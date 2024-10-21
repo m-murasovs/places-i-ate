@@ -4,7 +4,7 @@ const app = express();
 const router = express.Router();
 
 const path = __dirname + '/views/';
-const port = 3000;
+const port = 5000;
 
 export type Restaurant = {
     searchString: string;
