@@ -45,18 +45,14 @@ const DISALLOWED_RESTAURANTS = [
     'Wild Bean Cafe',
     'KFC'
 ];
+const DATASET_URL = 'https://api.apify.com/v2/datasets/iPKiTWZqnGc3qS1y0/items?token=apify_api_qr4r0vaVreBfgDNNoGfbm3uCAdzAzl4zEBIA';
 
 router.use((req: Request, res: Response, next: NextFunction) => {
-    console.log('/' + req.method);
     next();
 });
 
-router.get('/', (req: Request, res: Response) => {
-    res.send('index.html');
-});
-
-router.get('/restaurants', async (req: Request, res: Response) => {
-    const response = await fetch('https://api.apify.com/v2/datasets/iPKiTWZqnGc3qS1y0/items?token=apify_api_qr4r0vaVreBfgDNNoGfbm3uCAdzAzl4zEBIA');
+router.get('/', async (req: Request, res: Response) => {
+    const response = await fetch(DATASET_URL);
 
     const data = await response.json();
     const cleanedRestaurants = data.filter((restaurant: Restaurant) => {
