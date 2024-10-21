@@ -1,0 +1,21 @@
+{
+    "name": "node-docker-app-backend",
+    "version": "1.0.0",
+    "description": "Backend for a Node and Docker app",
+    "author": "m-murasovs",
+    "license": "MIT",
+    "main": "app.js",
+    "keywords": [
+        "nodejs",
+        "bootstrap",
+        "express"
+    ],
+    "dependencies": {
+        "express": "^4.21.1",
+        "nodemon": "^3.1.7"
+    },
+    "devDependencies": {
+        "@types/express": "^5.0.0",
+        "typescript": "^5.6.3"
+    }
+}
