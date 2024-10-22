@@ -7,5 +7,5 @@ Fun full-stack project to keep track of places I've eaten at.
 - Frontend: Next.js
 - Backend: Express.js
 - Database: GraphQL
-+ TypeScript everywhere.
++ TypeScript everywhere. I even enabled strict mode, for the rodeo :)
 

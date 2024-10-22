@@ -1,10 +1,10 @@
 import express, { Request, Response, NextFunction } from 'express';
-import { DiagnosticCategory } from 'typescript';
+
 const app = express();
 const router = express.Router();
 
-const path = __dirname + '/views/';
-const port = 5000;
+const path = import.meta.dirname + '/views/';
+const port = 5001;
 
 export type Restaurant = {
     searchString: string;
@@ -51,10 +51,18 @@ router.use((req: Request, res: Response, next: NextFunction) => {
     next();
 });
 
+/**
+ * TODO: return the stuff in chunks
+ */
 router.get('/', async (req: Request, res: Response) => {
     const response = await fetch(DATASET_URL);
 
-    const data = await response.json();
+    if (!response.ok) {
+        throw new Error('Failed to fetch data');
+    }
+
+    const data = await response.json() as Restaurant[];
+
     const cleanedRestaurants = data.filter((restaurant: Restaurant) => {
         if (!DISALLOWED_RESTAURANTS.includes(restaurant.title)) return restaurant;
     });
