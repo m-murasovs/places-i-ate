@@ -1,4 +1,4 @@
-const dataset = [
+const restaurants = [
   {
     "searchString": "restaurant",
     "rank": 1,
@@ -6841,4 +6841,4 @@ const dataset = [
   }
 ];
 
-export default dataset;
+export default restaurants;

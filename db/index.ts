@@ -1,6 +1,7 @@
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
-import * as restaurants from './dataset.js';
+// For some reason, this is a default export even though it's not default in the file. Also, I have to import it from .js because that's what it is after compiling.
+import restaurants from './dataset.js';
 
 const typeDefs = `#graphql
     type Location {
@@ -40,6 +41,8 @@ const typeDefs = `#graphql
         restaurants: [Restaurant!]!
     }
 `;
+
+console.log(Array.isArray(restaurants));
 
 const resolvers = {
     Query: {
