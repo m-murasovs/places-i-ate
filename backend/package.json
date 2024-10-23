@@ -13,9 +13,7 @@
     "type": "module",
     "module": "es2022",
     "dependencies": {
-        "@apollo/server": "^4.11.0",
-        "express": "^4.21.1",
-        "graphql": "^16.9.0"
+        "express": "^4.21.1"
     },
     "devDependencies": {
         "@types/express": "^5.0.0",

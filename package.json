@@ -4,6 +4,7 @@
     "version": "1.0.0",
     "description": "Fun app project for tracking places I've eaten at",
     "devDependencies": {
+        "@types/node": "^22.7.8",
         "@typescript-eslint/eslint-plugin": "^6.0.0",
         "@typescript-eslint/parser": "^6.0.0",
         "eslint": "^8.57.1",
