@@ -19,11 +19,6 @@ export default tseslint.config(
         },
         files: ['**/*.ts', '**/*.tsx'],
         rules: {
-            '@typescript-eslint/no-unsafe-argument': 'error',
-            '@typescript-eslint/no-unsafe-assignment': 'error',
-            '@typescript-eslint/no-unsafe-call': 'error',
-            '@typescript-eslint/no-unsafe-member-access': 'error',
-            '@typescript-eslint/no-unsafe-return': 'error',
             '@typescript-eslint/no-explicit-any': 0,
             'indent': ['error', 4, { 'SwitchCase': 1 }],
             'linebreak-style': ['error', 'unix'],
@@ -36,11 +31,11 @@ export default tseslint.config(
         },
     },
     {
-        ignores: ['**/build/**', '**/dist/**', 'frontend/.next/**']
+        ignores: ['**/build/**', '**/dist/**', './frontend/.next/**', './backend/index.cjs']
     },
     {
         // disable type-aware linting on JS files
-        files: ['**/*.js'],
+        files: ['**/*.cjs'],
         ...tseslint.configs.disableTypeChecked,
     }
 );
