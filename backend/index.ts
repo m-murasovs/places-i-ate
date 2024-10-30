@@ -1,10 +1,17 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express from 'express';
+import { graphqlHTTP } from 'express-graphql';
+import { buildSchema } from 'graphql';
 
-const app = express();
-const router = express.Router();
+export const DISALLOWED_RESTAURANTS = [
+    'Żabka | Prosto z pieca',
+    'Shell',
+    "McDonald's",
+    'Subway',
+    'Wild Bean Cafe',
+    'KFC'
+];
 
-const path = import.meta.dirname + '/views/';
-const port = 5001;
+export const DATASET_URL = 'https://api.apify.com/v2/datasets/iPKiTWZqnGc3qS1y0/items?token=apify_api_qr4r0vaVreBfgDNNoGfbm3uCAdzAzl4zEBIA';
 
 export type Restaurant = {
     searchString: string;
@@ -37,43 +44,63 @@ export type Restaurant = {
     imageUrl: string;
 };
 
-const DISALLOWED_RESTAURANTS = [
-    'Żabka | Prosto z pieca',
-    'Shell',
-    "McDonald's",
-    'Subway',
-    'Wild Bean Cafe',
-    'KFC'
-];
-const DATASET_URL = 'https://api.apify.com/v2/datasets/iPKiTWZqnGc3qS1y0/items?token=apify_api_qr4r0vaVreBfgDNNoGfbm3uCAdzAzl4zEBIA';
-
-router.use((req: Request, res: Response, next: NextFunction) => {
-    next();
-});
-
-/**
- * TODO: return the stuff in chunks
- */
-router.get('/', async (req: Request, res: Response) => {
-    const response = await fetch(DATASET_URL);
-
-    if (!response.ok) {
-        throw new Error('Failed to fetch data');
+const schema = buildSchema(`#graphql
+    type Location {
+        lat: Int
+        lng: Int
     }
 
-    const data = await response.json() as Restaurant[];
+    type Restaurant {
+        searchString: String
+        rank: Int
+        searchPageUrl: String
+        isAdvertisement: Boolean
+        placeId: String
+        location: Location
+        address: String
+        neighborhood: String
+        street: String
+        city: String
+        postalCode: String
+        state: String
+        countryCode: String
+        categoryName: String
+        categories: [String]
+        title: String!
+        totalScore: Int
+        permanentlyClosed: Boolean
+        temporarilyClosed: Boolean
+        reviewsCount: Int
+        url: String
+        price: String
+        cid: String
+        fid: String
+        imageUrl: String
+    }
 
-    const cleanedRestaurants = data.filter((restaurant: Restaurant) => {
-        if (!DISALLOWED_RESTAURANTS.includes(restaurant.title)) return restaurant;
-    });
+    type Query {
+        restaurants: [Restaurant!]!
+    }
+`);
 
-    res.send(cleanedRestaurants);
-});
+const rootValue = {
+    restaurants: () => {
+        return [];
+    }
+};
 
-app.use(express.static(path));
-app.use('/', router);
+const app = express();
+
+app.use('/graphql',
+    graphqlHTTP({
+        schema,
+        rootValue,
+        graphiql: { headerEditorEnabled: true }
+    })
+);
+
+const port = process.env.PORT || 8080;
 
 app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
+    console.log(`Server ready at http://localhost:${port}/graphql`);
 });
-
