@@ -25,7 +25,6 @@ export default tseslint.config(
             'quotes': ['error', 'single'],
             'comma-dangle': ['error', 'always-multiline'],
             'semi': ['error', 'always'],
-            'space-before-function-paren': ['error', 'never'],
             'keyword-spacing': ['error', { 'before': true, 'after': true }],
             'no-multiple-empty-lines': ['error', { 'max': 1, 'maxEOF': 1 }],
         },
