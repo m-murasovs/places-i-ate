@@ -3,7 +3,10 @@
     "private": true,
     "version": "1.0.0",
     "description": "Fun app project for tracking places I've eaten at",
+    "license": "ISC",
     "devDependencies": {
+        "@eslint/js": "^9.13.0",
+        "@types/eslint__js": "^8.42.3",
         "@types/node": "^22.7.8",
         "@typescript-eslint/eslint-plugin": "^6.0.0",
         "@typescript-eslint/parser": "^6.0.0",
@@ -15,7 +18,8 @@
         "eslint-plugin-react": "^7.37.1",
         "eslint-plugin-react-hooks": "^4.6.2",
         "eslint-plugin-react-refresh": "^0.4.5",
-        "typescript": "^5.6.3"
+        "typescript": "^5.6.3",
+        "typescript-eslint": "^8.12.2"
     },
     "scripts": {
         "install-all": "cd backend && npm install && cd ../frontend && npm install && cd ../",
@@ -24,7 +28,7 @@
         "test:backend": "cd backend && npm run test",
         "test:frontend:components": "cd frontend && npm run test:components",
         "test:frontend:e2e": "cd frontend && npm run test:e2e",
-        "lint": "eslint . --ext ts,js,jsx --report-unused-disable-directives --max-warnings 0"
-    },
-    "license": "ISC"
+        "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
+        "lint:fix": "eslint . --fix --report-unused-disable-directives --max-warnings 0"
+    }
 }

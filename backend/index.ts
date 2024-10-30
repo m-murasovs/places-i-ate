@@ -5,15 +5,15 @@ import { buildSchema } from 'graphql';
 export const DISALLOWED_RESTAURANTS = [
     'Żabka | Prosto z pieca',
     'Shell',
-    "McDonald's",
+    'McDonald\'s',
     'Subway',
     'Wild Bean Cafe',
-    'KFC'
+    'KFC',
 ];
 
 export const DATASET_URL = 'https://api.apify.com/v2/datasets/iPKiTWZqnGc3qS1y0/items?token=apify_api_qr4r0vaVreBfgDNNoGfbm3uCAdzAzl4zEBIA';
 
-export type Restaurant = {
+export interface Restaurant {
     searchString: string;
     rank: number;
     searchPageUrl: string;
@@ -42,7 +42,7 @@ export type Restaurant = {
     cid: string;
     fid: string;
     imageUrl: string;
-};
+}
 
 const schema = buildSchema(`#graphql
     type Location {
@@ -86,7 +86,7 @@ const schema = buildSchema(`#graphql
 const rootValue = {
     restaurants: () => {
         return [];
-    }
+    },
 };
 
 const app = express();
@@ -95,8 +95,8 @@ app.use('/graphql',
     graphqlHTTP({
         schema,
         rootValue,
-        graphiql: { headerEditorEnabled: true }
-    })
+        graphiql: { headerEditorEnabled: true },
+    }),
 );
 
 const port = process.env.PORT || 8080;
