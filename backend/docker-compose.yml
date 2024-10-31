@@ -4,5 +4,21 @@ services:
     build: .
     container_name: restaurants-backend
     ports:
-      - "49160:8080"
+      - "8080:8080"
+    depends_on:
+      - db
+    env_file:
+      - .env
     restart: always
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - '5432:5432'
+    volumes:
+      - data:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+volumes:
+  data:
