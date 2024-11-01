@@ -1,17 +1,24 @@
 {
     "name": "node-docker-app-backend",
+    "private": true,
     "version": "1.0.0",
     "description": "Backend for a Node and Docker app",
     "author": "m-murasovs",
     "license": "MIT",
-    "main": "index.js",
+    "main": "index.cjs",
     "keywords": [
         "nodejs",
         "bootstrap",
         "express"
     ],
-    "type": "module",
-    "module": "es2022",
+    "scripts": {
+        "start": "tsx index.ts",
+        "dev": "nodemon --exec \"npm run start\"",
+        "renameIndex": "mv index.js index.cjs",
+        "build": "npx tsc index.ts && npm run renameIndex",
+        "lint": "eslint \"./**/*.ts\"",
+        "lint:fix": "eslint \"./**/*.ts\" --fix"
+    },
     "dependencies": {
         "apollo-server": "^3.13.0",
         "dotenv": "^16.4.5",
@@ -25,14 +32,11 @@
         "@types/express": "^5.0.0",
         "@types/node": "^22.7.8",
         "@types/sequelize": "^4.28.20",
+        "@typescript-eslint/eslint-plugin": "^8.12.2",
+        "@typescript-eslint/parser": "^8.12.2",
         "nodemon": "^3.1.7",
         "ts-node": "^10.9.2",
+        "tsc": "^2.0.4",
         "typescript": "^5.6.3"
-    },
-    "scripts": {
-        "start": "tsx index.ts",
-        "dev": "nodemon --exec \"npm run start\"",
-        "renameIndex": "mv index.js index.cjs",
-        "build": "npx tsc index.ts && npm run renameIndex"
     }
 }

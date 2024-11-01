@@ -1,4 +1,3 @@
-
 export interface Restaurant {
     id: string;
     searchString: string;
