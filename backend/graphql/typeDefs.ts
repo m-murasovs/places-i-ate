@@ -18,7 +18,6 @@ const typeDefs = gql`
         searchPageUrl: String
         isAdvertisement: Boolean
         placeId: String
-        # The location should be an object containing the lat and lng fields
         location: Location!
         address: String
         neighborhood: String

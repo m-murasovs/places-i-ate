@@ -1,26 +1,19 @@
 import type { Restaurant } from '../types';
-
-interface ParentType {
-    Restaurant: {
-        findByPk: (id: string) => Promise<any>;
-        findAll: () => Promise<any>;
-        create: (restaurant: Restaurant) => Promise<any>;
-    };
-}
+import RestaurantModel from '../models/restaurant';
 
 const resolvers = {
     Query: {
-        async getRestaurant(parent: ParentType, { id }: { id: string; }) {
+        async getRestaurant({ id }: { id: string; }) {
             try {
-                const restaurant = await parent.Restaurant.findByPk(id);
+                const restaurant = await RestaurantModel.findByPk(id);
                 return restaurant;
             } catch (err) {
                 throw new Error(`Error fetching restaurant ${id}. Error: ${err}`);
             }
         },
-        async getAllRestaurants(parent: ParentType) {
+        async getAllRestaurants() {
             try {
-                const restaurants = await parent.Restaurant.findAll();
+                const restaurants = await RestaurantModel.findAll();
                 return restaurants;
             } catch (err) {
                 throw new Error(`Error fetching all restaurants. Error: ${err}`);
@@ -28,17 +21,17 @@ const resolvers = {
         },
     },
     Mutation: {
-        async createRestaurant(parent: ParentType, restaurant: Restaurant) {
+        async createRestaurant(restaurant: Partial<Restaurant>) {
             try {
-                const newRestaurant = parent.Restaurant.create(restaurant);
+                const newRestaurant = RestaurantModel.create(restaurant);
                 return newRestaurant;
             } catch (err) {
                 throw new Error(`Error adding restaurant. Error: ${err}`);
             }
         },
-        async updateRestaurant(parent: ParentType, restaurant: Partial<Restaurant>) {
+        async updateRestaurant(restaurant: Partial<Restaurant>) {
             try {
-                const oldRestaurant = await parent.Restaurant.findByPk(restaurant.id as string);
+                const oldRestaurant = await RestaurantModel.findByPk(restaurant.id as string);
                 if (!oldRestaurant) {
                     throw new Error(`User ${restaurant.id} not found`);
                 }
@@ -48,9 +41,9 @@ const resolvers = {
                 throw new Error(`Error adding restaurant. Error: ${err}`);
             }
         },
-        async deleteRestaurant(parent: ParentType, { id }: { id: string; }) {
+        async deleteRestaurant({ id }: { id: string; }) {
             try {
-                const restaurant = await parent.Restaurant.findByPk(id);
+                const restaurant = await RestaurantModel.findByPk(id);
                 if (!restaurant) {
                     throw new Error(`Restaurant ${id} not found`);
                 }
