@@ -1,11 +1,18 @@
 import type { Restaurant } from '../types';
 import RestaurantModel from '../models/restaurant';
 
+/** Generates a random 16-char hexadecimal ID */
+const generateId = () => {
+    return Array.from({ length: 16 }, () =>
+        Math.floor(Math.random() * 16).toString(16)
+    ).join('');
+}
+
 const resolvers = {
     Query: {
         async getRestaurant({ id }: { id: string; }) {
             try {
-                const restaurant = await RestaurantModel.findByPk(id);
+                const restaurant = await RestaurantModel.findById(id);
                 return restaurant;
             } catch (err) {
                 throw new Error(`Error fetching restaurant ${id}. Error: ${err}`);
@@ -13,7 +20,7 @@ const resolvers = {
         },
         async getAllRestaurants() {
             try {
-                const restaurants = await RestaurantModel.findAll();
+                const restaurants = await RestaurantModel.find({});
                 return restaurants;
             } catch (err) {
                 throw new Error(`Error fetching all restaurants. Error: ${err}`);
@@ -21,38 +28,37 @@ const resolvers = {
         },
     },
     Mutation: {
-        async createRestaurant(restaurant: Partial<Restaurant>) {
+        createRestaurant: async (parent, restaurant: Partial<Restaurant>) => {
             try {
-                const newRestaurant = RestaurantModel.create(restaurant);
+                const newRestaurant = new RestaurantModel({
+                    _id: restaurant._id ? restaurant._id : generateId(),
+                    ...restaurant,
+                });
+                await newRestaurant.save();
                 return newRestaurant;
             } catch (err) {
                 throw new Error(`Error adding restaurant. Error: ${err}`);
             }
         },
-        async updateRestaurant(restaurant: Partial<Restaurant>) {
+        updateRestaurant: async (parent, restaurant: Partial<Restaurant>) => {
             try {
-                const oldRestaurant = await RestaurantModel.findByPk(restaurant.id as string);
-                if (!oldRestaurant) {
-                    throw new Error(`User ${restaurant.id} not found`);
-                }
-                const newRestaurant = await oldRestaurant.update(restaurant);
-                return newRestaurant;
+                const updatedRestaurant = await RestaurantModel.findByIdAndUpdate(
+                    restaurant._id,
+                    restaurant,
+                );
+                return updatedRestaurant;
             } catch (err) {
-                throw new Error(`Error adding restaurant. Error: ${err}`);
+                throw new Error(`Error updating restaurant. Error: ${err}`);
             }
         },
-        async deleteRestaurant({ id }: { id: string; }) {
+        deleteRestaurant: async (parent, id: string) => {
             try {
-                const restaurant = await RestaurantModel.findByPk(id);
-                if (!restaurant) {
-                    throw new Error(`Restaurant ${id} not found`);
-                }
-                await restaurant.destroy();
-                return restaurant;
+                await RestaurantModel.findByIdAndDelete(id);
+                return true;
             } catch (err) {
-                throw new Error(`Error deleting restaurant ${id}. Error: ${err}`);
+                throw new Error(`Error deleting restaurant. Error: ${err}`);
             }
-        },
+        }
     },
 };
 

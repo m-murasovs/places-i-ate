@@ -1,5 +1,5 @@
 export interface Restaurant {
-    id: string;
+    _id: string;
     searchString: string;
     rank: number;
     searchPageUrl: string;

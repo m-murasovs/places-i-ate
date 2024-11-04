@@ -2,8 +2,8 @@ import { gql } from 'apollo-server';
 
 const typeDefs = gql`
     type Location {
-        lat: Int
-        lng: Int
+        lat: Float
+        lng: Float
     }
 
     input LocationInput {
@@ -12,7 +12,7 @@ const typeDefs = gql`
     }
 
     type Restaurant {
-        id: ID!
+        _id: ID
         searchString: String
         rank: Int
         searchPageUrl: String
@@ -29,7 +29,7 @@ const typeDefs = gql`
         categoryName: String
         categories: [String]
         title: String!
-        totalScore: Int
+        totalScore: Float
         permanentlyClosed: Boolean
         temporarilyClosed: Boolean
         reviewsCount: Int
@@ -47,7 +47,7 @@ const typeDefs = gql`
 
     type Mutation {
         createRestaurant(
-            id: ID!
+            _id: ID
             searchString: String
             rank: Int
             searchPageUrl: String
@@ -64,7 +64,7 @@ const typeDefs = gql`
             categoryName: String
             categories: [String]
             title: String!
-            totalScore: Int
+            totalScore: Float
             permanentlyClosed: Boolean
             temporarilyClosed: Boolean
             reviewsCount: Int
@@ -75,7 +75,7 @@ const typeDefs = gql`
             imageUrl: String
         ): Restaurant!,
         updateRestaurant(
-            id: ID!
+            _id: ID
             searchString: String
             rank: Int
             searchPageUrl: String
@@ -92,7 +92,7 @@ const typeDefs = gql`
             categoryName: String
             categories: [String]
             title: String!
-            totalScore: Int
+            totalScore: Float
             permanentlyClosed: Boolean
             temporarilyClosed: Boolean
             reviewsCount: Int
@@ -103,7 +103,7 @@ const typeDefs = gql`
             imageUrl: String
         ): Restaurant!,
         deleteRestaurant(
-            id: ID!
+            _id: ID
         ): Restaurant!
     }
 `;

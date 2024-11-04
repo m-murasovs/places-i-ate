@@ -1,107 +1,116 @@
-import { DataTypes } from 'sequelize';
-import db from '../utils/db';
+import { Schema, model } from 'mongoose';
+import type { Restaurant } from 'types';
 
-const Restaurant = db.define('Restaurant', {
+const restaurantSchema = new Schema<Restaurant>({
+    _id: {
+        type: String,
+        required: false,
+    },
     searchString: {
-        type: DataTypes.STRING,
+        type: String,
         allowNull: false,
     },
     rank: {
-        type: DataTypes.INTEGER,
+        type: Number,
         allowNull: false,
     },
     searchPageUrl: {
-        type: DataTypes.STRING,
+        type: String,
         allowNull: false,
     },
     isAdvertisement: {
-        type: DataTypes.BOOLEAN,
+        type: Boolean,
         allowNull: false,
     },
     placeId: {
-        type: DataTypes.STRING,
+        type: String,
         allowNull: false,
     },
     location: {
-        type: DataTypes.JSON,
+        type: {
+            lat: Number,
+            lng: Number,
+        },
         allowNull: false,
     },
     address: {
-        type: DataTypes.STRING,
+        type: String,
         allowNull: false,
     },
     neighborhood: {
-        type: DataTypes.STRING,
+        type: String,
         allowNull: false,
     },
     street: {
-        type: DataTypes.STRING,
+        type: String,
         allowNull: false,
     },
     city: {
-        type: DataTypes.STRING,
+        type: String,
         allowNull: false,
     },
     postalCode: {
-        type: DataTypes.STRING,
+        type: String,
         allowNull: false,
     },
     state: {
-        type: DataTypes.STRING,
+        type: String,
         allowNull: true,
     },
     countryCode: {
-        type: DataTypes.STRING,
+        type: String,
         allowNull: false,
     },
     categoryName: {
-        type: DataTypes.STRING,
+        type: String,
         allowNull: false,
     },
     categories: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
-        allowNull: false,
+        type: [String],
+        required: false,
     },
     title: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
+        required: false,
     },
     totalScore: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
+        type: Number,
+        required: false,
     },
     permanentlyClosed: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
+        type: Boolean,
+        required: false,
     },
     temporarilyClosed: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
+        type: Boolean,
+        required: false,
     },
     reviewsCount: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
+        type: Number,
+        required: false,
     },
     url: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
+        required: false,
     },
     price: {
-        type: DataTypes.STRING,
-        allowNull: true,
+        type: String,
+        required: true,
     },
     cid: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
+        required: false,
     },
     fid: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
+        required: false,
     },
     imageUrl: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
+        required: false,
     },
 });
 
-export default Restaurant;
+const RestaurantModel = model<Restaurant>('Restaurant', restaurantSchema);
+
+export default RestaurantModel;
