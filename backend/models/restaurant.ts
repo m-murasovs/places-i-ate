@@ -95,7 +95,7 @@ const restaurantSchema = new Schema<Restaurant>({
     },
     price: {
         type: String,
-        required: true,
+        required: false,
     },
     cid: {
         type: String,

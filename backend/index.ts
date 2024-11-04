@@ -3,7 +3,7 @@ import typeDefs from './graphql/typeDefs';
 import resolvers from './graphql/resolvers';
 import mongoose from 'mongoose';
 
-const MONGO_URI = 'mongodb://localhost:27017/restaurants';
+const MONGO_URI = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PW}@restaurants.qoimd.mongodb.net/`;
 
 mongoose
     .connect(MONGO_URI)
@@ -32,3 +32,4 @@ const server = new ApolloServer({
 server.listen({ port: process.env.PORT || 8080 }).then(({ url }) => {
     console.log(`Server ready at ${url}`);
 });
+
