@@ -5,9 +5,9 @@
     "description": "Fun app project for tracking places I've eaten at",
     "license": "ISC",
     "devDependencies": {
+        "@types/node": "^22.7.8",
         "@typescript-eslint/eslint-plugin": "^6.0.0",
         "@typescript-eslint/parser": "^6.0.0",
-        "@types/node": "^22.7.8",
         "eslint": "^8.57.1",
         "eslint-config-airbnb": "^19.0.4",
         "eslint-plugin-cypress": "^2.15.1",
@@ -27,5 +27,9 @@
         "test:frontend:e2e": "cd frontend && npm run test:e2e",
         "lint": "eslint . --ext ts,js,jsx --report-unused-disable-directives --max-warnings 0",
         "lint:fix": "eslint . --fix --report-unused-disable-directives --max-warnings 0"
+    },
+    "dependencies": {
+        "@apollo/client": "^3.11.8",
+        "graphql": "^16.9.0"
     }
 }

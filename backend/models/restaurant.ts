@@ -109,7 +109,7 @@ const restaurantSchema = new Schema<Restaurant>({
         type: String,
         required: false,
     },
-});
+}, { collection: 'places' });
 
 const RestaurantModel = model<Restaurant>('Restaurant', restaurantSchema);
 

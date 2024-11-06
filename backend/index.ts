@@ -3,7 +3,7 @@ import typeDefs from './graphql/typeDefs';
 import resolvers from './graphql/resolvers';
 import mongoose from 'mongoose';
 
-const MONGO_URI = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PW}@restaurants.qoimd.mongodb.net/`;
+const MONGO_URI = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PW}@restaurants.qoimd.mongodb.net/restaurants`;
 
 mongoose
     .connect(MONGO_URI)

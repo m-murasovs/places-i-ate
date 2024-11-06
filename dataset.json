@@ -1,36 +1,4 @@
-[{
-  "searchString": "restaurant",
-  "rank": 1,
-  "searchPageUrl": "https://www.google.com/maps/search/restaurant/@54.4637598199471,18.531298523639364,16z?hl=en",
-  "isAdvertisement": false,
-  "placeId": "ChIJK2dQXZug_UYRQ-_kNDcbYIU",
-  "location": {
-    "lat": 54.4718933,
-    "lng": 18.5508052
-  },
-  "address": "Spółdzielcza 2, 81-545 Gdynia, Poland",
-  "neighborhood": "Orłowo",
-  "street": "Spółdzielcza 2",
-  "city": "Gdynia",
-  "postalCode": "81-545",
-  "state": null,
-  "countryCode": "PL",
-  "categoryName": "Polish restaurant",
-  "categories": [
-    "Polish restaurant",
-    "Restaurant"
-  ],
-  "title": "Tłusta Kaczka",
-  "totalScore": 4.6,
-  "permanentlyClosed": false,
-  "temporarilyClosed": false,
-  "reviewsCount": 1369,
-  "url": "https://www.google.com/maps/search/?api=1&query=T%C5%82usta%20Kaczka&query_place_id=ChIJK2dQXZug_UYRQ-_kNDcbYIU",
-  "price": "$$$",
-  "cid": "9610711528733208387",
-  "fid": "0x46fda09b5d50672b:0x85601b3734e4ef43",
-  "imageUrl": "https://lh5.googleusercontent.com/p/AF1QipM_7F2n91mq5f2YkxTYMU6f2WmulKz6j_QDcVRc=w408-h271-k-no"
-},
+[
 {
   "searchString": "restaurant",
   "rank": 6,
