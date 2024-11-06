@@ -28,4 +28,6 @@ export interface Restaurant {
     cid: string;
     fid: string;
     imageUrl: string;
+    reviewStars: number;
+    reviewText: string;
 }

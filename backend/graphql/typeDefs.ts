@@ -38,6 +38,8 @@ const typeDefs = gql`
         cid: String
         fid: String
         imageUrl: String
+        reviewStars: Int
+        reviewText: String
     }
 
     type Query {
@@ -73,6 +75,8 @@ const typeDefs = gql`
             cid: String
             fid: String
             imageUrl: String
+            reviewStars: Int
+            reviewText: String
         ): Restaurant!,
         updateRestaurant(
             _id: ID
@@ -101,6 +105,8 @@ const typeDefs = gql`
             cid: String
             fid: String
             imageUrl: String
+            reviewStars: Int
+            reviewText: String
         ): Restaurant!,
         deleteRestaurant(
             _id: ID

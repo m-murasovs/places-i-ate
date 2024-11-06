@@ -2,7 +2,8 @@ import type { Restaurant } from '../types';
 import RestaurantModel from '../models/restaurant';
 
 /** Generates a random 16-char hexadecimal ID */
-const generateId = () => {
+// Add return type, which is a 16-digit hexadecimal
+const generateId = (): string => {
     return Array.from({ length: 16 }, () =>
         Math.floor(Math.random() * 16).toString(16)
     ).join('');

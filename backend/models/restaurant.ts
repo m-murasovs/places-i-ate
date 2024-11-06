@@ -109,6 +109,14 @@ const restaurantSchema = new Schema<Restaurant>({
         type: String,
         required: false,
     },
+    reviewStars: {
+        type: Number,
+        required: false,
+    },
+    reviewText: {
+        type: String,
+        required: false,
+    },
 }, { collection: 'places' });
 
 const RestaurantModel = model<Restaurant>('Restaurant', restaurantSchema);
