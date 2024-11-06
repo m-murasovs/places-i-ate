@@ -25,6 +25,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./backend
+          file: ./backend/Dockerfile
           platforms: linux/amd64,linux/arm64/v8
           push: true
           target: prod
