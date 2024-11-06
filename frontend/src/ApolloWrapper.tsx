@@ -7,13 +7,11 @@ import {
 } from "@apollo/experimental-nextjs-app-support";
 
 function makeClient() {
-    const httpLink = new HttpLink({
-        uri: "http://localhost:8080",
-    });
-
     return new ApolloClient({
         cache: new InMemoryCache(),
-        link: httpLink,
+        link: new HttpLink({
+            uri: "http://localhost:8080",
+        }),
     });
 }
 
