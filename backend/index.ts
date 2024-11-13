@@ -1,7 +1,12 @@
-import { ApolloServer } from 'apollo-server';
+import { ApolloServer } from '@apollo/server';
+import { expressMiddleware } from '@apollo/server/express4';
 import typeDefs from './graphql/typeDefs';
 import resolvers from './graphql/resolvers';
 import mongoose from 'mongoose';
+import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
+import express from 'express';
+import http from 'http';
+import cors from 'cors';
 
 const MONGO_URI = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PW}@restaurants.qoimd.mongodb.net/restaurants`;
 
@@ -11,25 +16,32 @@ mongoose
         console.log('Connected to MongoDB');
     }).catch(err => {
         console.error(err);
-    })
+    });
 
-export const DISALLOWED_RESTAURANTS = [
-    'Żabka | Prosto z pieca',
-    'Shell',
-    'McDonald\'s',
-    'Subway',
-    'Wild Bean Cafe',
-    'KFC',
-];
-
-export const DATASET_URL = 'https://api.apify.com/v2/datasets/iPKiTWZqnGc3qS1y0/items?token=apify_api_qr4r0vaVreBfgDNNoGfbm3uCAdzAzl4zEBIA';
+const app = express();
+const httpServer = http.createServer(app);
 
 const server = new ApolloServer({
     typeDefs,
     resolvers,
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 
-server.listen({ port: process.env.PORT || 8080 }).then(({ url }) => {
-    console.log(`Server ready at ${url}`);
-});
+(async () => {
+    await server.start();
+
+    app.use(
+        '/graphql',
+        cors<cors.CorsRequest>({ origin: 'https://example.com' }), // TODO: specify my frontend URL
+        express.json(),
+        expressMiddleware(server),
+    );
+
+    (async () => {
+        await new Promise<void>((resolve) => httpServer.listen({ port: 8080 }, resolve));
+    })();
+    console.log(`🚀 Server ready at http://localhost:8080/graphql`);
+})();
+
+
 
