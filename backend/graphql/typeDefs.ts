@@ -41,8 +41,13 @@ const typeDefs = `#graphql
     }
 
     type Query {
-        getRestaurant: Restaurant!
-        getAllRestaurants: [Restaurant!]!
+        getRestaurant(
+            _id: ID
+        ): Restaurant!
+        getAllRestaurants(
+            limit: Int
+            offset: Int
+        ): [Restaurant!]!
     }
 
     type Mutation {

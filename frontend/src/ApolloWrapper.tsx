@@ -11,6 +11,7 @@ function makeClient() {
         cache: new InMemoryCache(),
         link: new HttpLink({
             uri: "https://places-i-ate.onrender.com",
+            // uri: "http://localhost:8080/graphql",
         }),
     });
 }

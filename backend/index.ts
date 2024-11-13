@@ -36,7 +36,7 @@ const server = new ApolloServer({
             origin: [
                 'https://places-i-ate.vercel.app',
                 'https://places-i-ate-git-main-mmurasovs-projects.vercel.app/',
-                'http://localhost:3000'
+                // 'http://localhost:3000'
             ]
         }),
         express.json(),

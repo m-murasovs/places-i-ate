@@ -4,7 +4,7 @@ import { useQuery, gql } from '@apollo/client';
 
 const GET_ALL_RESTAURANTS = gql`
     query GetAllRestaurants {
-        getAllRestaurants {
+        getAllRestaurants(limit: 10, offset: 0) {
             title
             _id
         }
