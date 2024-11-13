@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import { useQuery, gql } from '@apollo/client';
+import { Restaurant } from '@/types';
 
 const GET_ALL_RESTAURANTS = gql`
     query GetAllRestaurants {
@@ -17,10 +18,15 @@ export default function Home() {
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error {error.message}</div>;
 
-    console.log(data);
     return (
         <div>
-            <button style={{ border: 'solid 1px black' }}>Press me</button>
+            <h1>Restaurants</h1>
+            <br />
+            <ul>
+                {data.getAllRestaurants.map((restaurant: Partial<Restaurant>) => (
+                    <li key={restaurant._id}>{restaurant.title}</li>
+                ))}
+            </ul>
         </div>
     );
 }

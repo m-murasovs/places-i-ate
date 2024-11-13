@@ -96,7 +96,7 @@ const UploadPage = () => {
 
     return <div>
         <h1>Upload</h1>
-        <button onClick={addData}>Add data</button>
+        <button disabled onClick={addData}>Add data (disabled)</button>
     </div>;
 };
 
