@@ -22,7 +22,7 @@ const server = new ApolloServer({
 (async () => {
     try {
         await connect(MONGO_URI);
-        console.log('Connected to MongoDB');
+        console.log('Connected to MongoDB!');
     } catch (e) {
         console.error(e);
     }
