@@ -29,7 +29,6 @@
         "lint:fix": "eslint . --fix --report-unused-disable-directives --max-warnings 0"
     },
     "dependencies": {
-        "@apollo/client": "^3.11.8",
-        "graphql": "^16.9.0"
+        "@apollo/client": "^3.11.8"
     }
 }
