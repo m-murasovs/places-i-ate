@@ -32,7 +32,13 @@ const server = new ApolloServer({
 
     app.use(
         '/graphql',
-        cors<cors.CorsRequest>({ origin: 'https://example.com' }), // TODO: specify my frontend URL
+        cors<cors.CorsRequest>({
+            origin: [
+                'https://places-i-ate.vercel.app',
+                'https://places-i-ate-git-main-mmurasovs-projects.vercel.app/',
+                'http://localhost:3000'
+            ]
+        }),
         express.json(),
         expressMiddleware(server),
     );
