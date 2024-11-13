@@ -2,21 +2,13 @@ import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import typeDefs from './graphql/typeDefs';
 import resolvers from './graphql/resolvers';
-import mongoose from 'mongoose';
+import { connect } from 'mongoose';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import express from 'express';
 import http from 'http';
 import cors from 'cors';
 
 const MONGO_URI = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PW}@restaurants.qoimd.mongodb.net/restaurants`;
-
-mongoose
-    .connect(MONGO_URI)
-    .then(() => {
-        console.log('Connected to MongoDB');
-    }).catch(err => {
-        console.error(err);
-    });
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -28,6 +20,13 @@ const server = new ApolloServer({
 });
 
 (async () => {
+    try {
+        await connect(MONGO_URI);
+        console.log('Connected to MongoDB');
+    } catch (e) {
+        console.error(e);
+    }
+
     await server.start();
 
     app.use(
