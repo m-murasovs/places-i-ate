@@ -3,14 +3,14 @@ import React from 'react';
 import { useMutation, gql } from '@apollo/client';
 import dataset from '../../../../dataset.json';
 
-export const DISALLOWED_RESTAURANTS = [
-    'Żabka | Prosto z pieca',
-    'Shell',
-    'McDonald\'s',
-    'Subway',
-    'Wild Bean Cafe',
-    'KFC',
-];
+// const DISALLOWED_RESTAURANTS = [
+//     'Żabka | Prosto z pieca',
+//     'Shell',
+//     'McDonald\'s',
+//     'Subway',
+//     'Wild Bean Cafe',
+//     'KFC',
+// ];
 
 const CREATE_RESTAURANT = gql`
     mutation CreateRestaurant($location: LocationInput!, $title: String!, $id: ID, $searchString: String, $rank: Int, $searchPageUrl: String, $isAdvertisement: Boolean, $placeId: String, $address: String, $neighborhood: String, $street: String, $city: String, $postalCode: String, $state: String, $countryCode: String, $categoryName: String, $categories: [String], $totalScore: Float, $permanentlyClosed: Boolean, $temporarilyClosed: Boolean, $reviewsCount: Int, $url: String, $price: String, $cid: String, $fid: String, $imageUrl: String) {
