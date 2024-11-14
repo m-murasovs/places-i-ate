@@ -1,5 +1,13 @@
+import bcrypt from 'bcryptjs';
 import type { Restaurant } from '../types';
 import RestaurantModel from '../models/restaurant';
+import UserModel from '../models/user';
+
+interface RegisterValues {
+    email: string,
+    password: string,
+    name: string;
+}
 
 /** Generates a random 16-char hexadecimal ID */
 const generateId = (): string => {
@@ -10,6 +18,14 @@ const generateId = (): string => {
 
 const resolvers = {
     Query: {
+        async getUser({ id }: { id: string; }) {
+            try {
+                const user = await UserModel.findById(id);
+                return user;
+            } catch (err) {
+                throw new Error(`Error fetching user ${id}. Error: ${err}`);
+            }
+        },
         async getRestaurant({ id }: { id: string; }) {
             try {
                 const restaurant = await RestaurantModel.findById(id);
@@ -31,6 +47,30 @@ const resolvers = {
         },
     },
     Mutation: {
+        createUser: async (parent, values: RegisterValues) => {
+            const { email, password, name } = values;
+
+            try {
+                const userFound = await UserModel.findOne({ email });
+                if (userFound) {
+                    throw new Error('Email already exists');
+                }
+
+                const hashedPassword = await bcrypt.hash(password, 10);
+                const user = new UserModel({
+                    _id: generateId(),
+                    email,
+                    name,
+                    password: hashedPassword,
+                });
+                const savedUser = await user.save();
+
+                return savedUser;
+            } catch (error) {
+                console.error(error);
+                throw new Error(`Error adding user. Error: ${error}`);
+            }
+        },
         createRestaurant: async (parent, restaurant: Partial<Restaurant>) => {
             try {
                 const newRestaurant = new RestaurantModel({
@@ -39,8 +79,8 @@ const resolvers = {
                 });
                 await newRestaurant.save();
                 return newRestaurant;
-            } catch (err) {
-                throw new Error(`Error adding restaurant. Error: ${err}`);
+            } catch (error) {
+                throw new Error(`Error adding restaurant. Error: ${error}`);
             }
         },
         updateRestaurant: async (parent, restaurant: Partial<Restaurant>) => {
@@ -50,16 +90,16 @@ const resolvers = {
                     restaurant,
                 );
                 return updatedRestaurant;
-            } catch (err) {
-                throw new Error(`Error updating restaurant. Error: ${err}`);
+            } catch (error) {
+                throw new Error(`Error updating restaurant. Error: ${error}`);
             }
         },
         deleteRestaurant: async (parent, id: string) => {
             try {
                 await RestaurantModel.findByIdAndDelete(id);
                 return true;
-            } catch (err) {
-                throw new Error(`Error deleting restaurant. Error: ${err}`);
+            } catch (error) {
+                throw new Error(`Error deleting restaurant. Error: ${error}`);
             }
         }
     },

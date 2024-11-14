@@ -1,4 +1,17 @@
 const typeDefs = `#graphql
+    scalar Date
+
+    type User {
+        _id: ID
+        email: String
+        password: String
+        name: String
+        phone: String
+        image: String
+        createdAt: Date
+        updatedAt: Date
+    }
+
     type Location {
         lat: Float
         lng: Float
@@ -41,6 +54,9 @@ const typeDefs = `#graphql
     }
 
     type Query {
+        getUser(
+            _id: ID
+        ): User!
         getRestaurant(
             _id: ID
         ): Restaurant!
@@ -51,6 +67,25 @@ const typeDefs = `#graphql
     }
 
     type Mutation {
+        createUser(
+            _id: ID
+            email: String!
+            password: String!
+            name: String!
+            phone: String
+            image: String
+        ): User!,
+        updateUser(
+            _id: ID
+            email: String
+            password: String
+            name: String
+            phone: String
+            image: String
+        ): User!,
+        deleteUser(
+            _id: ID
+        ): User!,
         createRestaurant(
             _id: ID
             searchString: String
