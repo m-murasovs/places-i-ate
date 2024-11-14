@@ -32,3 +32,14 @@ export interface Restaurant {
     reviewStars: number;
     reviewText: string;
 }
+
+export interface User {
+    _id: string;
+    email: string;
+    password: string;
+    name: string;
+    phone: string;
+    image: string;
+    createdAt: Date;
+    updatedAt: Date;
+}

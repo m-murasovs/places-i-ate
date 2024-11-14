@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
-import { ApolloWrapper } from '@/ApolloWrapper';
+import { ApolloWrapper } from '@/lib/ApolloWrapper';
 
 const geistSans = localFont({
     src: './fonts/GeistVF.woff',
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 export default function RootLayout({
     children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode;
 }>) {
     return (
         <html lang="en">

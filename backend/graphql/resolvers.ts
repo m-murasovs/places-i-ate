@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs';
+
 import type { Restaurant } from '../types';
 import RestaurantModel from '../models/restaurant';
 import UserModel from '../models/user';
@@ -6,7 +7,7 @@ import UserModel from '../models/user';
 interface RegisterValues {
     email: string,
     password: string,
-    name: string;
+    name?: string,
 }
 
 /** Generates a random 16-char hexadecimal ID */
@@ -18,20 +19,28 @@ const generateId = (): string => {
 
 const resolvers = {
     Query: {
-        async getUser({ id }: { id: string; }) {
+        async getUserById(parent, { id }: { id: string; }) {
             try {
-                const user = await UserModel.findById(id);
+                const user = await UserModel.findById(id, { password: 0 });
                 return user;
-            } catch (err) {
-                throw new Error(`Error fetching user ${id}. Error: ${err}`);
+            } catch (error) {
+                throw new Error(`Error fetching user ${id}. Error: ${error}`);
             }
         },
-        async getRestaurant({ id }: { id: string; }) {
+        async getUserByEmail(parent, { email }: { email: string; }) {
+            try {
+                const user = await UserModel.findOne({ email }, { password: 0 });
+                return user;
+            } catch (error) {
+                throw new Error(`Error fetching user by email ${email}. Error: ${error}`);
+            }
+        },
+        async getRestaurant(parent, { id }: { id: string; }) {
             try {
                 const restaurant = await RestaurantModel.findById(id);
                 return restaurant;
-            } catch (err) {
-                throw new Error(`Error fetching restaurant ${id}. Error: ${err}`);
+            } catch (error) {
+                throw new Error(`Error fetching restaurant ${id}. Error: ${error}`);
             }
         },
         async getAllRestaurants(parent, { limit, offset }: { limit: number; offset: number; }) {
@@ -41,20 +50,31 @@ const resolvers = {
                     .skip(offset)
                     .limit(limit);
                 return restaurants;
-            } catch (err) {
-                throw new Error(`Error fetching all restaurants. Error: ${err}`);
+            } catch (error) {
+                throw new Error(`Error fetching all restaurants. Error: ${error}`);
             }
         },
     },
     Mutation: {
+        login: async (parent, { email, password }: { email: string; password: string; }) => {
+            try {
+                const user = await UserModel.findOne({ email });
+                if (!user) throw new Error('Invalid email');
+
+                const passwordMatch = await bcrypt.compare(password, user[0].password);
+                if (!passwordMatch) throw new Error('Invalid password');
+
+                return user;
+            } catch (error) {
+                throw new Error(`Error logging in. Error: ${error}`);
+            }
+        },
         createUser: async (parent, values: RegisterValues) => {
             const { email, password, name } = values;
 
             try {
                 const userFound = await UserModel.findOne({ email });
-                if (userFound) {
-                    throw new Error('Email already exists');
-                }
+                if (userFound) throw new Error('Email already exists');
 
                 const hashedPassword = await bcrypt.hash(password, 10);
                 const user = new UserModel({
@@ -62,6 +82,7 @@ const resolvers = {
                     email,
                     name,
                     password: hashedPassword,
+                    createdAt: new Date(),
                 });
                 const savedUser = await user.save();
 

@@ -54,8 +54,11 @@ const typeDefs = `#graphql
     }
 
     type Query {
-        getUser(
+        getUserById(
             _id: ID
+        ): User!
+        getUserByEmail(
+            email: String
         ): User!
         getRestaurant(
             _id: ID
@@ -74,7 +77,7 @@ const typeDefs = `#graphql
             name: String!
             phone: String
             image: String
-        ): User!,
+        ): User!
         updateUser(
             _id: ID
             email: String
@@ -82,10 +85,14 @@ const typeDefs = `#graphql
             name: String
             phone: String
             image: String
-        ): User!,
+        ): User!
         deleteUser(
             _id: ID
-        ): User!,
+        ): User!
+        login(
+            email: String!
+            password: String!
+        ): User!
         createRestaurant(
             _id: ID
             searchString: String
@@ -115,7 +122,7 @@ const typeDefs = `#graphql
             imageUrl: String
             reviewStars: Int
             reviewText: String
-        ): Restaurant!,
+        ): Restaurant!
         updateRestaurant(
             _id: ID
             searchString: String
@@ -145,7 +152,7 @@ const typeDefs = `#graphql
             imageUrl: String
             reviewStars: Int
             reviewText: String
-        ): Restaurant!,
+        ): Restaurant!
         deleteRestaurant(
             _id: ID
         ): Restaurant!
