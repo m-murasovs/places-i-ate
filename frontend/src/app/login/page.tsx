@@ -2,7 +2,6 @@
 import { FormEvent, useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 
 const Login = () => {
     const [error, setError] = useState('');
@@ -16,6 +15,7 @@ const Login = () => {
             email: formData.get('email'),
             password: formData.get('password'),
             redirect: false,
+            withCredentials: true
         });
 
         if (res?.error) setError(res.error as string);
@@ -29,7 +29,7 @@ const Login = () => {
         border border-solid border-black bg-white rounded"
                 onSubmit={handleSubmit}
             >
-                {error && <div className="text-black">{error}</div>}
+                {error && <div className="font-bold" style={{ color: 'red' }}>{error}</div>}
                 <h1 className="mb-5 w-full text-2xl font-bold">Sign In</h1>
                 <label className="w-full text-sm">Email</label>
                 <input
@@ -49,11 +49,6 @@ const Login = () => {
                     Sign In
                 </button>
 
-                <Link
-                    href="/register"
-                    className="text-sm text-[#888] transition duration-150 ease hover:text-black">
-                    Don{"'"}t have an account?
-                </Link>
             </form>
         </section>
     );

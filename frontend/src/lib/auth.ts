@@ -1,15 +1,16 @@
 import type { NextAuthOptions } from 'next-auth';
 import credentials from 'next-auth/providers/credentials';
 import { gql } from '@apollo/client';
-import { client } from './ApolloWrapper';
+import { getClient } from './client';
+import bcrypt from 'bcryptjs';
 
 interface LoginCredentials {
-    email: string | undefined,
-    password?: string | undefined,
+    email: string,
+    password: string,
 }
 
 const LOGIN = gql`
-    query Login {
+    mutation Login {
         login(email: $email, password: $password) {
             email
             password
@@ -22,18 +23,24 @@ export const authOptions: NextAuthOptions = {
             name: 'Credentials',
             id: 'credentials',
             credentials: {
-                email: { label: "Email", type: "text" },
-                password: { label: "Password", type: "password" }
+                email: { label: 'Email', type: 'text' },
+                password: { label: 'Password', type: 'password' }
             },
             async authorize(credentials) {
                 const { email, password } = credentials as LoginCredentials;
 
-                const { data } = await client.query({
-                    query: LOGIN,
-                    variables: { email, password }
-                });
+                try {
+                    const hashedPassword = await bcrypt.hash(password, 10);
+                    const { data } = await getClient().mutate({
+                        mutation: LOGIN,
+                        variables: { email, password: hashedPassword }
+                    });
 
-                return data;
+                    return data;
+                } catch (error) {
+                    console.error(error);
+                    return null;
+                }
             }
         })
     ],

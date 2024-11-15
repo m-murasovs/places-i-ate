@@ -1,8 +1,11 @@
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 import type { Restaurant } from '../types';
 import RestaurantModel from '../models/restaurant';
 import UserModel from '../models/user';
+
+const JWT_SECRET = process.env.AUTH_SECRET;
 
 interface RegisterValues {
     email: string,
@@ -56,18 +59,26 @@ const resolvers = {
         },
     },
     Mutation: {
-        login: async (parent, { email, password }: { email: string; password: string; }) => {
-            try {
-                const user = await UserModel.findOne({ email });
-                if (!user) throw new Error('Invalid email');
+        login: async (
+            parent,
+            { email, password }: { email: string; password: string; }
+        ) => {
+            const user = await UserModel.findOne({ email });
+            if (!user) throw new Error('Invalid email');
 
-                const passwordMatch = await bcrypt.compare(password, user[0].password);
-                if (!passwordMatch) throw new Error('Invalid password');
+            const passwordMatch = await bcrypt.compare(password, user.password);
+            if (!passwordMatch) throw new Error('Invalid password');
 
-                return user;
-            } catch (error) {
-                throw new Error(`Error logging in. Error: ${error}`);
-            }
+            const token = jwt.sign(
+                { userId: user._id },
+                JWT_SECRET,
+                { expiresIn: "24h" }
+            );
+
+            return {
+                token,
+                user,
+            };
         },
         createUser: async (parent, values: RegisterValues) => {
             const { email, password, name } = values;
