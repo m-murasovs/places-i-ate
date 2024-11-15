@@ -1,34 +1,31 @@
 {
-    "name": "places-we-ate",
+    "name": "frontend",
+    "version": "0.1.0",
     "private": true,
-    "version": "1.0.0",
-    "description": "Fun app project for tracking places I've eaten at",
-    "license": "ISC",
-    "devDependencies": {
-        "@types/node": "^22.7.8",
-        "@typescript-eslint/eslint-plugin": "^6.0.0",
-        "@typescript-eslint/parser": "^6.0.0",
-        "eslint": "^8.57.1",
-        "eslint-config-airbnb": "^19.0.4",
-        "eslint-plugin-cypress": "^2.15.1",
-        "eslint-plugin-import": "^2.31.0",
-        "eslint-plugin-jsx-a11y": "^6.10.0",
-        "eslint-plugin-react": "^7.37.1",
-        "eslint-plugin-react-hooks": "^4.6.2",
-        "eslint-plugin-react-refresh": "^0.4.5",
-        "typescript": "^5.6.3"
-    },
     "scripts": {
-        "install-all": "cd backend && npm install && cd ../frontend && npm install && cd ../",
-        "backend": "cd backend && npm run dev",
-        "frontend": "cd frontend && npm run dev",
-        "test:backend": "cd backend && npm run test",
-        "test:frontend:components": "cd frontend && npm run test:components",
-        "test:frontend:e2e": "cd frontend && npm run test:e2e",
-        "lint": "eslint . --ext ts,js,jsx --report-unused-disable-directives --max-warnings 0",
-        "lint:fix": "eslint . --fix --report-unused-disable-directives --max-warnings 0"
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint"
     },
     "dependencies": {
-        "@apollo/client": "^3.11.8"
+        "bcryptjs": "^2.4.3",
+        "dotenv": "^16.4.5",
+        "mongoose": "^8.8.1",
+        "next": "14.2.15",
+        "next-auth": "^4.24.10",
+        "react": "^18",
+        "react-dom": "^18"
+    },
+    "devDependencies": {
+        "@types/bcryptjs": "^2.4.6",
+        "@types/node": "^20",
+        "@types/react": "^18",
+        "@types/react-dom": "^18",
+        "eslint": "^8",
+        "eslint-config-next": "14.2.15",
+        "postcss": "^8",
+        "tailwindcss": "^3.4.1",
+        "typescript": "^5"
     }
 }

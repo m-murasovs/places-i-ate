@@ -1,4 +1,3 @@
-// TODO: create a shared file for types
 export interface Restaurant {
     _id: string;
     searchString: string;

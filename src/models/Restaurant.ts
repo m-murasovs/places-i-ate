@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import type { Restaurant } from 'types';
+import type { Restaurant } from '@/types';
 
 const restaurantSchema = new Schema<Restaurant>({
     _id: {

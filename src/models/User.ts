@@ -1,7 +1,7 @@
-import { Schema, model } from "mongoose";
-import { User } from 'types';
+import { Schema, model } from 'mongoose';
+import { type User as UserType } from '@/types';
 
-const UserSchema = new Schema<User>({
+const UserSchema = new Schema<UserType>({
     _id: {
         type: String,
         required: true,
@@ -9,10 +9,10 @@ const UserSchema = new Schema<User>({
     email: {
         type: String,
         unique: true,
-        required: [true, "Email is required"],
+        required: [true, 'Email is required'],
         match: [
             /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-            "Email is invalid",
+            'Email is invalid',
         ],
     },
     password: {
@@ -21,14 +21,14 @@ const UserSchema = new Schema<User>({
     },
     name: {
         type: String,
-        required: [true, "Name is required"]
+        required: [true, 'Name is required']
     }
 }, {
     timestamps: true,
-    collection: "users"
+    collection: 'users'
 }
 );
 
-const User = model<User>('User', UserSchema);
+const User = model<UserType>('User', UserSchema);
 
 export default User;

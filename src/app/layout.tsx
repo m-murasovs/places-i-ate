@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
-import { ApolloWrapper } from '@/lib/ApolloWrapper';
 import { Provider } from './provider';
 
 const geistSans = localFont({
@@ -28,12 +27,8 @@ export default function RootLayout({
     return (
         <html lang="en">
             <Provider>
-                <body
-                    className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-                >
-                    <ApolloWrapper>
-                        {children}
-                    </ApolloWrapper>
+                <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+                    {children}
                 </body>
             </Provider>
         </html>
