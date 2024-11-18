@@ -1,7 +1,7 @@
-import { Schema, model } from 'mongoose';
-import type { Restaurant } from '@/types';
+import mongoose, { Schema } from 'mongoose';
+import type { Restaurant as RestaurantType } from '@/types';
 
-const restaurantSchema = new Schema<Restaurant>({
+const RestaurantSchema = new Schema<RestaurantType>({
     _id: {
         type: String,
         required: false,
@@ -119,6 +119,6 @@ const restaurantSchema = new Schema<Restaurant>({
     },
 }, { collection: 'places' });
 
-const RestaurantModel = model<Restaurant>('Restaurant', restaurantSchema);
+const RestaurantModel = mongoose.model('Restaurant', RestaurantSchema);
 
-export default RestaurantModel;
+export const Restaurant = (mongoose.models.Restaurant as typeof RestaurantModel) || RestaurantModel;

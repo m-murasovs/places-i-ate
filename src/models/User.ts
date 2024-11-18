@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import { type User as UserType } from '@/types';
 
 const UserSchema = new Schema<UserType>({
@@ -29,6 +29,8 @@ const UserSchema = new Schema<UserType>({
 }
 );
 
-const User = model<UserType>('User', UserSchema);
+const UserModel = mongoose.model('User', UserSchema);
 
-export default User;
+export const User = (mongoose.models.User as typeof UserModel) || UserModel;
+
+console.log(User);

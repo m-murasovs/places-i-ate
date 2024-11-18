@@ -1,7 +1,9 @@
 import credentials from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
 import { connectDB } from './mongodb';
-import User from '@/models/User';
+import mongoose from 'mongoose';
+
+const User = mongoose.model('User');
 
 export const authOptions = {
     providers: [
