@@ -1,4 +1,4 @@
-export interface Restaurant {
+export type IRestaurant = {
     _id: string;
     searchString: string;
     rank: number;
@@ -30,15 +30,8 @@ export interface Restaurant {
     imageUrl: string;
     reviewStars: number;
     reviewText: string;
-}
+};
 
-export interface User {
-    _id: string;
-    email: string;
-    password: string;
-    name: string;
-    phone: string;
-    image: string;
-    createdAt: Date;
-    updatedAt: Date;
+export interface IRestaurantService {
+    searchRestaurant(filter: Partial<IRestaurant>): Promise<{ data: IRestaurant[], totalCount: number; }>;
 }

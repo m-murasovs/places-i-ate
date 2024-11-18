@@ -1,6 +1,8 @@
+import { MongoClient } from 'mongodb';
+
 export type global = unknown;
 
 declare global {
     // eslint-disable-next-line
-    var mongoose: any;
+    var _mongoClientPromise: Promise<MongoClient>;
 }

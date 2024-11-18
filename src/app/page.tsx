@@ -1,47 +1,37 @@
-'use client';
-import React from 'react';
-import { signOut, useSession } from 'next-auth/react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import React, { Suspense } from 'react';
+import { fetchRestaurants } from '@/Server/actions/RestaurantActions';
+import { IRestaurant } from '@/Server/Service/RestaurantService/IRestaurantService';
 
-export default function Home() {
-    const { status } = useSession();
-    const router = useRouter();
-
-    if (status === 'loading') return <div>Loading...</div>;
-
-    const showSession = () => {
-        if (status === 'authenticated') {
-            return (
-                <button
-                    className="border border-solid border-black rounded"
-                    onClick={() => {
-                        signOut({ redirect: false }).then(() => {
-                            router.push('/');
-                        });
-                    }}
-                >
-                    Sign Out
-                </button>
-            );
-        } else {
-            return (
-                <Link
-                    href="/login"
-                    className="border border-solid border-black rounded"
-                >
-                    Sign In
-                </Link>
-            );
-        }
-    };
-
-    return (
-        <main className="flex min-h-screen flex-col items-center justify-center">
-            {showSession()}
-            <h1>Restaurants</h1>
-            <br />
-        </main>
-    );
+type ISearchQuery = {
+    page: string;
 }
 
+type HomeProps = {
+    searchParams?: { [key: string]: string | string[] | undefined; };
+};
+
+export default async function Home({
+    searchParams
+}: HomeProps) {
+    const { page } = searchParams as ISearchQuery;
+    const pageNumber = page && !isNaN(Number(page)) ? Number(page) : 1;
+
+    const restaurants = await fetchRestaurants(pageNumber, 10);
+
+    console.log(restaurants);
+
+    return (
+        <div>
+            <h1>Restaurants</h1>
+            <Suspense fallback={<div>Loading...</div>}>
+                <ul>
+                    {restaurants.map((restaurant: IRestaurant) => (
+                        <li key={restaurant._id}>
+                            <h2>{restaurant.title}</h2>
+                        </li>
+                    ))}
+                </ul>
+            </Suspense>
+        </div>
+    );
+}
