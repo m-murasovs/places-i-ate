@@ -1,4 +1,5 @@
 import { signIn } from '@/auth';
+import { PrimaryButton } from '@/components/button';
 
 const LoginPage = () => {
     return (
@@ -8,7 +9,9 @@ const LoginPage = () => {
                 await signIn('google');
             }}
         >
-            <button type="submit">Login with Google</button>
+            <PrimaryButton type="submit">
+                Login with Google
+            </PrimaryButton>
         </form>
     );
 };

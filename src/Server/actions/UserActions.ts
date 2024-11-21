@@ -1,9 +1,10 @@
 'use server';
 
+import { Filter, FindOptions } from 'mongodb';
 import { IUser } from '../Service/UserService/IUserService';
 import { UserService } from '../Service/UserService/UserSevice';
 
-export const fetchUser = async (filter: Record<string, unknown>, projection: Record<string, unknown>) => {
+export const fetchUser = async (filter: Filter<IUser>, projection: FindOptions<IUser>) => {
     const userService = new UserService();
     const data = await userService.searchUser(filter, projection);
 

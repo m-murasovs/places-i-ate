@@ -1,5 +1,6 @@
 import { Repository } from '@/Server/RepositoryService/RepositoryService';
 import { IRestaurant, IRestaurantService } from './IRestaurantService';
+import { Filter } from 'mongodb';
 
 export class RestaurantService implements IRestaurantService {
     private repository: Repository<IRestaurant>;
@@ -8,11 +9,17 @@ export class RestaurantService implements IRestaurantService {
         this.repository = new Repository<IRestaurant>('places');
     }
 
-    async searchRestaurant(
-        filter: Partial<IRestaurant>,
+    async searchRestaurants(
+        filter: Filter<IRestaurant>,
         page: number = 1,
         limit: number = 10
     ): Promise<{ data: IRestaurant[], totalCount: number; }> {
         return this.repository.find(filter, page, limit);
+    }
+
+    async createRestaurant(
+        data: Partial<IRestaurant>
+    ): Promise<IRestaurant | null> {
+        return this.repository.create(data);
     }
 }

@@ -1,5 +1,7 @@
-export type IRestaurant = {
-    _id: string;
+import { Document, Filter, ObjectId } from 'mongodb';
+
+export interface IRestaurant extends Document {
+    _id: ObjectId;
     searchString: string;
     rank: number;
     searchPageUrl: string;
@@ -33,5 +35,6 @@ export type IRestaurant = {
 };
 
 export interface IRestaurantService {
-    searchRestaurant(filter: Partial<IRestaurant>): Promise<{ data: IRestaurant[], totalCount: number; }>;
+    searchRestaurants(filter: Filter<IRestaurant>): Promise<{ data: IRestaurant[], totalCount: number; }>;
+    createRestaurant(data: Partial<IRestaurant>): Promise<IRestaurant | null>;
 }

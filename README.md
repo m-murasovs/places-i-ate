@@ -1,10 +1,5 @@
 # Plan
 
-## Backend
-
-1. Make it possible to add a review to a restaurant
-2. Deploy the Docker container and keep the server running
-
 ## Frontend
 
 1. Make it possible to find a restaurant from the list (or DB?) Search by title?

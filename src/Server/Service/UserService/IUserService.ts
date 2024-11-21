@@ -1,5 +1,7 @@
+import { Document, Filter, FindOptions, ObjectId } from 'mongodb';
+
 export interface IUser extends Document {
-    _id: string;
+    _id: ObjectId;
     email: string;
     name: string;
     emailVerified: Date;
@@ -9,8 +11,8 @@ export interface IUser extends Document {
 
 export interface IUserService {
     searchUser(
-        filter: Partial<IUser>,
-        fields: Record<string, unknown>,
+        filter: Filter<IUser>,
+        fields: FindOptions<IUser>,
     ): Promise<IUser | null>;
 
     createUser(data: IUser): Promise<IUser | null>;

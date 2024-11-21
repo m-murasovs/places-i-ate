@@ -1,5 +1,6 @@
 import { Repository } from '@/Server/RepositoryService/RepositoryService';
 import { IUser, IUserService } from './IUserService';
+import { Filter, FindOptions } from 'mongodb';
 
 export class UserService implements IUserService {
     private repository: Repository<IUser>;
@@ -8,7 +9,7 @@ export class UserService implements IUserService {
         this.repository = new Repository<IUser>('users');
     }
 
-    async searchUser(filter: Partial<IUser>, fields: Record<string, unknown>) {
+    async searchUser(filter: Filter<IUser>, fields: FindOptions<IUser>) {
         return await this.repository.findOne(filter, fields);
     }
 
