@@ -17,6 +17,12 @@ export class RestaurantService implements IRestaurantService {
         return this.repository.find(filter, page, limit);
     }
 
+    async searchRestaurant(
+        filter: Filter<IRestaurant>,
+    ): Promise<IRestaurant | null> {
+        return this.repository.findOne(filter);
+    }
+
     async createRestaurant(
         data: Partial<IRestaurant>
     ): Promise<IRestaurant | null> {

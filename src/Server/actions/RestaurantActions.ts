@@ -15,6 +15,12 @@ export const fetchVisitedRestaurants = async (pageNumber: number, limit: number)
     return data;
 };
 
+export const searchRestaurant = async (title: string) => {
+    const restaurantService = new RestaurantService();
+    const data = await restaurantService.searchRestaurant({ title: { '$regex': title, '$options': 'i' } });
+    return data;
+};
+
 export const createNewRestaurant = async (data: Partial<IRestaurant>) => {
     const restaurantService = new RestaurantService();
     const restaurantData = await restaurantService.createRestaurant(data);

@@ -5,7 +5,7 @@ export const PrimaryButton = ({
     type,
     ...props
 }: {
-    type: 'submit' | 'reset' | 'button' | undefined;
+    type?: 'submit' | 'reset' | 'button' | undefined;
     children: ReactElement | string;
 }) => {
     return <button
