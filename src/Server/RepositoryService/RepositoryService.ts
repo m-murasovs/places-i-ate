@@ -4,14 +4,16 @@ import { IRepository } from './IRepositoryService';
 
 export class Repository<T> implements IRepository<T> {
     private collection: string;
+    private mongoClient: Promise<MongoClient>;
 
     constructor(collection: string) {
         this.collection = collection;
+        this.mongoClient = clientPromise;
     }
 
     async create(data: Partial<T>): Promise<T | null> {
         try {
-            const client: MongoClient = await clientPromise;
+            const client = await this.mongoClient;
             const collection = client.db().collection(this.collection);
             const result = await collection.insertOne({
                 ...data,
@@ -40,7 +42,7 @@ export class Repository<T> implements IRepository<T> {
         projection?: FindOptions,
     ): Promise<{ data: T[], totalCount: number; }> {
         try {
-            const client: MongoClient = await clientPromise;
+            const client = await this.mongoClient;
             const collection = client.db().collection(this.collection);
             const totalCount = await collection.countDocuments(filter as WithId<T>);
             const data = await collection.find(filter as WithId<T>, { projection })
@@ -67,7 +69,7 @@ export class Repository<T> implements IRepository<T> {
         projection?: FindOptions,
     ): Promise<T | null> {
         try {
-            const client: MongoClient = await clientPromise;
+            const client = await this.mongoClient;
             const collection = client.db().collection(this.collection);
             const result = await collection.findOne(filter as WithId<T>, { projection });
 

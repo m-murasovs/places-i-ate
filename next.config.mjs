@@ -8,6 +8,18 @@ const nextConfig = {
                 port: '',
                 pathname: '**',
             },
+            {
+                protocol: 'https',
+                hostname: 'streetviewpixels-pa.googleapis.com',
+                port: '',
+                pathname: '**',
+            },
+            {
+                protocol: 'https',
+                hostname: 'cdn.worldota.net',
+                port: '',
+                pathname: '**',
+            },
         ],
     }
 };

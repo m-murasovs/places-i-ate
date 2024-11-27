@@ -1,6 +1,6 @@
 import { Repository } from '@/Server/RepositoryService/RepositoryService';
 import { IRestaurant, IRestaurantService } from './IRestaurantService';
-import { Filter } from 'mongodb';
+import { Filter, FindOptions } from 'mongodb';
 
 export class RestaurantService implements IRestaurantService {
     private repository: Repository<IRestaurant>;
@@ -12,9 +12,10 @@ export class RestaurantService implements IRestaurantService {
     async searchRestaurants(
         filter: Filter<IRestaurant>,
         page: number = 1,
-        limit: number = 10
+        limit: number = 10,
+        projection?: FindOptions<IRestaurant>,
     ): Promise<{ data: IRestaurant[], totalCount: number; }> {
-        return this.repository.find(filter, page, limit);
+        return this.repository.find(filter, page, limit, projection);
     }
 
     async searchRestaurant(
