@@ -1,9 +1,10 @@
 'use client';
-import React, { useState, Suspense, useEffect } from 'react';
-import { fetchVisitedRestaurants } from '@/Server/actions/RestaurantActions';
-import { IRestaurant } from '@/Server/Service/RestaurantService/IRestaurantService';
+import React, { useState, Suspense } from 'react';
 import { DebounceInput } from 'react-debounce-input';
+import Image from 'next/image';
+import { IRestaurant } from '@/Server/Service/RestaurantService/IRestaurantService';
 import FoundRestaurants from './restaurant';
+import useFetchVisitedPlaces from '@/hooks/use_fetch_visited_places';
 
 type ISearchQuery = {
     page: string;
@@ -16,50 +17,49 @@ type HomeProps = {
 export default function Home({
     searchParams
 }: HomeProps) {
-    const [restaurants, setRestaurants] = useState<IRestaurant[]>([]);
     const [searchInput, setSearchInput] = useState('');
 
     const { page } = searchParams as ISearchQuery;
     const pageNumber = page && !isNaN(Number(page)) ? Number(page) : 1;
 
-    useEffect(() => {
-        // TODO: create a hook for this and add option to invalidate the query when a restaurant is reviewed
-        const fetchRestaurants = async () => {
-            const data = await fetchVisitedRestaurants(pageNumber, 10);
-            setRestaurants(data);
-        };
-        fetchRestaurants();
-    }, [pageNumber]);
-
+    const { data: visitedPlaces, isLoading, isFetching } = useFetchVisitedPlaces(pageNumber, 10);
+    // only fetch once
     return (
         <div>
             <section className='mb-4'>
                 <h2 className='text-2xl mb-1'>Submit a new review</h2>
                 <div>
                     <DebounceInput
-                        value={searchInput}
-                        placeholder='Type restaurant name...'
-                        className='p-2 border-2 border-gray-400 rounded'
-                        minLength={2}
                         onChange={(e) => setSearchInput(e.target.value)}
+                        className='p-2 border-2 border-gray-400 rounded'
+                        placeholder='Type restaurant name...'
+                        value={searchInput}
+                        minLength={2}
                     />
                     <FoundRestaurants searchInput={searchInput} />
                 </div>
             </section>
 
             <section>
-                <h2 className='text-2xl mb-4'>Reviewed restaurants</h2>
-                <Suspense fallback={'Loading...'}>
-                    <ul>
-                        {restaurants.map((restaurant: IRestaurant) => (
-                            <li key={restaurant.title}>
-                                <h2>{restaurant.title}</h2>
-                                <h2>Stars: {restaurant.reviewStars}</h2>
-                                <h2>{restaurant.reviewText}</h2>
+                <h2 className='text-2xl mb-4'>Places we been</h2>
+                {isLoading || isFetching
+                    ? <p>Loading...</p>
+                    : <ul>
+                        {visitedPlaces?.map((place: IRestaurant) => (
+                            <li key={place.title}>
+                                <Image
+                                    alt={place.title}
+                                    src={place.imageUrl}
+                                    width={50}
+                                    height={50}
+                                />
+                                <h2>{place.title}</h2>
+                                <h2>Stars: {place.reviewStars}</h2>
+                                <h2>{place.reviewText}</h2>
                             </li>
                         ))}
                     </ul>
-                </Suspense>
+                }
             </section>
         </div>
     );

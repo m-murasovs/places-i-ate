@@ -3,10 +3,10 @@ import useSearchRestaurants from '@/hooks/use_search_restaurant';
 import useUpdateRestaurant from '@/hooks/use_update_restaurant';
 import { IRestaurant } from '@/Server/Service/RestaurantService/IRestaurantService';
 import { ItemId } from '@/Server/Service/types';
-import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { DebounceInput } from 'react-debounce-input';
+import { invalidateQueries } from './react_query_provider';
 
 const RestaurantForm = (
     {
@@ -20,8 +20,13 @@ const RestaurantForm = (
     }
 ) => {
     const [showReviewForm, setShowReviewForm] = useState(false);
-    const [editReviewStars, setEditReviewStars] = useState<number>(reviewStars || 3);
-    const [editReviewText, setEditReviewText] = useState(reviewText || '');
+    const [editReviewStars, setEditReviewStars] = useState<number>(3);
+    const [editReviewText, setEditReviewText] = useState('');
+
+    useEffect(() => {
+        setEditReviewStars(reviewStars);
+        setEditReviewText(reviewText);
+    }, [])
 
     const { error, mutate, isLoading, isSuccess } = useUpdateRestaurant();
 
@@ -42,6 +47,10 @@ const RestaurantForm = (
                 }
             }
         );
+        // Refetch the visited places on homepage but allow time for it to update
+        setTimeout(() => {
+            invalidateQueries(['fetchVisitedPlaces']);
+        }, 1000)
     };
 
     // @ts-ignore
