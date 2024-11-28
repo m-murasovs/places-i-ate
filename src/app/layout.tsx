@@ -21,6 +21,7 @@ const geistMono = localFont({
 export const metadata: Metadata = {
     title: 'Munch Gdynia',
     description: 'Places we done been eat at',
+    icons: ['/favicon.ico']
 };
 
 export default async function RootLayout({

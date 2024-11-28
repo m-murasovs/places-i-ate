@@ -1,7 +1,9 @@
-import { Document, Filter, ObjectId } from 'mongodb';
+import { Document, Filter, FindOptions } from 'mongodb';
+import { ItemId } from '../types';
+
 
 export interface IRestaurant extends Document {
-    _id: ObjectId;
+    _id: ItemId;
     searchString: string;
     rank: number;
     searchPageUrl: string;
@@ -37,4 +39,5 @@ export interface IRestaurant extends Document {
 export interface IRestaurantService {
     searchRestaurants(filter: Filter<IRestaurant>): Promise<{ data: IRestaurant[], totalCount: number; }>;
     createRestaurant(data: Partial<IRestaurant>): Promise<IRestaurant | null>;
+    updateRestaurant(_id: ItemId, updateFields: FindOptions<IRestaurant>): Promise<IRestaurant | null>;
 }

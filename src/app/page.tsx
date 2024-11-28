@@ -2,9 +2,8 @@
 import React, { useState, Suspense, useEffect } from 'react';
 import { fetchVisitedRestaurants } from '@/Server/actions/RestaurantActions';
 import { IRestaurant } from '@/Server/Service/RestaurantService/IRestaurantService';
-import Image from 'next/image';
-import useSearchRestaurants from '@/hooks/use_search_restaurant';
 import { DebounceInput } from 'react-debounce-input';
+import FoundRestaurants from './restaurant';
 
 type ISearchQuery = {
     page: string;
@@ -14,35 +13,23 @@ type HomeProps = {
     searchParams?: { [key: string]: string | string[] | undefined; };
 };
 
-/**
- * This page will display a search form for available restaurants
- * We will be able to search one,
- * Below it, we'll show the restaurants we've visited with the reviews
- *
- */
 export default function Home({
     searchParams
 }: HomeProps) {
     const [restaurants, setRestaurants] = useState<IRestaurant[]>([]);
     const [searchInput, setSearchInput] = useState('');
 
+    const { page } = searchParams as ISearchQuery;
+    const pageNumber = page && !isNaN(Number(page)) ? Number(page) : 1;
+
     useEffect(() => {
+        // TODO: create a hook for this and add option to invalidate the query when a restaurant is reviewed
         const fetchRestaurants = async () => {
             const data = await fetchVisitedRestaurants(pageNumber, 10);
             setRestaurants(data);
         };
         fetchRestaurants();
-    }, []);
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchInput(e.target.value);
-    };
-
-    const { page } = searchParams as ISearchQuery;
-    const pageNumber = page && !isNaN(Number(page)) ? Number(page) : 1;
-
-    const { data: foundRestaurants, isLoading, isError } = useSearchRestaurants(searchInput);
-    const restaurantNotFound = (!!searchInput.length && !foundRestaurants && !isLoading) || isError;
+    }, [pageNumber]);
 
     return (
         <div>
@@ -52,34 +39,11 @@ export default function Home({
                     <DebounceInput
                         value={searchInput}
                         placeholder='Type restaurant name...'
-                        className='p-2 border-2 border-gray-600 rounded'
+                        className='p-2 border-2 border-gray-400 rounded'
                         minLength={2}
-                        onChange={handleChange}
+                        onChange={(e) => setSearchInput(e.target.value)}
                     />
-                    {(searchInput.length && isLoading)
-                        ? <p>Loading...</p>
-                        : null
-                    }
-                    {restaurantNotFound
-                        ? <p>Nothing found for <b>{searchInput}</b></p>
-                        : null
-                    }
-                    {foundRestaurants
-                        ? foundRestaurants.map((rest: IRestaurant | undefined) => {
-                            if (!rest) return;
-                            const { title, imageUrl, address } = rest;
-                            return <div key={title}>
-                                <Image
-                                    alt={title}
-                                    src={imageUrl}
-                                    width={50}
-                                    height={50}
-                                />
-                                <h3>{title}</h3>
-                                <p>{address}</p>
-                            </div>;
-                        })
-                        : null}
+                    <FoundRestaurants searchInput={searchInput} />
                 </div>
             </section>
 
@@ -90,6 +54,8 @@ export default function Home({
                         {restaurants.map((restaurant: IRestaurant) => (
                             <li key={restaurant.title}>
                                 <h2>{restaurant.title}</h2>
+                                <h2>Stars: {restaurant.reviewStars}</h2>
+                                <h2>{restaurant.reviewText}</h2>
                             </li>
                         ))}
                     </ul>
