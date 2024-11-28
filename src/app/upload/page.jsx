@@ -1,10 +1,10 @@
 'use client';
 import React from 'react';
 import dataset from '../../../dataset.json';
-// import { createNewRestaurant } from '@/Server/actions/RestaurantActions';
+// import { createNewPlace } from '@/Server/actions/PlaceActions';
 import { PrimaryButton } from '@/components/button';
 
-// const DISALLOWED_RESTAURANTS = [
+// const DISALLOWED_PLACES = [
 //     'Żabka | Prosto z pieca',
 //     'Shell',
 //     'McDonald\'s',
@@ -15,9 +15,9 @@ import { PrimaryButton } from '@/components/button';
 
 const UploadPage = () => {
     const upload = async () => {
-        // for (const restaurant of dataset) {
-        //     if (!DISALLOWED_RESTAURANTS.includes(restaurant.title)) {
-        //         const rest = await createNewRestaurant(restaurant);
+        // for (const place of dataset) {
+        //     if (!DISALLOWED_PLACES.includes(place.title)) {
+        //         const rest = await createNewPlace(place);
         //         console.log(`Uploaded ${rest.title}`);
         //     }
         // }

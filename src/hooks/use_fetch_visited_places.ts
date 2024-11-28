@@ -1,11 +1,11 @@
 'use client';
-import { fetchVisitedRestaurants } from '@/Server/actions/RestaurantActions';
+import { fetchVisitedPlaces } from '@/Server/actions/PlaceActions';
 import { useQuery } from '@tanstack/react-query';
 
 const useFetchVisitedPlaces = (pageNumber: number, limit: number) => {
     return useQuery({
         queryKey: ['fetchVisitedPlaces', pageNumber],
-        queryFn: () => fetchVisitedRestaurants(pageNumber, limit),
+        queryFn: () => fetchVisitedPlaces(pageNumber, limit),
         enabled: !!pageNumber && !!limit,
     });
 };

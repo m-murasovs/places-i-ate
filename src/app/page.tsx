@@ -2,8 +2,8 @@
 import React, { useState, Suspense } from 'react';
 import { DebounceInput } from 'react-debounce-input';
 import Image from 'next/image';
-import { IRestaurant } from '@/Server/Service/RestaurantService/IRestaurantService';
-import FoundRestaurants from './restaurant';
+import { IPlace } from '@/Server/Service/PlaceService/IPlaceService';
+import FoundPlaces from './place';
 import useFetchVisitedPlaces from '@/hooks/use_fetch_visited_places';
 
 type ISearchQuery = {
@@ -23,7 +23,7 @@ export default function Home({
     const pageNumber = page && !isNaN(Number(page)) ? Number(page) : 1;
 
     const { data: visitedPlaces, isLoading, isFetching } = useFetchVisitedPlaces(pageNumber, 10);
-    // only fetch once
+
     return (
         <div>
             <section className='mb-4'>
@@ -32,11 +32,11 @@ export default function Home({
                     <DebounceInput
                         onChange={(e) => setSearchInput(e.target.value)}
                         className='p-2 border-2 border-gray-400 rounded'
-                        placeholder='Type restaurant name...'
+                        placeholder='Type place name...'
                         value={searchInput}
                         minLength={2}
                     />
-                    <FoundRestaurants searchInput={searchInput} />
+                    <FoundPlaces searchInput={searchInput} />
                 </div>
             </section>
 
@@ -45,7 +45,7 @@ export default function Home({
                 {isLoading || isFetching
                     ? <p>Loading...</p>
                     : <ul>
-                        {visitedPlaces?.map((place: IRestaurant) => (
+                        {visitedPlaces?.map((place: IPlace) => (
                             <li key={place.title}>
                                 <Image
                                     alt={place.title}

@@ -1,7 +1,7 @@
 import clientPromise from '@/lib/mongodb';
 import { Filter, FindOptions, MongoClient, ObjectId, WithId } from 'mongodb';
-import { IRepository } from './IRepositoryService';
-import { IRestaurant } from '../Service/RestaurantService/IRestaurantService';
+import { IRepository } from './IPlaceService';
+import { IPlace } from '../Service/PlaceService/IPlaceService';
 import { ItemId } from '../Service/types';
 
 const handleMongoError = (error: unknown) => {
@@ -42,7 +42,7 @@ export class Repository<T> implements IRepository<T> {
 
     async update(
         _id: ItemId,
-        projection: FindOptions<IRestaurant>,
+        projection: FindOptions<IPlace>,
     ): Promise<T | null> {
         try {
             const client = await this.mongoClient;

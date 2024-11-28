@@ -1,4 +1,4 @@
-import { Repository } from '@/Server/RepositoryService/RepositoryService';
+import { Repository } from '@/Server/PlaceService/PlaceService';
 import { IUser, IUserService } from './IUserService';
 import { Filter, FindOptions } from 'mongodb';
 

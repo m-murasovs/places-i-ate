@@ -2,10 +2,11 @@
 
 ## Frontend
 
-1. Make it possible to find a restaurant from the list (or DB?) Search by title?
-2. Make it possible to add a review to a restaurant.
-    - Use the updateRestaurant mutation
-    - I guess we need to have the input as a form.
-    -
-3. Show all visited restaurants in a list
-4. Show all restaurants on a map. Visited ones in a different color? Maybe a map icon with the logo inside?
+1. (optional) Save reviews in a separate repo. They should be tied to the user and the place. So, userId and placeId.
+2. Implement basic visual components
+3. Show all places on a map. Visited ones in a different color? Maybe a map icon with the logo inside?
+4. Wish list - make some plans!
+
+4. Future:
+    - Better scraping
+        - scrape eeeeverything - maybe we can set a location for the user and then specify accordingly?

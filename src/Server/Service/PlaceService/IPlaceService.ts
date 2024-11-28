@@ -2,7 +2,7 @@ import { Document, Filter, FindOptions } from 'mongodb';
 import { ItemId } from '../types';
 
 
-export interface IRestaurant extends Document {
+export interface IPlace extends Document {
     _id: ItemId;
     searchString: string;
     rank: number;
@@ -36,8 +36,8 @@ export interface IRestaurant extends Document {
     reviewText: string;
 };
 
-export interface IRestaurantService {
-    searchRestaurants(filter: Filter<IRestaurant>): Promise<{ data: IRestaurant[], totalCount: number; }>;
-    createRestaurant(data: Partial<IRestaurant>): Promise<IRestaurant | null>;
-    updateRestaurant(_id: ItemId, updateFields: FindOptions<IRestaurant>): Promise<IRestaurant | null>;
+export interface IPlaceService {
+    searchPlaces(filter: Filter<IPlace>): Promise<{ data: IPlace[], totalCount: number; }>;
+    createPlace(data: Partial<IPlace>): Promise<IPlace | null>;
+    updatePlace(_id: ItemId, updateFields: FindOptions<IPlace>): Promise<IPlace | null>;
 }
