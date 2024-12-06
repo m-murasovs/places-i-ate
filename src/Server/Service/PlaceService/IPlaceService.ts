@@ -1,7 +1,6 @@
 import { Document, Filter, FindOptions } from 'mongodb';
 import { ItemId } from '../types';
 
-
 export interface IPlace extends Document {
     _id: ItemId;
     searchString: string;

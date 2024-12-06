@@ -53,9 +53,8 @@ const PlaceForm = (
         }, 1000);
     };
 
-    // @ts-ignore
     if (error) {
-        // @ts-ignore
+        // @ts-expect-error dkafjhdskjfh
         return <span>{`An error has occurred: ${error.message}`}</span>;
     }
 
