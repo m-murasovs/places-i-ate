@@ -2,8 +2,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
 
-import { auth, signOut } from '@/auth';
-import { notFound } from 'next/navigation';
+import { signOut } from '@/auth';
 import { PrimaryButton } from '@/components/button';
 import { ReactQueryProvider } from './react_query_provider';
 
@@ -29,9 +28,6 @@ export default async function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const session = await auth();
-    if (!session) return notFound();
-
     return (
         <html lang="en">
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>

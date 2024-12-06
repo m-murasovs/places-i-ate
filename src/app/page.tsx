@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, Suspense } from 'react';
+import React, { useState } from 'react';
 import { DebounceInput } from 'react-debounce-input';
 import Image from 'next/image';
 import { IPlace } from '@/Server/Service/PlaceService/IPlaceService';
