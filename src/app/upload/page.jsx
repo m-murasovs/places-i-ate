@@ -22,8 +22,6 @@ const UploadPage = () => {
         // }
     };
 
-    console.log(dataset[0]);
-
     return <div>
         <h1>Upload</h1>
         <PrimaryButton onClick={() => upload()}>Upload</PrimaryButton>
