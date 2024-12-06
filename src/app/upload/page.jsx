@@ -1,6 +1,5 @@
 'use client';
 import React from 'react';
-import dataset from '../../../dataset.json';
 // import { createNewPlace } from '@/Server/actions/PlaceActions';
 import { PrimaryButton } from '@/components/button';
 
