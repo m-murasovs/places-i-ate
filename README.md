@@ -1,39 +1,39 @@
 # Places I Ate
 
-A full-stack web application to track and review restaurants you've visited. Log your dining experiences with ratings and reviews.
+A full-stack web application to track and review restaurants you've visited. Log your dining experiences with ratings, reviews, and see them on a map.
 
 ## Features
 
-### Current (In Development)
-
-- **Google OAuth** — Sign in via Google, keep your restaurant visits private to your account
+- **GitHub OAuth** — Sign in with GitHub, keep your restaurant visits private to your account
 - **Visit Logging** — Record each restaurant visit with:
   - **Rating System** — Rate 1-5 stars, or mark as "S-tier" for your absolute favorites
   - **Written Reviews** — Add detailed notes about your experience
   - **Visit Date** — Track when you ate there
-- **Visit History** — View all restaurants you've visited in a searchable, scrollable list
-- **Place Search** — Search your previously visited places by name
+- **Place Autocomplete** — Search from 200+ pre-loaded Gdynia restaurants, or add a new place manually
+- **Visit History** — Browse all your visits with rating filter pills (All, 1-5 stars, S-tier)
+- **Edit / Delete** — Inline edit rating and review, or delete a visit with confirmation
+- **Interactive Map** — See visited restaurants on a Leaflet map with color-coded markers
 
 ### Planned
 
-- **Interactive Map** — See visited restaurants on a map with color-coded markers (Phase 3)
-- **Google Places Autocomplete** — Search any restaurant by name with autocomplete (Phase 3)
-- **Visit Edit/Delete** — Modify or remove past visits (Phase 3)
-- **Filtering / Sorting** — Search by rating, date, etc. (Phase 3)
+- Polish map view (fix loading state, clustering for dense areas)
+- Pagination for large visit lists
+- Better mobile styling
 
 ## Tech Stack
 
-- **Frontend**: React 18, Next.js 14, Tailwind CSS
-- **Backend**: Next.js server actions, NextAuth 5 (Google OAuth)
+- **Frontend**: React 18, Next.js 14, Tailwind CSS, Leaflet
+- **Backend**: Next.js server actions, NextAuth 5 (GitHub OAuth)
 - **Database**: MongoDB Atlas + Prisma ORM
 - **State**: TanStack Query v5
+- **Data**: Apify dataset (Gdynia restaurants scraped from Google Maps)
 
 ## Getting Started
 
 ### Prerequisites
 - Node.js 18+
 - MongoDB Atlas account or local MongoDB instance
-- Google OAuth credentials (for authentication)
+- GitHub OAuth app (free — https://github.com/settings/developers)
 
 ### Installation
 
@@ -51,13 +51,13 @@ A full-stack web application to track and review restaurants you've visited. Log
 3. Set up environment variables (`.env.local`):
    ```
    # Database
-   MONGODB_URI="mongodb+srv://..."
+   MONGODB_URI="mongodb+srv://.../<dbname>?retryWrites=true&w=majority"
 
    # Auth
-   NEXTAUTH_URL=http://localhost:3000
-   NEXTAUTH_SECRET=<generated-secret>
-   GOOGLE_ID=<your-google-oauth-id>
-   GOOGLE_SECRET=<your-google-oauth-secret>
+   AUTH_SECRET=<generated-secret>
+   AUTH_URL=http://localhost:3000
+   AUTH_GITHUB_ID=<your-github-oauth-client-id>
+   AUTH_GITHUB_SECRET=<your-github-oauth-client-secret>
    ```
 
 4. Set up the database:
@@ -66,25 +66,36 @@ A full-stack web application to track and review restaurants you've visited. Log
    npx prisma generate
    ```
 
-5. Run the development server:
+5. Seed the places dataset:
+   ```bash
+   npx tsx scripts/seed-places.ts
+   ```
+
+6. Run the development server:
    ```bash
    npm run dev
    ```
 
-6. Open http://localhost:3000 in your browser
+7. Open http://localhost:3000 in your browser
 
 ## Project Structure
 
 ```
 src/
 ├── app/               # Next.js pages
-│   ├── page.tsx       # Home (search + visited list)
-│   ├── place.tsx      # Place search results component
+│   ├── page.tsx       # Home (visit form + visit list with filters)
+│   ├── map/           # Map view (Leaflet)
 │   └── login/         # Login page
-├── components/        # Reusable React components
+├── components/        # React components
+│   ├── VisitForm.tsx  # Create visit with place autocomplete
+│   ├── VisitCard.tsx  # Visit display with edit/delete
+│   └── VisitMap.tsx   # Leaflet map with markers
 ├── hooks/             # React Query hooks
+│   ├── use_fetch_visited_places.ts
 │   ├── use_search_places.ts
-│   └── use_fetch_visited_places.ts
+│   ├── use_create_visit.ts
+│   ├── use_update_visit.ts
+│   └── use_delete_visit.ts
 ├── lib/               # Utilities
 │   ├── prisma.ts      # Prisma client
 │   └── auth.config.ts # NextAuth config
@@ -94,13 +105,9 @@ src/
     │   └── VisitActions.ts
     ├── PlaceService/  # Place service (Prisma)
     └── VisitService/  # Visit service (Prisma)
+scripts/
+└── seed-places.ts     # Import Apify dataset into Place table
 ```
-
-## Roadmap
-
-**Phase 1** (current) — Foundation fixes, auth, visit rendering
-**Phase 2** — Visit creation form (free-text place entry)
-**Phase 3** — Map view, Google Places API, filtering, edit/delete
 
 ## License
 
