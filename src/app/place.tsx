@@ -26,7 +26,7 @@ const PlaceForm = (
     useEffect(() => {
         setEditReviewStars(reviewStars);
         setEditReviewText(reviewText);
-    }, []);
+    }, [reviewStars, reviewText]);
 
     const { error, mutate, isLoading, isSuccess } = useUpdatePlace();
 

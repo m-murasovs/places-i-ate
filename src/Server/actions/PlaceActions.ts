@@ -1,37 +1,66 @@
 'use server';
 
-import { FindOptions } from 'mongodb';
-import { IPlace } from '../Service/PlaceService/IPlaceService';
-import { PlaceService } from '../Service/PlaceService/PlaceService';
-import { ItemId } from '../Service/types';
+import { placeService } from '../PlaceService/PlaceServicePrisma';
 
-const placeService = new PlaceService();
-
-export const fetchVisitedPlaces = async (pageNumber: number, limit: number) => {
-    const { data } = await placeService.searchPlaces(
-        { reviewStars: { $exists: true } },
-        pageNumber,
-        limit
-    );
-    return data;
+/**
+ * Search for places by name
+ */
+export const searchPlaces = async (query: string, limit: number = 10) => {
+    if (!query || query.trim().length === 0) {
+        return [];
+    }
+    const places = await placeService.searchPlaces(query, limit);
+    return places;
 };
 
-export const searchPlaces = async (title: string): Promise<Partial<IPlace[]> | null> => {
-    const { data } = await placeService.searchPlaces(
-        { title: { '$regex': title, '$options': 'i' } },
-        1,
-        10,
-        { projection: { _id: 1, title: 1, address: 1, imageUrl: 1, reviewStars: 1, reviewText: 1 } }
-    );
-    return data;
+/**
+ * Get all places (with pagination)
+ */
+export const getAllPlaces = async (limit: number = 50, offset: number = 0) => {
+    const places = await placeService.getAllPlaces(limit, offset);
+    return places;
 };
 
-export const createNewPlace = async (data: Partial<IPlace>) => {
-    const placeData = await placeService.createPlace(data);
-    return placeData;
+/**
+ * Get a place by ID
+ */
+export const getPlace = async (id: string) => {
+    const place = await placeService.getPlaceById(id);
+    return place;
 };
 
-export const updatePlace = async (_id: ItemId, updateFields: FindOptions<IPlace>) => {
-    const placeData = await placeService.updatePlace(_id, updateFields);
-    return placeData;
+/**
+ * Create a new place
+ */
+export const createPlace = async (data: {
+    googlePlacesId: string;
+    name: string;
+    address: string;
+    latitude: number;
+    longitude: number;
+    phoneNumber?: string;
+    website?: string;
+}) => {
+    const place = await placeService.createPlace(data);
+    return place;
+};
+
+/**
+ * Update an existing place
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const updatePlace = async (
+    id: string,
+    data: any
+) => {
+    const place = await placeService.updatePlace(id, data);
+    return place;
+};
+
+/**
+ * Delete a place
+ */
+export const deletePlace = async (id: string) => {
+    const result = await placeService.deletePlace(id);
+    return result;
 };
