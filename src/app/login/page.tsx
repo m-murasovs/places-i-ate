@@ -6,11 +6,11 @@ const LoginPage = () => {
         <form
             action={async () => {
                 'use server';
-                await signIn('google');
+                await signIn('github');
             }}
         >
             <PrimaryButton type="submit">
-                Login with Google
+                Login with GitHub
             </PrimaryButton>
         </form>
     );

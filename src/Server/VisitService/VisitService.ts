@@ -1,5 +1,7 @@
 import prisma from '@/lib/prisma';
-import { Visit } from '@prisma/client';
+import { Visit, Place } from '@prisma/client';
+
+export type VisitWithPlace = Visit & { place: Place };
 
 export type RatingType = '1' | '2' | '3' | '4' | '5' | 'S';
 
@@ -85,7 +87,7 @@ export class VisitService {
     userId: string,
     limit: number = 50,
     offset: number = 0
-  ): Promise<(Visit & { place?: Record<string, unknown> })[]> {
+  ): Promise<VisitWithPlace[]> {
     try {
       const visits = await prisma.visit.findMany({
         where: { userId },
@@ -173,7 +175,7 @@ export class VisitService {
   /**
    * Get visits by rating
    */
-  async getVisitsByRating(userId: string, rating: RatingType): Promise<(Visit & { place?: Record<string, unknown> })[]> {
+  async getVisitsByRating(userId: string, rating: RatingType): Promise<VisitWithPlace[]> {
     try {
       const visits = await prisma.visit.findMany({
         where: {

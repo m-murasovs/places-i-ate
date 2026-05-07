@@ -2,7 +2,6 @@ import NextAuth from 'next-auth';
 import { authConfig } from '@/lib/auth.config';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import prisma from '@/lib/prisma';
-import crypto from 'crypto';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     ...authConfig,
@@ -22,18 +21,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     },
                 });
 
-                if (!dbUser) {
-                    await prisma.user.create({
-                        data: {
-                            _id: crypto.randomBytes(16).toString('hex'),
-                            email: user.email as string,
-                            name: user.name as string,
-                            image: user.image as string,
-                            emailVerified: new Date(),
-                        },
-                    });
-                } else {
-                    token = { ...token, ...dbUser };
+                if (dbUser) {
+                    token.id = dbUser.id;
                 }
             }
 
@@ -41,15 +30,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         },
 
         async session({ session, token }) {
-            if (token) {
-                session = { ...session, ...token };
+            if (token?.id) {
+                session.user.id = token.id as string;
             }
 
             return session;
-        },
-
-        redirect() {
-            return '/login';
         },
     },
 });

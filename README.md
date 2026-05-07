@@ -1,36 +1,32 @@
-# Places I Ate 🍽️
+# Places I Ate
 
-A full-stack web application to track and review restaurants you've visited. Log your dining experiences with ratings, reviews, and discover them all on a map.
+A full-stack web application to track and review restaurants you've visited. Log your dining experiences with ratings and reviews.
 
 ## Features
 
 ### Current (In Development)
 
-- **Multi-user Accounts** — Sign in via Google OAuth, keep your restaurant visits private to your account
-- **Restaurant Discovery** — Search and autocomplete restaurant names powered by Google Maps API
+- **Google OAuth** — Sign in via Google, keep your restaurant visits private to your account
 - **Visit Logging** — Record each restaurant visit with:
   - **Rating System** — Rate 1-5 stars, or mark as "S-tier" for your absolute favorites
   - **Written Reviews** — Add detailed notes about your experience
   - **Visit Date** — Track when you ate there
 - **Visit History** — View all restaurants you've visited in a searchable, scrollable list
-- **Interactive Map** — See all your visited restaurants displayed on a map with color-coded markers (S-tier gold, 1-star red, etc.)
+- **Place Search** — Search your previously visited places by name
 
-### Future (Planned)
+### Planned
 
-- **Social Tagging** — Tag friends in visits to share dining experiences and see their restaurant explorations
-- **Multi-user Visits** — Collaborative restaurant logs when dining with others
-- **Photo Uploads** — Add photos of dishes or the restaurant ambiance (Phase 2+)
-- **Wishlist** — Save restaurants you want to try in the future
-- **Advanced Filtering** — Search by rating, review date, rating range
+- **Interactive Map** — See visited restaurants on a map with color-coded markers (Phase 3)
+- **Google Places Autocomplete** — Search any restaurant by name with autocomplete (Phase 3)
+- **Visit Edit/Delete** — Modify or remove past visits (Phase 3)
+- **Filtering / Sorting** — Search by rating, date, etc. (Phase 3)
 
 ## Tech Stack
 
 - **Frontend**: React 18, Next.js 14, Tailwind CSS
-- **Backend**: Next.js API routes, NextAuth 5 (Google OAuth)
-- **Database**: MongoDB + Prisma ORM
-- **State**: React Query for server-state management
-- **Maps**: Leaflet + React Leaflet (OpenStreetMap)
-- **APIs**: Google Maps Places API
+- **Backend**: Next.js server actions, NextAuth 5 (Google OAuth)
+- **Database**: MongoDB Atlas + Prisma ORM
+- **State**: TanStack Query v5
 
 ## Getting Started
 
@@ -38,7 +34,6 @@ A full-stack web application to track and review restaurants you've visited. Log
 - Node.js 18+
 - MongoDB Atlas account or local MongoDB instance
 - Google OAuth credentials (for authentication)
-- Google Maps API key (for restaurant search)
 
 ### Installation
 
@@ -56,16 +51,13 @@ A full-stack web application to track and review restaurants you've visited. Log
 3. Set up environment variables (`.env.local`):
    ```
    # Database
-   DATABASE_URL="mongodb+srv://..."
-   
-   # Google OAuth (NextAuth)
+   MONGODB_URI="mongodb+srv://..."
+
+   # Auth
    NEXTAUTH_URL=http://localhost:3000
    NEXTAUTH_SECRET=<generated-secret>
    GOOGLE_ID=<your-google-oauth-id>
    GOOGLE_SECRET=<your-google-oauth-secret>
-   
-   # Google Maps API
-   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=<your-google-maps-api-key>
    ```
 
 4. Set up the database:
@@ -87,38 +79,28 @@ A full-stack web application to track and review restaurants you've visited. Log
 src/
 ├── app/               # Next.js pages
 │   ├── page.tsx       # Home (search + visited list)
-│   ├── login/         # Login page
-│   └── restaurants-map/  # Map view (Phase 3)
+│   ├── place.tsx      # Place search results component
+│   └── login/         # Login page
 ├── components/        # Reusable React components
-│   ├── VisitForm.tsx  # Add/edit visit form
-│   └── Map.tsx        # Map display component
-├── hooks/             # React hooks
+├── hooks/             # React Query hooks
 │   ├── use_search_places.ts
-│   ├── use_fetch_visited_places.ts
-│   └── use_update_place.ts
-├── lib/               # Utilities & services
+│   └── use_fetch_visited_places.ts
+├── lib/               # Utilities
 │   ├── prisma.ts      # Prisma client
-│   ├── auth.config.ts # NextAuth config
-│   └── googleMapsService.ts  # Google Maps integration
+│   └── auth.config.ts # NextAuth config
 └── Server/
-    ├── actions/       # Server actions (Next.js)
+    ├── actions/       # Server actions
     │   ├── PlaceActions.ts
-    │   ├── VisitActions.ts
-    │   └── UserActions.ts
-    └── *Service/      # Service layer (business logic)
-        ├── PlaceService/
-        └── VisitService/
+    │   └── VisitActions.ts
+    ├── PlaceService/  # Place service (Prisma)
+    └── VisitService/  # Visit service (Prisma)
 ```
 
 ## Roadmap
 
-**Phase 1** — Foundation fixes & database schema  
-**Phase 2** — Google Maps search + add/edit visits + ratings  
-**Phase 3** — Interactive map display + polish
-
-## Contributing
-
-This is currently a personal learning project. Contributions welcome for features, bug fixes, and improvements!
+**Phase 1** (current) — Foundation fixes, auth, visit rendering
+**Phase 2** — Visit creation form (free-text place entry)
+**Phase 3** — Map view, Google Places API, filtering, edit/delete
 
 ## License
 

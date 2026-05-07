@@ -3,9 +3,6 @@
 import { visitService, RatingType } from '../VisitService/VisitService';
 import { auth } from '@/auth';
 
-/**
- * Create a new visit record
- */
 export const createVisit = async (data: {
     placeId: string;
     rating: RatingType;
@@ -14,20 +11,17 @@ export const createVisit = async (data: {
     visitedWithUserIds?: string[];
 }) => {
     const session = await auth();
-    if (!session?.user?.email) {
+    if (!session?.user?.id) {
         throw new Error('Unauthorized');
     }
 
     const visit = await visitService.createVisit({
-        userId: session.user.email,
+        userId: session.user.id,
         ...data,
     });
     return visit;
 };
 
-/**
- * Update a visit
- */
 export const updateVisit = async (
     visitId: string,
     data: Partial<{
@@ -38,13 +32,12 @@ export const updateVisit = async (
     }>
 ) => {
     const session = await auth();
-    if (!session?.user?.email) {
+    if (!session?.user?.id) {
         throw new Error('Unauthorized');
     }
 
-    // Verify the visit belongs to the current user
     const visit = await visitService.getVisitById(visitId);
-    if (!visit || visit.userId !== session.user.email) {
+    if (!visit || visit.userId !== session.user.id) {
         throw new Error('Forbidden');
     }
 
@@ -53,18 +46,14 @@ export const updateVisit = async (
     return updatedVisit;
 };
 
-/**
- * Delete a visit
- */
 export const deleteVisit = async (visitId: string) => {
     const session = await auth();
-    if (!session?.user?.email) {
+    if (!session?.user?.id) {
         throw new Error('Unauthorized');
     }
 
-    // Verify the visit belongs to the current user
     const visit = await visitService.getVisitById(visitId);
-    if (!visit || visit.userId !== session.user.email) {
+    if (!visit || visit.userId !== session.user.id) {
         throw new Error('Forbidden');
     }
 
@@ -72,58 +61,43 @@ export const deleteVisit = async (visitId: string) => {
     return result;
 };
 
-/**
- * Get all visits for the current user
- */
 export const fetchUserVisits = async (limit: number = 50, offset: number = 0) => {
     const session = await auth();
-    if (!session?.user?.email) {
+    if (!session?.user?.id) {
         throw new Error('Unauthorized');
     }
 
-    const visits = await visitService.getUserVisits(session.user.email, limit, offset);
-    const count = await visitService.getUserVisitCount(session.user.email);
+    const visits = await visitService.getUserVisits(session.user.id, limit, offset);
+    const count = await visitService.getUserVisitCount(session.user.id);
     return { visits, count };
 };
 
-/**
- * Get a single visit by ID
- */
 export const getVisit = async (visitId: string) => {
     const visit = await visitService.getVisitById(visitId);
     return visit;
 };
 
-/**
- * Get all visits for a specific place
- */
 export const getPlaceVisits = async (placeId: string) => {
     const visits = await visitService.getPlaceVisits(placeId);
     return visits;
 };
 
-/**
- * Get user's visits for a specific place (allows checking if already visited)
- */
 export const getUserPlaceVisits = async (placeId: string) => {
     const session = await auth();
-    if (!session?.user?.email) {
+    if (!session?.user?.id) {
         throw new Error('Unauthorized');
     }
 
-    const visits = await visitService.getUserPlaceVisits(session.user.email, placeId);
+    const visits = await visitService.getUserPlaceVisits(session.user.id, placeId);
     return visits;
 };
 
-/**
- * Get visits by rating (for filter/search)
- */
 export const getVisitsByRating = async (rating: RatingType) => {
     const session = await auth();
-    if (!session?.user?.email) {
+    if (!session?.user?.id) {
         throw new Error('Unauthorized');
     }
 
-    const visits = await visitService.getVisitsByRating(session.user.email, rating);
+    const visits = await visitService.getVisitsByRating(session.user.id, rating);
     return visits;
 };

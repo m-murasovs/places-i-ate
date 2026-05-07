@@ -7,7 +7,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 const queryClient = new QueryClient();
 
 export const invalidateQueries = (queryKeys: string[]) => {
-    queryClient.invalidateQueries(queryKeys);
+    queryClient.invalidateQueries({ queryKey: queryKeys });
 };
 
 export function ReactQueryProvider({ children }: React.PropsWithChildren) {

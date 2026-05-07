@@ -18,8 +18,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-    title: 'Munch Gdynia',
-    description: 'Places we done been eat at',
+    title: 'Places I Ate',
+    description: 'Track and review restaurants you\'ve visited',
     icons: ['/favicon.ico']
 };
 
@@ -35,7 +35,7 @@ export default async function RootLayout({
                     <header className="bg-white shadow">
                         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 flex justify-between">
                             <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-                                Places we ate
+                                Places I Ate
                             </h1>
                             <form
                                 action={async () => {

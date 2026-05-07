@@ -1,8 +1,6 @@
 'use client';
 import React, { useState } from 'react';
 import { DebounceInput } from 'react-debounce-input';
-import Image from 'next/image';
-import { IPlace } from '@/Server/Service/PlaceService/IPlaceService';
 import FoundPlaces from './place';
 import useFetchVisitedPlaces from '@/hooks/use_fetch_visited_places';
 
@@ -22,7 +20,7 @@ export default function Home({
     const { page } = searchParams as ISearchQuery;
     const pageNumber = page && !isNaN(Number(page)) ? Number(page) : 1;
 
-    const { data: visitedPlaces, isLoading, isFetching } = useFetchVisitedPlaces(pageNumber, 10);
+    const { data, isLoading, isFetching } = useFetchVisitedPlaces(10, (pageNumber - 1) * 10);
 
     return (
         <div>
@@ -41,21 +39,17 @@ export default function Home({
             </section>
 
             <section>
-                <h2 className='text-2xl mb-4'>Places we been</h2>
+                <h2 className='text-2xl mb-4'>Places I&apos;ve been</h2>
                 {isLoading || isFetching
                     ? <p>Loading...</p>
                     : <ul>
-                        {visitedPlaces?.map((place: IPlace) => (
-                            <li key={place.title}>
-                                <Image
-                                    alt={place.title}
-                                    src={place.imageUrl}
-                                    width={50}
-                                    height={50}
-                                />
-                                <h2>{place.title}</h2>
-                                <h2>Stars: {place.reviewStars}</h2>
-                                <h2>{place.reviewText}</h2>
+                        {data?.visits?.map((visit) => (
+                            <li key={visit.id} className='mb-4 p-3 border rounded'>
+                                <h3 className='text-lg font-semibold'>
+                                    {visit.place.name}
+                                </h3>
+                                <p>Rating: {visit.rating}</p>
+                                {visit.review && <p>{visit.review}</p>}
                             </li>
                         ))}
                     </ul>
