@@ -7,6 +7,7 @@ import { invalidateQueries } from '@/app/react_query_provider';
 const useCreateVisit = () => {
     return useMutation({
         mutationFn: (data: {
+            placeId?: string;
             placeName: string;
             address: string;
             rating: RatingType;

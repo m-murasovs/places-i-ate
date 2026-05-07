@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
 
+import Link from 'next/link';
 import { signOut } from '@/auth';
 import { PrimaryButton } from '@/components/button';
 import { ReactQueryProvider } from './react_query_provider';
@@ -33,10 +34,20 @@ export default async function RootLayout({
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
                 <ReactQueryProvider>
                     <header className="bg-white shadow">
-                        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 flex justify-between">
-                            <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-                                Places I Ate
-                            </h1>
+                        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 flex justify-between items-center">
+                            <div className="flex items-center gap-6">
+                                <Link href="/" className="text-3xl font-bold tracking-tight text-gray-900 hover:text-gray-700">
+                                    Places I Ate
+                                </Link>
+                                <nav className="flex gap-4">
+                                    <Link href="/" className="text-sm text-gray-600 hover:text-gray-900">
+                                        Visits
+                                    </Link>
+                                    <Link href="/map" className="text-sm text-gray-600 hover:text-gray-900">
+                                        Map
+                                    </Link>
+                                </nav>
+                            </div>
                             <form
                                 action={async () => {
                                     'use server';

@@ -28,6 +28,7 @@ function slugify(str: string): string {
 }
 
 export const createVisitWithPlace = async (data: {
+    placeId?: string;
     placeName: string;
     address: string;
     rating: RatingType;
@@ -39,26 +40,31 @@ export const createVisitWithPlace = async (data: {
         throw new Error('Unauthorized');
     }
 
-    const syntheticId = slugify(data.placeName) + '-' + slugify(data.address);
+    let resolvedPlaceId = data.placeId;
 
-    let place = await placeService.getPlaceByGoogleId(syntheticId);
-    if (!place) {
-        place = await placeService.createPlace({
-            googlePlacesId: syntheticId,
-            name: data.placeName,
-            address: data.address,
-            latitude: 0,
-            longitude: 0,
-        });
-    }
+    if (!resolvedPlaceId) {
+        const syntheticId = slugify(data.placeName) + '-' + slugify(data.address);
 
-    if (!place) {
-        throw new Error('Failed to create place');
+        let place = await placeService.getPlaceByGoogleId(syntheticId);
+        if (!place) {
+            place = await placeService.createPlace({
+                googlePlacesId: syntheticId,
+                name: data.placeName,
+                address: data.address,
+                latitude: 0,
+                longitude: 0,
+            });
+        }
+
+        if (!place) {
+            throw new Error('Failed to create place');
+        }
+        resolvedPlaceId = place.id;
     }
 
     const visit = await visitService.createVisit({
         userId: session.user.id,
-        placeId: place.id,
+        placeId: resolvedPlaceId,
         rating: data.rating,
         review: data.review,
         visitDate: data.visitDate,

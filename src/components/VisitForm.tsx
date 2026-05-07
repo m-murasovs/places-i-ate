@@ -1,24 +1,57 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { RatingType } from '@/Server/VisitService/VisitService';
 import { PrimaryButton } from './button';
 import useCreateVisit from '@/hooks/use_create_visit';
+import useSearchPlaces from '@/hooks/use_search_places';
 
 const RATINGS: RatingType[] = ['1', '2', '3', '4', '5', 'S'];
 
 export default function VisitForm({ onSuccess }: { onSuccess?: () => void }) {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedPlaceId, setSelectedPlaceId] = useState<string | undefined>();
     const [placeName, setPlaceName] = useState('');
     const [address, setAddress] = useState('');
+    const [showSuggestions, setShowSuggestions] = useState(false);
     const [rating, setRating] = useState<RatingType>('3');
     const [review, setReview] = useState('');
     const [visitDate, setVisitDate] = useState(new Date().toISOString().split('T')[0]);
+    const suggestionsRef = useRef<HTMLDivElement>(null);
 
+    const { data: suggestions } = useSearchPlaces(searchQuery);
     const { mutate, isPending, isError, error } = useCreateVisit();
+
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (suggestionsRef.current && !suggestionsRef.current.contains(e.target as Node)) {
+                setShowSuggestions(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const handleSearchChange = (value: string) => {
+        setSearchQuery(value);
+        setPlaceName(value);
+        setSelectedPlaceId(undefined);
+        setAddress('');
+        setShowSuggestions(true);
+    };
+
+    const handleSelectPlace = (place: { id: string; name: string; address: string }) => {
+        setSelectedPlaceId(place.id);
+        setPlaceName(place.name);
+        setSearchQuery(place.name);
+        setAddress(place.address);
+        setShowSuggestions(false);
+    };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         mutate(
             {
+                placeId: selectedPlaceId,
                 placeName,
                 address,
                 rating,
@@ -27,6 +60,8 @@ export default function VisitForm({ onSuccess }: { onSuccess?: () => void }) {
             },
             {
                 onSuccess: () => {
+                    setSearchQuery('');
+                    setSelectedPlaceId(undefined);
                     setPlaceName('');
                     setAddress('');
                     setRating('3');
@@ -40,35 +75,57 @@ export default function VisitForm({ onSuccess }: { onSuccess?: () => void }) {
 
     return (
         <form onSubmit={handleSubmit} className='space-y-4'>
-            <div>
+            <div className='relative' ref={suggestionsRef}>
                 <label htmlFor='placeName' className='block text-sm font-medium text-gray-700'>
                     Restaurant name
                 </label>
                 <input
                     id='placeName'
                     type='text'
-                    value={placeName}
-                    onChange={(e) => setPlaceName(e.target.value)}
+                    value={searchQuery}
+                    onChange={(e) => handleSearchChange(e.target.value)}
+                    onFocus={() => searchQuery.length >= 2 && setShowSuggestions(true)}
                     className='mt-1 block w-full p-2 border-2 border-gray-300 rounded'
-                    placeholder='e.g. Sushi Palace'
+                    placeholder='Start typing to search...'
                     required
+                    autoComplete='off'
                 />
+                {showSuggestions && suggestions && suggestions.length > 0 && (
+                    <div className='absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded shadow-lg max-h-60 overflow-y-auto'>
+                        {suggestions.map((place) => (
+                            <button
+                                key={place.id}
+                                type='button'
+                                onClick={() => handleSelectPlace(place)}
+                                className='w-full text-left px-3 py-2 hover:bg-blue-50 border-b border-gray-100 last:border-b-0'
+                            >
+                                <div className='font-medium text-sm'>{place.name}</div>
+                                <div className='text-xs text-gray-500'>{place.address}</div>
+                            </button>
+                        ))}
+                    </div>
+                )}
+                {selectedPlaceId && (
+                    <p className='text-xs text-green-600 mt-1'>Selected from database</p>
+                )}
             </div>
 
-            <div>
-                <label htmlFor='address' className='block text-sm font-medium text-gray-700'>
-                    Address
-                </label>
-                <input
-                    id='address'
-                    type='text'
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    className='mt-1 block w-full p-2 border-2 border-gray-300 rounded'
-                    placeholder='e.g. 123 Main St, Gdynia'
-                    required
-                />
-            </div>
+            {!selectedPlaceId && (
+                <div>
+                    <label htmlFor='address' className='block text-sm font-medium text-gray-700'>
+                        Address
+                    </label>
+                    <input
+                        id='address'
+                        type='text'
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        className='mt-1 block w-full p-2 border-2 border-gray-300 rounded'
+                        placeholder='e.g. 123 Main St, Gdynia'
+                        required
+                    />
+                </div>
+            )}
 
             <div>
                 <label className='block text-sm font-medium text-gray-700 mb-1'>
