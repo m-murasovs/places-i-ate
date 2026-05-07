@@ -1,58 +1,88 @@
 'use client';
 import React, { useState } from 'react';
-import { DebounceInput } from 'react-debounce-input';
-import FoundPlaces from './place';
 import useFetchVisitedPlaces from '@/hooks/use_fetch_visited_places';
+import VisitForm from '@/components/VisitForm';
+import VisitCard from '@/components/VisitCard';
+import { SecondaryButton } from '@/components/button';
+import { RatingType, VisitWithPlace } from '@/Server/VisitService/VisitService';
 
-type ISearchQuery = {
-    page: string;
-}
+const RATINGS: RatingType[] = ['1', '2', '3', '4', '5', 'S'];
 
-type HomeProps = {
-    searchParams?: { [key: string]: string | string[] | undefined; };
-};
+export default function Home() {
+    const [showForm, setShowForm] = useState(false);
+    const [ratingFilter, setRatingFilter] = useState<RatingType | undefined>();
 
-export default function Home({
-    searchParams
-}: HomeProps) {
-    const [searchInput, setSearchInput] = useState('');
-
-    const { page } = searchParams as ISearchQuery;
-    const pageNumber = page && !isNaN(Number(page)) ? Number(page) : 1;
-
-    const { data, isLoading, isFetching } = useFetchVisitedPlaces(10, (pageNumber - 1) * 10);
+    const { data, isLoading, isFetching } = useFetchVisitedPlaces(50, 0, ratingFilter);
 
     return (
         <div>
-            <section className='mb-4'>
-                <h2 className='text-2xl mb-1'>Submit a new review</h2>
-                <div>
-                    <DebounceInput
-                        onChange={(e) => setSearchInput(e.target.value)}
-                        className='p-2 border-2 border-gray-400 rounded'
-                        placeholder='Type place name...'
-                        value={searchInput}
-                        minLength={2}
-                    />
-                    <FoundPlaces searchInput={searchInput} />
-                </div>
+            <section className='mb-8'>
+                {showForm ? (
+                    <div>
+                        <div className='flex items-center justify-between mb-4'>
+                            <h2 className='text-2xl'>Add a visit</h2>
+                            <SecondaryButton onClick={() => setShowForm(false)}>
+                                Cancel
+                            </SecondaryButton>
+                        </div>
+                        <VisitForm onSuccess={() => setShowForm(false)} />
+                    </div>
+                ) : (
+                    <SecondaryButton onClick={() => setShowForm(true)}>
+                        + Add a visit
+                    </SecondaryButton>
+                )}
             </section>
 
             <section>
-                <h2 className='text-2xl mb-4'>Places I&apos;ve been</h2>
+                <div className='flex items-center justify-between mb-4'>
+                    <h2 className='text-2xl'>Places I&apos;ve been</h2>
+                    {data?.count ? (
+                        <span className='text-sm text-gray-500'>{data.count} visit{data.count !== 1 ? 's' : ''}</span>
+                    ) : null}
+                </div>
+
+                <div className='flex gap-2 mb-4 flex-wrap'>
+                    <button
+                        onClick={() => setRatingFilter(undefined)}
+                        className={`px-3 py-1 rounded-full text-sm border transition-colors ${
+                            !ratingFilter
+                                ? 'bg-gray-800 text-white border-gray-800'
+                                : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
+                        }`}
+                    >
+                        All
+                    </button>
+                    {RATINGS.map((r) => (
+                        <button
+                            key={r}
+                            onClick={() => setRatingFilter(ratingFilter === r ? undefined : r)}
+                            className={`px-3 py-1 rounded-full text-sm border transition-colors ${
+                                ratingFilter === r
+                                    ? r === 'S'
+                                        ? 'bg-yellow-400 text-white border-yellow-400'
+                                        : 'bg-blue-500 text-white border-blue-500'
+                                    : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
+                            }`}
+                        >
+                            {r === 'S' ? 'S-tier' : `${r} star${r !== '1' ? 's' : ''}`}
+                        </button>
+                    ))}
+                </div>
+
                 {isLoading || isFetching
                     ? <p>Loading...</p>
-                    : <ul>
-                        {data?.visits?.map((visit) => (
-                            <li key={visit.id} className='mb-4 p-3 border rounded'>
-                                <h3 className='text-lg font-semibold'>
-                                    {visit.place.name}
-                                </h3>
-                                <p>Rating: {visit.rating}</p>
-                                {visit.review && <p>{visit.review}</p>}
-                            </li>
-                        ))}
-                    </ul>
+                    : data?.visits?.length
+                        ? <ul>
+                            {data.visits.map((visit) => (
+                                <VisitCard key={visit.id} visit={visit as VisitWithPlace} />
+                            ))}
+                        </ul>
+                        : <p className='text-gray-500'>
+                            {ratingFilter
+                                ? `No visits with rating ${ratingFilter === 'S' ? 'S-tier' : ratingFilter + ' star' + (ratingFilter !== '1' ? 's' : '')}.`
+                                : 'No visits yet. Add your first one!'}
+                        </p>
                 }
             </section>
         </div>

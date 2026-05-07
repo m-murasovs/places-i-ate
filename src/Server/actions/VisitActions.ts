@@ -1,6 +1,7 @@
 'use server';
 
 import { visitService, RatingType } from '../VisitService/VisitService';
+import { placeService } from '../PlaceService/PlaceServicePrisma';
 import { auth } from '@/auth';
 
 export const createVisit = async (data: {
@@ -19,6 +20,50 @@ export const createVisit = async (data: {
         userId: session.user.id,
         ...data,
     });
+    return visit;
+};
+
+function slugify(str: string): string {
+    return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+}
+
+export const createVisitWithPlace = async (data: {
+    placeName: string;
+    address: string;
+    rating: RatingType;
+    review?: string;
+    visitDate: Date;
+}) => {
+    const session = await auth();
+    if (!session?.user?.id) {
+        throw new Error('Unauthorized');
+    }
+
+    const syntheticId = slugify(data.placeName) + '-' + slugify(data.address);
+
+    let place = await placeService.getPlaceByGoogleId(syntheticId);
+    if (!place) {
+        place = await placeService.createPlace({
+            googlePlacesId: syntheticId,
+            name: data.placeName,
+            address: data.address,
+            latitude: 0,
+            longitude: 0,
+        });
+    }
+
+    if (!place) {
+        throw new Error('Failed to create place');
+    }
+
+    const visit = await visitService.createVisit({
+        userId: session.user.id,
+        placeId: place.id,
+        rating: data.rating,
+        review: data.review,
+        visitDate: data.visitDate,
+    });
+
     return visit;
 };
 
@@ -61,10 +106,15 @@ export const deleteVisit = async (visitId: string) => {
     return result;
 };
 
-export const fetchUserVisits = async (limit: number = 50, offset: number = 0) => {
+export const fetchUserVisits = async (limit: number = 50, offset: number = 0, rating?: RatingType) => {
     const session = await auth();
     if (!session?.user?.id) {
         throw new Error('Unauthorized');
+    }
+
+    if (rating) {
+        const visits = await visitService.getVisitsByRating(session.user.id, rating);
+        return { visits: visits.slice(offset, offset + limit), count: visits.length };
     }
 
     const visits = await visitService.getUserVisits(session.user.id, limit, offset);
