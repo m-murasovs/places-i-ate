@@ -1,4 +1,5 @@
 import { Visit } from '@prisma/client';
+import { SortType } from './VisitService';
 
 export type RatingType = '1' | '2' | '3' | '4' | '5' | 'S';
 
@@ -22,7 +23,7 @@ export interface IVisitService {
   deleteVisit(id: string): Promise<boolean>;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getUserVisits(userId: string, limit?: number, offset?: number): Promise<(Visit & { place?: any })[]>;
+  getUserVisits(userId: string, limit?: number, offset?: number, sort?: SortType): Promise<(Visit & { place?: any })[]>;
 
   getUserVisitCount(userId: string): Promise<number>;
 
@@ -33,5 +34,5 @@ export interface IVisitService {
   getAllVisits(limit?: number, offset?: number): Promise<Visit[]>;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getVisitsByRating(userId: string, rating: RatingType): Promise<(Visit & { place?: any })[]>;
+  getVisitsByRating(userId: string, rating: RatingType, sort?: SortType): Promise<(Visit & { place?: any })[]>;
 }

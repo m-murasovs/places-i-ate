@@ -11,6 +11,7 @@ A full-stack web application to track and review restaurants you've visited. Log
   - **Visit Date** — Track when you ate there
 - **Place Autocomplete** — Search from 200+ pre-loaded Gdynia restaurants, or add a new place manually
 - **Visit History** — Browse all your visits with rating filter pills (All, 1-5 stars, S-tier)
+- **Sorting** — Sort visits by date (newest first), rating (highest first), or place name (A-Z)
 - **Edit / Delete** — Inline edit rating and review, or delete a visit with confirmation
 - **Interactive Map** — See visited restaurants on a Leaflet map with color-coded markers
 
@@ -26,6 +27,7 @@ A full-stack web application to track and review restaurants you've visited. Log
 - **Backend**: Next.js server actions, NextAuth 5 (GitHub OAuth)
 - **Database**: MongoDB Atlas + Prisma ORM
 - **State**: TanStack Query v5
+- **Testing**: Playwright (e2e)
 - **Data**: Apify dataset (Gdynia restaurants scraped from Google Maps)
 
 ## Getting Started
@@ -106,7 +108,14 @@ src/
     ├── PlaceService/  # Place service (Prisma)
     └── VisitService/  # Visit service (Prisma)
 scripts/
-└── seed-places.ts     # Import Apify dataset into Place table
+├── seed-places.ts     # Import Apify dataset into Place table
+└── seed-test-user.ts  # Create e2e test user in database
+e2e/
+├── global.setup.ts    # Authenticate test user, save session cookies
+└── tests/
+    ├── home.spec.ts        # Home page, filters, sorting
+    ├── visit-crud.spec.ts  # Create, edit, delete visits
+    └── map.spec.ts         # Map page
 ```
 
 ## License

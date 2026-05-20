@@ -44,6 +44,13 @@ NextAuth 5 beta (GitHub OAuth), Prisma 5 + MongoDB Atlas, TanStack Query v5, Lea
 - [x] Leaflet map view at `/map` with color-coded markers by rating
 - [x] Nav links in header (Visits / Map)
 
+### Phase 4 — Sorting & testing
+- [x] Sort visits by date, rating, or place name (sort pills on home page)
+- [x] `SortType` threaded through service → actions → hook → UI
+- [x] Playwright e2e test suite (11 tests: home page, filters, sort, visit CRUD, map)
+- [x] Auth bypass for e2e via conditional CredentialsProvider (guarded by `E2E_TEST=true && NODE_ENV !== 'production'`)
+- [x] Test user seed script (`scripts/seed-test-user.ts`)
+
 ## Remaining / Future
 
 ### Map polish
@@ -55,14 +62,19 @@ NextAuth 5 beta (GitHub OAuth), Prisma 5 + MongoDB Atlas, TanStack Query v5, Lea
 - [ ] Pagination for large visit lists
 - [ ] Mobile-responsive styling pass
 - [ ] Loading skeletons instead of "Loading..." text
-- [ ] Sort visits by date, rating, or name
 - [ ] Success toast after creating/editing/deleting a visit
+- [ ] User account setup
+    - [ ] Viewing other users' profiles
+    - [ ] Displaying other users' ratings for a place
 
 ### Data & integrations
 - [ ] Google Places API autocomplete (optional, replaces DB search for worldwide coverage)
 - [ ] Allow editing place name/address on manually-created places
 - [ ] Re-run seed script to refresh dataset (or schedule via Apify webhook)
 - [ ] Photo uploads for visits
+
+### Project infra
+- [ ] Set up a CI flow to make sure tests and deploy to Vercel are done automatically.
 
 ## Key architectural decisions made
 
@@ -72,3 +84,4 @@ NextAuth 5 beta (GitHub OAuth), Prisma 5 + MongoDB Atlas, TanStack Query v5, Lea
 4. **Apify dataset for places** — 200 Gdynia restaurants seeded into Place table, used for autocomplete
 5. **TanStack Query v5** — aligned devtools/client versions
 6. **react-leaflet v4** — v5 requires React 19, project is on React 18
+7. **Playwright for e2e** — CredentialsProvider auth bypass, global setup writes session cookies once, all tests reuse stored auth state

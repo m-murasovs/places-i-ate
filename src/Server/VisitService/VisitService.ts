@@ -5,6 +5,20 @@ export type VisitWithPlace = Visit & { place: Place };
 
 export type RatingType = '1' | '2' | '3' | '4' | '5' | 'S';
 
+export type SortType = 'date' | 'rating' | 'name';
+
+function getOrderBy(sort: SortType) {
+  switch (sort) {
+    case 'rating':
+      return { rating: 'desc' as const };
+    case 'name':
+      return { place: { name: 'asc' as const } };
+    case 'date':
+    default:
+      return { visitDate: 'desc' as const };
+  }
+}
+
 export class VisitService {
   /**
    * Create a new visit record
@@ -86,7 +100,8 @@ export class VisitService {
   async getUserVisits(
     userId: string,
     limit: number = 50,
-    offset: number = 0
+    offset: number = 0,
+    sort: SortType = 'date'
   ): Promise<VisitWithPlace[]> {
     try {
       const visits = await prisma.visit.findMany({
@@ -94,7 +109,7 @@ export class VisitService {
         include: {
           place: true,
         },
-        orderBy: { visitDate: 'desc' },
+        orderBy: getOrderBy(sort),
         take: limit,
         skip: offset,
       });
@@ -175,7 +190,7 @@ export class VisitService {
   /**
    * Get visits by rating
    */
-  async getVisitsByRating(userId: string, rating: RatingType): Promise<VisitWithPlace[]> {
+  async getVisitsByRating(userId: string, rating: RatingType, sort: SortType = 'date'): Promise<VisitWithPlace[]> {
     try {
       const visits = await prisma.visit.findMany({
         where: {
@@ -185,7 +200,7 @@ export class VisitService {
         include: {
           place: true,
         },
-        orderBy: { visitDate: 'desc' },
+        orderBy: getOrderBy(sort),
       });
       return visits;
     } catch (error) {

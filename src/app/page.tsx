@@ -4,15 +4,16 @@ import useFetchVisitedPlaces from '@/hooks/use_fetch_visited_places';
 import VisitForm from '@/components/VisitForm';
 import VisitCard from '@/components/VisitCard';
 import { SecondaryButton } from '@/components/button';
-import { RatingType, VisitWithPlace } from '@/Server/VisitService/VisitService';
+import { RatingType, SortType, VisitWithPlace } from '@/Server/VisitService/VisitService';
 
 const RATINGS: RatingType[] = ['1', '2', '3', '4', '5', 'S'];
 
 export default function Home() {
     const [showForm, setShowForm] = useState(false);
     const [ratingFilter, setRatingFilter] = useState<RatingType | undefined>();
+    const [sortOrder, setSortOrder] = useState<SortType>('date');
 
-    const { data, isLoading, isFetching } = useFetchVisitedPlaces(50, 0, ratingFilter);
+    const { data, isLoading, isFetching } = useFetchVisitedPlaces(50, 0, ratingFilter, sortOrder);
 
     return (
         <div>
@@ -66,6 +67,23 @@ export default function Home() {
                             }`}
                         >
                             {r === 'S' ? 'S-tier' : `${r} star${r !== '1' ? 's' : ''}`}
+                        </button>
+                    ))}
+                </div>
+
+                <div className='flex gap-2 mb-6 flex-wrap items-center'>
+                    <span className='text-sm text-gray-700'>Sort by:</span>
+                    {(['date', 'rating', 'name'] as const).map((sort) => (
+                        <button
+                            key={sort}
+                            onClick={() => setSortOrder(sort)}
+                            className={`px-3 py-1 rounded-full text-sm border transition-colors ${
+                                sortOrder === sort
+                                    ? 'bg-gray-800 text-white border-gray-800'
+                                    : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
+                            }`}
+                        >
+                            {sort === 'date' ? 'Date' : sort === 'rating' ? 'Rating' : 'Name'}
                         </button>
                     ))}
                 </div>

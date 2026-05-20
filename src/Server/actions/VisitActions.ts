@@ -1,6 +1,6 @@
 'use server';
 
-import { visitService, RatingType } from '../VisitService/VisitService';
+import { visitService, RatingType, SortType } from '../VisitService/VisitService';
 import { placeService } from '../PlaceService/PlaceServicePrisma';
 import { auth } from '@/auth';
 
@@ -112,18 +112,18 @@ export const deleteVisit = async (visitId: string) => {
     return result;
 };
 
-export const fetchUserVisits = async (limit: number = 50, offset: number = 0, rating?: RatingType) => {
+export const fetchUserVisits = async (limit: number = 50, offset: number = 0, rating?: RatingType, sort: SortType = 'date') => {
     const session = await auth();
     if (!session?.user?.id) {
         throw new Error('Unauthorized');
     }
 
     if (rating) {
-        const visits = await visitService.getVisitsByRating(session.user.id, rating);
+        const visits = await visitService.getVisitsByRating(session.user.id, rating, sort);
         return { visits: visits.slice(offset, offset + limit), count: visits.length };
     }
 
-    const visits = await visitService.getUserVisits(session.user.id, limit, offset);
+    const visits = await visitService.getUserVisits(session.user.id, limit, offset, sort);
     const count = await visitService.getUserVisitCount(session.user.id);
     return { visits, count };
 };
