@@ -1,8 +1,11 @@
 'use client';
 import { useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import 'leaflet.markercluster/dist/MarkerCluster.css';
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import { VisitWithPlace } from '@/Server/VisitService/VisitService';
 
 const RATING_COLORS: Record<string, string> = {
@@ -78,24 +81,43 @@ export default function VisitMap({ visits }: { visits: VisitWithPlace[] }) {
                 url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
             />
             <FitBounds visits={validVisits} />
-            {validVisits.map((visit) => (
-                <Marker
-                    key={visit.id}
-                    position={[visit.place.latitude, visit.place.longitude]}
-                    icon={createIcon(visit.rating)}
-                >
-                    <Popup>
-                        <div>
-                            <strong>{visit.place.name}</strong>
-                            <br />
-                            <span>Rating: {visit.rating === 'S' ? 'S-tier' : `${visit.rating}/5`}</span>
-                            {visit.review && <><br /><em>{visit.review}</em></>}
-                            <br />
-                            <small>{new Date(visit.visitDate).toLocaleDateString()}</small>
-                        </div>
-                    </Popup>
-                </Marker>
-            ))}
+            <MarkerClusterGroup chunkedLoading>
+                {validVisits.map((visit) => (
+                    <Marker
+                        key={visit.id}
+                        position={[visit.place.latitude, visit.place.longitude]}
+                        icon={createIcon(visit.rating)}
+                    >
+                        <Popup>
+                            <div style={{ minWidth: '200px', fontFamily: 'system-ui, sans-serif' }}>
+                                <div style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '8px' }}>
+                                    {visit.place.name}
+                                </div>
+                                <div style={{
+                                    display: 'inline-block',
+                                    backgroundColor: RATING_COLORS[visit.rating] ?? '#6b7280',
+                                    color: 'white',
+                                    padding: '4px 8px',
+                                    borderRadius: '16px',
+                                    fontSize: '12px',
+                                    fontWeight: 'bold',
+                                    marginBottom: '8px',
+                                }}>
+                                    {visit.rating === 'S' ? 'S-tier' : `${visit.rating}/5`}
+                                </div>
+                                {visit.review && (
+                                    <div style={{ fontStyle: 'italic', color: '#6b7280', marginBottom: '8px' }}>
+                                        {visit.review}
+                                    </div>
+                                )}
+                                <div style={{ fontSize: '12px', color: '#9ca3af' }}>
+                                    {new Date(visit.visitDate).toLocaleDateString()}
+                                </div>
+                            </div>
+                        </Popup>
+                    </Marker>
+                ))}
+            </MarkerClusterGroup>
         </MapContainer>
     );
 }

@@ -11,6 +11,7 @@ export default defineConfig({
         baseURL: 'http://localhost:3000',
         storageState: 'e2e/.auth/user.json',
         trace: 'on-first-retry',
+        headless: process.env.HEADLESS !== 'false',
     },
     projects: [
         {

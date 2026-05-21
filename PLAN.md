@@ -51,17 +51,17 @@ NextAuth 5 beta (GitHub OAuth), Prisma 5 + MongoDB Atlas, TanStack Query v5, Lea
 - [x] Auth bypass for e2e via conditional CredentialsProvider (guarded by `E2E_TEST=true && NODE_ENV !== 'production'`)
 - [x] Test user seed script (`scripts/seed-test-user.ts`)
 
-## Remaining / Future
+### Phase 5 — Map polish
+- [x] Loading skeletons for map page (pulse placeholders replacing bare "Loading..." text)
+- [x] Marker clustering for dense areas (react-leaflet-cluster wrapping leaflet.markercluster)
+- [x] Improved popup styling (bold name, colored rating badge, italic review, muted date)
+- [x] Headless config for Playwright (HEADLESS env var in playwright.config.ts)
 
-### Map polish
-- [ ] Debug map loading state (currently shows "Loading visits..." sometimes)
-- [ ] Marker clustering for dense areas (leaflet.markercluster)
-- [ ] Better popup styling
+## Remaining / Future
 
 ### UX improvements
 - [ ] Pagination for large visit lists
 - [ ] Mobile-responsive styling pass
-- [ ] Loading skeletons instead of "Loading..." text
 - [ ] Success toast after creating/editing/deleting a visit
 - [ ] User account setup
     - [ ] Viewing other users' profiles
