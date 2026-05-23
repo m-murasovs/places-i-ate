@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import useFetchVisitedPlaces from '@/hooks/use_fetch_visited_places';
 import VisitForm from '@/components/VisitForm';
 import VisitCard from '@/components/VisitCard';
@@ -8,12 +8,33 @@ import { RatingType, SortType, VisitWithPlace } from '@/Server/VisitService/Visi
 
 const RATINGS: RatingType[] = ['1', '2', '3', '4', '5', 'S'];
 
+function SkeletonCard() {
+    return (
+        <li className='mb-4 p-4 border border-stone-200 rounded-xl bg-white'>
+            <div className='flex items-center justify-between mb-2'>
+                <div className='h-5 w-48 bg-stone-200 rounded animate-pulse'></div>
+                <div className='w-8 h-8 bg-stone-200 rounded-full animate-pulse'></div>
+            </div>
+            <div className='h-4 w-64 bg-stone-200 rounded animate-pulse mb-2'></div>
+            <div className='h-4 w-32 bg-stone-200 rounded animate-pulse'></div>
+        </li>
+    );
+}
+
 export default function Home() {
     const [showForm, setShowForm] = useState(false);
     const [ratingFilter, setRatingFilter] = useState<RatingType | undefined>();
     const [sortOrder, setSortOrder] = useState<SortType>('date');
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
     const { data, isLoading, isFetching } = useFetchVisitedPlaces(50, 0, ratingFilter, sortOrder);
+
+    useEffect(() => {
+        if (successMessage) {
+            const timer = setTimeout(() => setSuccessMessage(null), 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [successMessage]);
 
     return (
         <div>
@@ -26,7 +47,10 @@ export default function Home() {
                                 Cancel
                             </SecondaryButton>
                         </div>
-                        <VisitForm onSuccess={() => setShowForm(false)} />
+                        <VisitForm onSuccess={() => {
+                            setShowForm(false);
+                            setSuccessMessage('Visit added!');
+                        }} />
                     </div>
                 ) : (
                     <SecondaryButton onClick={() => setShowForm(true)}>
@@ -34,6 +58,10 @@ export default function Home() {
                     </SecondaryButton>
                 )}
             </section>
+
+            {successMessage && (
+                <p className='text-green-600 text-sm mb-4'>{successMessage}</p>
+            )}
 
             <section>
                 <div className='flex items-center justify-between mb-4'>
@@ -89,7 +117,11 @@ export default function Home() {
                 </div>
 
                 {isLoading || isFetching
-                    ? <p>Loading...</p>
+                    ? <ul>
+                        {Array.from({ length: 4 }, (_, i) => (
+                            <SkeletonCard key={i} />
+                        ))}
+                    </ul>
                     : data?.visits?.length
                         ? <ul>
                             {data.visits.map((visit) => (
