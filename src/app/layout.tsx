@@ -5,6 +5,7 @@ import './globals.css';
 import Link from 'next/link';
 import { signOut } from '@/auth';
 import { PrimaryButton } from '@/components/button';
+import NavLinks from '@/components/NavLinks';
 import { ReactQueryProvider } from './react_query_provider';
 
 const geistSans = localFont({
@@ -33,20 +34,13 @@ export default async function RootLayout({
         <html lang="en">
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
                 <ReactQueryProvider>
-                    <header className="bg-white shadow">
-                        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 flex justify-between items-center">
+                    <header className="bg-white border-b border-stone-200">
+                        <div className="mx-auto max-w-7xl px-4 py-3 sm:py-6 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
                             <div className="flex items-center gap-6">
-                                <Link href="/" className="text-3xl font-bold tracking-tight text-gray-900 hover:text-gray-700">
+                                <Link href="/" className="text-xl sm:text-3xl font-bold tracking-tight text-stone-900 hover:text-rose-600">
                                     Places I Ate
                                 </Link>
-                                <nav className="flex gap-4">
-                                    <Link href="/" className="text-sm text-gray-600 hover:text-gray-900">
-                                        Visits
-                                    </Link>
-                                    <Link href="/map" className="text-sm text-gray-600 hover:text-gray-900">
-                                        Map
-                                    </Link>
-                                </nav>
+                                <NavLinks />
                             </div>
                             <form
                                 action={async () => {

@@ -21,7 +21,7 @@ export default function Home() {
                 {showForm ? (
                     <div>
                         <div className='flex items-center justify-between mb-4'>
-                            <h2 className='text-2xl'>Add a visit</h2>
+                            <h2 className='text-2xl font-semibold text-stone-800'>Add a visit</h2>
                             <SecondaryButton onClick={() => setShowForm(false)}>
                                 Cancel
                             </SecondaryButton>
@@ -37,9 +37,9 @@ export default function Home() {
 
             <section>
                 <div className='flex items-center justify-between mb-4'>
-                    <h2 className='text-2xl'>Places I&apos;ve been</h2>
+                    <h2 className='text-2xl font-semibold text-stone-800'>Places I&apos;ve been</h2>
                     {data?.count ? (
-                        <span className='text-sm text-gray-500'>{data.count} visit{data.count !== 1 ? 's' : ''}</span>
+                        <span className='text-sm text-stone-400'>{data.count} visit{data.count !== 1 ? 's' : ''}</span>
                     ) : null}
                 </div>
 
@@ -48,8 +48,8 @@ export default function Home() {
                         onClick={() => setRatingFilter(undefined)}
                         className={`px-3 py-1 rounded-full text-sm border transition-colors ${
                             !ratingFilter
-                                ? 'bg-gray-800 text-white border-gray-800'
-                                : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
+                                ? 'bg-rose-600 text-white border-rose-600'
+                                : 'bg-white text-stone-600 border-stone-300 hover:border-pink-400'
                         }`}
                     >
                         All
@@ -62,8 +62,8 @@ export default function Home() {
                                 ratingFilter === r
                                     ? r === 'S'
                                         ? 'bg-yellow-400 text-white border-yellow-400'
-                                        : 'bg-blue-500 text-white border-blue-500'
-                                    : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
+                                        : 'bg-rose-600 text-white border-rose-600'
+                                    : 'bg-white text-stone-600 border-stone-300 hover:border-pink-400'
                             }`}
                         >
                             {r === 'S' ? 'S-tier' : `${r} star${r !== '1' ? 's' : ''}`}
@@ -72,15 +72,15 @@ export default function Home() {
                 </div>
 
                 <div className='flex gap-2 mb-6 flex-wrap items-center'>
-                    <span className='text-sm text-gray-700'>Sort by:</span>
+                    <span className='text-sm text-stone-600'>Sort by:</span>
                     {(['date', 'rating', 'name'] as const).map((sort) => (
                         <button
                             key={sort}
                             onClick={() => setSortOrder(sort)}
                             className={`px-3 py-1 rounded-full text-sm border transition-colors ${
                                 sortOrder === sort
-                                    ? 'bg-gray-800 text-white border-gray-800'
-                                    : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
+                                    ? 'bg-rose-600 text-white border-rose-600'
+                                    : 'bg-white text-stone-600 border-stone-300 hover:border-pink-400'
                             }`}
                         >
                             {sort === 'date' ? 'Date' : sort === 'rating' ? 'Rating' : 'Name'}
@@ -96,7 +96,7 @@ export default function Home() {
                                 <VisitCard key={visit.id} visit={visit as VisitWithPlace} />
                             ))}
                         </ul>
-                        : <p className='text-gray-500'>
+                        : <p className='text-stone-500'>
                             {ratingFilter
                                 ? `No visits with rating ${ratingFilter === 'S' ? 'S-tier' : ratingFilter + ' star' + (ratingFilter !== '1' ? 's' : '')}.`
                                 : 'No visits yet. Add your first one!'}

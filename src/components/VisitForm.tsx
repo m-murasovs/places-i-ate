@@ -76,7 +76,7 @@ export default function VisitForm({ onSuccess }: { onSuccess?: () => void }) {
     return (
         <form onSubmit={handleSubmit} className='space-y-4'>
             <div className='relative' ref={suggestionsRef}>
-                <label htmlFor='placeName' className='block text-sm font-medium text-gray-700'>
+                <label htmlFor='placeName' className='block text-sm font-medium text-stone-700'>
                     Restaurant name
                 </label>
                 <input
@@ -85,22 +85,22 @@ export default function VisitForm({ onSuccess }: { onSuccess?: () => void }) {
                     value={searchQuery}
                     onChange={(e) => handleSearchChange(e.target.value)}
                     onFocus={() => searchQuery.length >= 2 && setShowSuggestions(true)}
-                    className='mt-1 block w-full p-2 border-2 border-gray-300 rounded'
+                    className='mt-1 block w-full p-2 border-2 border-stone-300 rounded focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400'
                     placeholder='Start typing to search...'
                     required
                     autoComplete='off'
                 />
                 {showSuggestions && suggestions && suggestions.length > 0 && (
-                    <div className='absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded shadow-lg max-h-60 overflow-y-auto'>
+                    <div className='absolute z-10 mt-1 w-full bg-white border border-stone-200 rounded shadow-lg max-h-60 overflow-y-auto'>
                         {suggestions.map((place) => (
                             <button
                                 key={place.id}
                                 type='button'
                                 onClick={() => handleSelectPlace(place)}
-                                className='w-full text-left px-3 py-2 hover:bg-blue-50 border-b border-gray-100 last:border-b-0'
+                                className='w-full text-left px-3 py-3 hover:bg-pink-50 active:bg-pink-100 border-b border-stone-100 last:border-b-0'
                             >
-                                <div className='font-medium text-sm'>{place.name}</div>
-                                <div className='text-xs text-gray-500'>{place.address}</div>
+                                <div className='font-medium text-sm text-stone-900'>{place.name}</div>
+                                <div className='text-xs text-stone-500'>{place.address}</div>
                             </button>
                         ))}
                     </div>
@@ -112,7 +112,7 @@ export default function VisitForm({ onSuccess }: { onSuccess?: () => void }) {
 
             {!selectedPlaceId && (
                 <div>
-                    <label htmlFor='address' className='block text-sm font-medium text-gray-700'>
+                    <label htmlFor='address' className='block text-sm font-medium text-stone-700'>
                         Address
                     </label>
                     <input
@@ -120,7 +120,7 @@ export default function VisitForm({ onSuccess }: { onSuccess?: () => void }) {
                         type='text'
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
-                        className='mt-1 block w-full p-2 border-2 border-gray-300 rounded'
+                        className='mt-1 block w-full p-2 border-2 border-stone-300 rounded focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400'
                         placeholder='e.g. 123 Main St, Gdynia'
                         required
                     />
@@ -128,7 +128,7 @@ export default function VisitForm({ onSuccess }: { onSuccess?: () => void }) {
             )}
 
             <div>
-                <label className='block text-sm font-medium text-gray-700 mb-1'>
+                <label className='block text-sm font-medium text-stone-700 mb-1'>
                     Rating
                 </label>
                 <div className='flex gap-2'>
@@ -141,8 +141,8 @@ export default function VisitForm({ onSuccess }: { onSuccess?: () => void }) {
                                 rating === r
                                     ? r === 'S'
                                         ? 'bg-yellow-400 border-yellow-500 text-white'
-                                        : 'bg-blue-500 border-blue-600 text-white'
-                                    : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400'
+                                        : 'bg-rose-500 border-rose-600 text-white'
+                                    : 'bg-white border-stone-300 text-stone-600 hover:border-pink-400'
                             }`}
                         >
                             {r}
@@ -152,21 +152,21 @@ export default function VisitForm({ onSuccess }: { onSuccess?: () => void }) {
             </div>
 
             <div>
-                <label htmlFor='review' className='block text-sm font-medium text-gray-700'>
+                <label htmlFor='review' className='block text-sm font-medium text-stone-700'>
                     Review (optional)
                 </label>
                 <textarea
                     id='review'
                     value={review}
                     onChange={(e) => setReview(e.target.value)}
-                    className='mt-1 block w-full p-2 border-2 border-gray-300 rounded'
+                    className='mt-1 block w-full p-2 border-2 border-stone-300 rounded focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400'
                     rows={3}
                     placeholder='How was it?'
                 />
             </div>
 
             <div>
-                <label htmlFor='visitDate' className='block text-sm font-medium text-gray-700'>
+                <label htmlFor='visitDate' className='block text-sm font-medium text-stone-700'>
                     Date visited
                 </label>
                 <input
@@ -174,7 +174,7 @@ export default function VisitForm({ onSuccess }: { onSuccess?: () => void }) {
                     type='date'
                     value={visitDate}
                     onChange={(e) => setVisitDate(e.target.value)}
-                    className='mt-1 block w-full p-2 border-2 border-gray-300 rounded'
+                    className='mt-1 block w-full p-2 border-2 border-stone-300 rounded focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400'
                     required
                 />
             </div>

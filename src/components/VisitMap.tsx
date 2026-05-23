@@ -10,9 +10,9 @@ import { VisitWithPlace } from '@/Server/VisitService/VisitService';
 
 const RATING_COLORS: Record<string, string> = {
     'S': '#facc15',
-    '5': '#22c55e',
-    '4': '#86efac',
-    '3': '#60a5fa',
+    '5': '#10b981',
+    '4': '#34d399',
+    '3': '#fbbf24',
     '2': '#f97316',
     '1': '#ef4444',
 };
@@ -48,9 +48,25 @@ function FitBounds({ visits }: { visits: VisitWithPlace[] }) {
             .filter((v) => v.place.latitude !== 0 || v.place.longitude !== 0)
             .map((v) => [v.place.latitude, v.place.longitude] as [number, number]);
 
-        if (points.length > 0) {
-            map.fitBounds(L.latLngBounds(points), { padding: [40, 40] });
-        }
+        if (points.length === 0) return;
+
+        const bounds = L.latLngBounds(points);
+
+        const fitOnce = () => {
+            map.invalidateSize();
+            map.fitBounds(bounds, { padding: [40, 40] });
+        };
+
+        const container = map.getContainer();
+        const observer = new ResizeObserver(() => {
+            fitOnce();
+            observer.disconnect();
+        });
+        observer.observe(container);
+
+        fitOnce();
+
+        return () => observer.disconnect();
     }, [visits, map]);
 
     return null;
@@ -71,53 +87,55 @@ export default function VisitMap({ visits }: { visits: VisitWithPlace[] }) {
     };
 
     return (
-        <MapContainer
-            center={[center.lat, center.lng]}
-            zoom={13}
-            style={{ height: '600px', width: '100%', borderRadius: '8px' }}
-        >
-            <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-            />
-            <FitBounds visits={validVisits} />
-            <MarkerClusterGroup chunkedLoading>
-                {validVisits.map((visit) => (
-                    <Marker
-                        key={visit.id}
-                        position={[visit.place.latitude, visit.place.longitude]}
-                        icon={createIcon(visit.rating)}
-                    >
-                        <Popup>
-                            <div style={{ minWidth: '200px', fontFamily: 'system-ui, sans-serif' }}>
-                                <div style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '8px' }}>
-                                    {visit.place.name}
-                                </div>
-                                <div style={{
-                                    display: 'inline-block',
-                                    backgroundColor: RATING_COLORS[visit.rating] ?? '#6b7280',
-                                    color: 'white',
-                                    padding: '4px 8px',
-                                    borderRadius: '16px',
-                                    fontSize: '12px',
-                                    fontWeight: 'bold',
-                                    marginBottom: '8px',
-                                }}>
-                                    {visit.rating === 'S' ? 'S-tier' : `${visit.rating}/5`}
-                                </div>
-                                {visit.review && (
-                                    <div style={{ fontStyle: 'italic', color: '#6b7280', marginBottom: '8px' }}>
-                                        {visit.review}
+        <div className='h-[calc(100vh-12rem)] sm:h-[600px] w-full rounded-lg overflow-hidden shadow-md'>
+            <MapContainer
+                center={[center.lat, center.lng]}
+                zoom={13}
+                style={{ height: '100%', width: '100%' }}
+            >
+                <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                    url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+                />
+                <FitBounds visits={validVisits} />
+                <MarkerClusterGroup chunkedLoading>
+                    {validVisits.map((visit) => (
+                        <Marker
+                            key={visit.id}
+                            position={[visit.place.latitude, visit.place.longitude]}
+                            icon={createIcon(visit.rating)}
+                        >
+                            <Popup>
+                                <div style={{ minWidth: '200px', fontFamily: 'system-ui, sans-serif' }}>
+                                    <div style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '8px' }}>
+                                        {visit.place.name}
                                     </div>
-                                )}
-                                <div style={{ fontSize: '12px', color: '#9ca3af' }}>
-                                    {new Date(visit.visitDate).toLocaleDateString()}
+                                    <div style={{
+                                        display: 'inline-block',
+                                        backgroundColor: RATING_COLORS[visit.rating] ?? '#6b7280',
+                                        color: 'white',
+                                        padding: '4px 8px',
+                                        borderRadius: '16px',
+                                        fontSize: '12px',
+                                        fontWeight: 'bold',
+                                        marginBottom: '8px',
+                                    }}>
+                                        {visit.rating === 'S' ? 'S-tier' : `${visit.rating}/5`}
+                                    </div>
+                                    {visit.review && (
+                                        <div style={{ fontStyle: 'italic', color: '#78716c', marginBottom: '8px' }}>
+                                            {visit.review}
+                                        </div>
+                                    )}
+                                    <div style={{ fontSize: '12px', color: '#a8a29e' }}>
+                                        {new Date(visit.visitDate).toLocaleDateString()}
+                                    </div>
                                 </div>
-                            </div>
-                        </Popup>
-                    </Marker>
-                ))}
-            </MarkerClusterGroup>
-        </MapContainer>
+                            </Popup>
+                        </Marker>
+                    ))}
+                </MarkerClusterGroup>
+            </MapContainer>
+        </div>
     );
 }

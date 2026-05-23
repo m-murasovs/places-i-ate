@@ -38,9 +38,9 @@ test.describe.serial('Visit CRUD', () => {
         const card = page.locator('li').filter({ hasText: TEST_PLACE }).first();
 
         await card.getByText('Delete').click();
-        await expect(card.getByText('Are you sure?')).toBeVisible();
+        await expect(card.getByText('Confirm delete')).toBeVisible();
 
-        await card.getByText('Yes, delete').click();
+        await card.getByText('Confirm delete').click();
         await expect(page.locator('li').filter({ hasText: TEST_PLACE })).toHaveCount(0, { timeout: 10000 });
     });
 });

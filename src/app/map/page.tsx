@@ -7,8 +7,8 @@ const VisitMap = dynamic(() => import('@/components/VisitMap'), {
     ssr: false,
     loading: () => (
         <div className='space-y-4'>
-            <div className='h-8 w-48 bg-gray-200 rounded animate-pulse'></div>
-            <div className='h-[600px] w-full bg-gray-200 rounded-lg animate-pulse'></div>
+            <div className='h-8 w-48 bg-stone-200 rounded animate-pulse'></div>
+            <div className='h-[600px] w-full bg-stone-200 rounded-lg animate-pulse'></div>
         </div>
     ),
 });
@@ -19,9 +19,9 @@ export default function MapPage() {
     if (isLoading) {
         return (
             <div className='space-y-4'>
-                <div className='h-8 w-48 bg-gray-200 rounded animate-pulse'></div>
-                <div className='text-sm text-gray-500 mb-2 h-4 w-32 bg-gray-200 rounded animate-pulse'></div>
-                <div className='h-[600px] w-full bg-gray-200 rounded-lg animate-pulse'></div>
+                <div className='h-8 w-48 bg-stone-200 rounded animate-pulse'></div>
+                <div className='text-sm text-gray-500 mb-2 h-4 w-32 bg-stone-200 rounded animate-pulse'></div>
+                <div className='h-[600px] w-full bg-stone-200 rounded-lg animate-pulse'></div>
             </div>
         );
     }
