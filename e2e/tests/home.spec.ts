@@ -36,4 +36,10 @@ test.describe('Home page', () => {
         await expect(page.getByRole('button', { name: 'Name' })).toHaveClass(/bg-rose-600/);
         await expect(page.getByRole('button', { name: 'Date' })).not.toHaveClass(/bg-rose-600/);
     });
+
+    test('shows skeleton loading state', async ({ page }) => {
+        await page.route('**/api/**', route => route.fulfill({ status: 200, body: JSON.stringify({ visits: [], count: 0 }) }));
+        await page.goto('/');
+        await expect(page.locator('.animate-pulse').first()).toBeVisible();
+    });
 });
