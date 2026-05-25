@@ -13,7 +13,7 @@ A full-stack web application to track and review restaurants you've visited. Log
 - **Visit History** — Browse all your visits with rating filter pills (All, 1-5 stars, S-tier), paginated 10 per page
 - **Sorting** — Sort visits by date (newest first), rating (highest first), or place name (A-Z)
 - **Edit / Delete** — Inline edit rating and review, or delete a visit with confirmation
-- **Interactive Map** — See visited restaurants on a Leaflet map with color-coded markers
+- **Interactive Map** — See visited restaurants on a Leaflet map with color-coded markers and clustering
 - **Public Profiles** — Choose a username, get a public profile at `/u/username` with your visits and map
 - **Follow System** — Follow other users (asymmetric, no approval needed)
 - **Mobile Tab Bar** — Fixed bottom navigation on mobile with safe-area padding
@@ -113,8 +113,8 @@ src/
     ├── UserService/   # User lookup, username claim
     └── FollowService/ # Follow/unfollow, counts
 e2e/
-├── global.setup.ts    # Authenticate + seed username for test user
-├── global.teardown.ts # Clean up test data
+├── global.setup.ts    # Authenticate, seed username + visits with coordinates for test user
+├── global.teardown.ts # Clean up test places and visits
 └── tests/
     ├── home.spec.ts        # Home page, filters, sorting
     ├── visit-crud.spec.ts  # Create, edit, delete visits

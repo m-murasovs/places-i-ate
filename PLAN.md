@@ -97,6 +97,14 @@ NextAuth 5 beta (GitHub OAuth), Prisma 5 + MongoDB Atlas, TanStack Query v5, Lea
 - [x] Session augmentation — `username` propagated through JWT/session to middleware + client
 - [x] E2e tests for profile page (4 new tests), global setup seeds username for test user
 
+### Bug fix — Map markers not rendering on first load (completed)
+- [x] Root cause: `react-leaflet-cluster@4.1.3` required React 19 / react-leaflet 5, silently failed on React 18
+- [x] Downgraded to `react-leaflet-cluster@2.1.0` (matches React 18 + react-leaflet 4 peer deps)
+- [x] Fixed map container timing — `MapReady` component waits for real CSS dimensions before `invalidateSize`
+- [x] Added `limit` to TanStack Query key to prevent home/map cache collision
+- [x] E2E setup seeds 2 visits with real coordinates (Riga + Vienna), map tests assert markers on first load
+- [x] Fixed Playwright teardown ordering (`teardown` property on chromium project)
+
 ### Social — Phase 7: Place intelligence
 - [ ] Place detail page (`/place/[id]`) with aggregate rating (average + count) across all users
 - [ ] "Friends also rated this" — show ratings from people you follow on the place page
@@ -122,5 +130,5 @@ NextAuth 5 beta (GitHub OAuth), Prisma 5 + MongoDB Atlas, TanStack Query v5, Lea
 3. **GitHub OAuth instead of Google** — free, no billing/GCP project needed
 4. **Apify dataset for places** — 200 Gdynia restaurants seeded into Place table, used for autocomplete
 5. **TanStack Query v5** — aligned devtools/client versions
-6. **react-leaflet v4** — v5 requires React 19, project is on React 18
+6. **react-leaflet v4 + cluster v2.1.0** — v5/v4.1.3 require React 19, project is on React 18. Upgrade to React 19 + Next.js 15 is a future task
 7. **Playwright for e2e** — CredentialsProvider auth bypass, global setup writes session cookies once, all tests reuse stored auth state
