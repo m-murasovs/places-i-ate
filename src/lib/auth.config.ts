@@ -24,4 +24,13 @@ const e2eProvider = Credentials({
 
 export const authConfig: NextAuthConfig = {
     providers: isE2E ? [GitHub, e2eProvider] : [GitHub],
+    callbacks: {
+        session({ session, token }) {
+            if (token?.id) {
+                session.user.id = token.id as string;
+            }
+            session.user.username = (token?.username as string) ?? null;
+            return session;
+        },
+    },
 };

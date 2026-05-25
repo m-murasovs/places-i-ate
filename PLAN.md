@@ -87,11 +87,15 @@ NextAuth 5 beta (GitHub OAuth), Prisma 5 + MongoDB Atlas, TanStack Query v5, Lea
 - [x] Mobile tab bar — fixed bottom tab bar on small screens with active rose indicator, safe-area padding for notched devices
 - [x] Pagination for large visit lists — 10 visits per page with prev/next controls, resets on filter/sort change
 
-### Social — Phase 6: Profiles & follow graph
-- [ ] Add `username` (unique slug) and `bio` fields to `User` model
-- [ ] Public profile page (`/u/[username]`) showing user's visits, ratings, and summary map
-- [ ] Follow/unfollow (asymmetric, no approval) — `Follow` model (followerId, followingId)
-- [ ] Username prompt on first login (slugified from GitHub name as default)
+### Social — Phase 6: Profiles & follow graph (completed)
+- [x] Add `username` (unique slug) and `bio` fields to `User` model + `Follow` model with unique constraint
+- [x] Username onboarding flow — middleware redirects to `/onboarding` if no username, form claims slug
+- [x] Public profile page (`/u/[username]`) showing avatar, bio, follower/following counts, visits map, and visit list
+- [x] Follow/unfollow button (asymmetric, no approval) with optimistic UI
+- [x] Profile link in nav (desktop header + mobile tab bar)
+- [x] `readOnly` prop on VisitCard for profile view (hides edit/delete)
+- [x] Session augmentation — `username` propagated through JWT/session to middleware + client
+- [x] E2e tests for profile page (4 new tests), global setup seeds username for test user
 
 ### Social — Phase 7: Place intelligence
 - [ ] Place detail page (`/place/[id]`) with aggregate rating (average + count) across all users

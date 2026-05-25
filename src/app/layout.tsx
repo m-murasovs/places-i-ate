@@ -3,7 +3,7 @@ import localFont from 'next/font/local';
 import './globals.css';
 
 import Link from 'next/link';
-import { signOut } from '@/auth';
+import { auth, signOut } from '@/auth';
 import { PrimaryButton } from '@/components/button';
 import NavLinks from '@/components/NavLinks';
 import { ReactQueryProvider } from './react_query_provider';
@@ -30,6 +30,9 @@ export default async function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const session = await auth();
+    const username = session?.user?.username ?? null;
+
     return (
         <html lang="en">
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
@@ -40,7 +43,7 @@ export default async function RootLayout({
                                 <Link href="/" className="text-xl sm:text-3xl font-bold tracking-tight text-stone-900 hover:text-rose-600">
                                     Places I Ate
                                 </Link>
-                                <NavLinks />
+                                <NavLinks username={username} />
                             </div>
                             <form
                                 action={async () => {

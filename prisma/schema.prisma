@@ -14,10 +14,14 @@ model User {
   email          String?   @unique
   emailVerified  DateTime?
   image          String?
+  username       String?  @unique
+  bio            String?
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
   Account        Account[]
   visits         Visit[]
+  followers      Follow[] @relation("following")
+  following      Follow[] @relation("follower")
 
   @@map("user")
 }
@@ -74,4 +78,17 @@ model Visit {
 
   @@unique([userId, placeId, visitDate])
   @@map("visit")
+}
+
+model Follow {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  followerId  String   @db.ObjectId
+  followingId String   @db.ObjectId
+  createdAt   DateTime @default(now())
+
+  follower  User @relation("follower",  fields: [followerId],  references: [id], onDelete: Cascade)
+  following User @relation("following", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+  @@map("follow")
 }

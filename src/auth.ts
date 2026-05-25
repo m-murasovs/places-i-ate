@@ -13,6 +13,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         signIn: '/login',
     },
     callbacks: {
+        ...authConfig.callbacks,
         async jwt({ token, user }) {
             if (user) {
                 const dbUser = await prisma.user.findUnique({
@@ -23,18 +24,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
                 if (dbUser) {
                     token.id = dbUser.id;
+                    token.username = dbUser.username ?? (dbUser.email === 'e2e-test@places-i-ate.internal' ? 'e2e-test-user' : null);
                 }
             }
 
             return token;
-        },
-
-        async session({ session, token }) {
-            if (token?.id) {
-                session.user.id = token.id as string;
-            }
-
-            return session;
         },
     },
 });

@@ -14,11 +14,16 @@ A full-stack web application to track and review restaurants you've visited. Log
 - **Sorting** — Sort visits by date (newest first), rating (highest first), or place name (A-Z)
 - **Edit / Delete** — Inline edit rating and review, or delete a visit with confirmation
 - **Interactive Map** — See visited restaurants on a Leaflet map with color-coded markers
+- **Public Profiles** — Choose a username, get a public profile at `/u/username` with your visits and map
+- **Follow System** — Follow other users (asymmetric, no approval needed)
+- **Mobile Tab Bar** — Fixed bottom navigation on mobile with safe-area padding
 
 ### Planned
 
-- Better mobile styling
-- Public profiles and social features
+- Place detail pages with aggregate ratings across users
+- "Friends also rated this" on place pages
+- Bookmarks ("want to try" list)
+- Per-visit visibility (public / followers-only / private)
 
 ## Tech Stack
 
@@ -86,35 +91,35 @@ src/
 ├── app/               # Next.js pages
 │   ├── page.tsx       # Home (visit form + visit list with filters)
 │   ├── map/           # Map view (Leaflet)
-│   └── login/         # Login page
+│   ├── login/         # Login page
+│   ├── onboarding/    # Username claim on first login
+│   └── u/[username]/  # Public profile page
 ├── components/        # React components
 │   ├── VisitForm.tsx  # Create visit with place autocomplete
-│   ├── VisitCard.tsx  # Visit display with edit/delete
-│   └── VisitMap.tsx   # Leaflet map with markers
+│   ├── VisitCard.tsx  # Visit display with edit/delete (readOnly for profiles)
+│   ├── VisitMap.tsx   # Leaflet map with markers
+│   └── NavLinks.tsx   # Desktop + mobile bottom tab bar navigation
 ├── hooks/             # React Query hooks
-│   ├── use_fetch_visited_places.ts
-│   ├── use_search_places.ts
-│   ├── use_create_visit.ts
-│   ├── use_update_visit.ts
-│   └── use_delete_visit.ts
 ├── lib/               # Utilities
 │   ├── prisma.ts      # Prisma client
-│   └── auth.config.ts # NextAuth config
+│   └── auth.config.ts # NextAuth config (shared with middleware)
 └── Server/
     ├── actions/       # Server actions
     │   ├── PlaceActions.ts
-    │   └── VisitActions.ts
+    │   ├── VisitActions.ts
+    │   └── UserActions.ts  # Profile, follow/unfollow
     ├── PlaceService/  # Place service (Prisma)
-    └── VisitService/  # Visit service (Prisma)
-scripts/
-├── seed-places.ts     # Import Apify dataset into Place table
-└── seed-test-user.ts  # Create e2e test user in database
+    ├── VisitService/  # Visit service (Prisma)
+    ├── UserService/   # User lookup, username claim
+    └── FollowService/ # Follow/unfollow, counts
 e2e/
-├── global.setup.ts    # Authenticate test user, save session cookies
+├── global.setup.ts    # Authenticate + seed username for test user
+├── global.teardown.ts # Clean up test data
 └── tests/
     ├── home.spec.ts        # Home page, filters, sorting
     ├── visit-crud.spec.ts  # Create, edit, delete visits
-    └── map.spec.ts         # Map page
+    ├── map.spec.ts         # Map page
+    └── profile.spec.ts     # Profile page, follow button, read-only cards
 ```
 
 ## License

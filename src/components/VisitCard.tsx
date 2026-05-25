@@ -25,7 +25,7 @@ const RATING_BADGE_CLASSES: Record<string, string> = {
     '1': 'bg-red-400 text-white',
 };
 
-export default function VisitCard({ visit }: { visit: VisitWithPlace }) {
+export default function VisitCard({ visit, readOnly = false }: { visit: VisitWithPlace; readOnly?: boolean }) {
     const [editing, setEditing] = useState(false);
     const [rating, setRating] = useState<RatingType>(visit.rating as RatingType);
     const [review, setReview] = useState(visit.review ?? '');
@@ -119,38 +119,40 @@ export default function VisitCard({ visit }: { visit: VisitWithPlace }) {
                 {new Date(visit.visitDate).toLocaleDateString()}
             </p>
 
-            <div className='flex gap-2 mt-2'>
-                <button
-                    onClick={() => setEditing(true)}
-                    className='text-sm text-rose-600 hover:text-rose-700 py-1 px-2 min-h-[44px] min-w-[44px]'
-                >
-                    Edit
-                </button>
-                {confirmDelete ? (
-                    <div className='flex gap-2'>
-                        <button
-                            onClick={handleDelete}
-                            disabled={deleteMutation.isPending}
-                            className='text-sm text-white bg-red-600 hover:bg-red-700 rounded py-1 px-3 min-h-[44px] disabled:opacity-50'
-                        >
-                            {deleteMutation.isPending ? 'Deleting...' : 'Confirm delete'}
-                        </button>
-                        <button
-                            onClick={() => setConfirmDelete(false)}
-                            className='text-sm text-gray-600 bg-gray-100 hover:bg-gray-200 rounded py-1 px-3 min-h-[44px]'
-                        >
-                            Cancel
-                        </button>
-                    </div>
-                ) : (
+            {!readOnly && (
+                <div className='flex gap-2 mt-2'>
                     <button
-                        onClick={() => setConfirmDelete(true)}
-                        className='text-sm text-red-600 hover:underline py-1 px-2 min-h-[44px] min-w-[44px]'
+                        onClick={() => setEditing(true)}
+                        className='text-sm text-rose-600 hover:text-rose-700 py-1 px-2 min-h-[44px] min-w-[44px]'
                     >
-                        Delete
+                        Edit
                     </button>
-                )}
-            </div>
+                    {confirmDelete ? (
+                        <div className='flex gap-2'>
+                            <button
+                                onClick={handleDelete}
+                                disabled={deleteMutation.isPending}
+                                className='text-sm text-white bg-red-600 hover:bg-red-700 rounded py-1 px-3 min-h-[44px] disabled:opacity-50'
+                            >
+                                {deleteMutation.isPending ? 'Deleting...' : 'Confirm delete'}
+                            </button>
+                            <button
+                                onClick={() => setConfirmDelete(false)}
+                                className='text-sm text-gray-600 bg-gray-100 hover:bg-gray-200 rounded py-1 px-3 min-h-[44px]'
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    ) : (
+                        <button
+                            onClick={() => setConfirmDelete(true)}
+                            className='text-sm text-red-600 hover:underline py-1 px-2 min-h-[44px] min-w-[44px]'
+                        >
+                            Delete
+                        </button>
+                    )}
+                </div>
+            )}
         </li>
     );
 }
