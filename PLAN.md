@@ -66,16 +66,16 @@ NextAuth 5 beta (GitHub OAuth), Prisma 5 + MongoDB Atlas, TanStack Query v5, Lea
 - [x] VisitCard touch targets — 44px min targets on Edit/Delete, redesigned delete confirmation with proper buttons
 - [x] Updated e2e tests to match new delete confirmation UI
 
-### UX — Step 2: Visual polish
-- [ ] Button component — add `transition-colors`, proper `focus-visible:ring`, `disabled:opacity-50`; remove broken `focus:shadow-outline`
-- [ ] VisitCard hover state — `hover:shadow-md transition-shadow`, increase padding to `p-4`, fix name truncation with long place names
-- [ ] "Add a visit" button — make it a clear CTA, `w-full sm:w-auto` on mobile
-- [ ] Dark mode — either wire up fully or remove the half-defined CSS vars in globals.css
+### UX — Step 2: Visual polish (completed)
+- [x] Button component — already had `transition-colors`, `focus-visible:ring`, `disabled:opacity-50` from prior work
+- [x] VisitCard hover state — already had `hover:shadow-md transition-shadow` and `p-4`; added `truncate` for long place names
+- [x] "Add a visit" button — upgraded to PrimaryButton CTA with `w-full sm:w-auto`
+- [x] Dark mode — no half-defined CSS vars existed; globals.css only has clean light-mode vars, no action needed
 
-### UX — Step 3: Interaction improvements
-- [ ] Home page skeleton loading — replace `<p>Loading...</p>` with 3-4 pulsing VisitCard shapes (like map page already does)
-- [ ] Success feedback — brief inline message after add/edit/delete (3s `setTimeout`, no library)
-- [ ] Delete confirmation redesign — replace inline "Are you sure? Yes/No" text with a proper button row (`Confirm delete` + `Cancel`)
+### UX — Step 3: Interaction improvements (completed)
+- [x] Home page skeleton loading — 4 pulsing VisitCard shapes while loading
+- [x] Success feedback — inline message after add with 3s auto-dismiss
+- [x] Delete confirmation redesign — already had proper `Confirm delete` + `Cancel` button row from Step 1
 
 ### UX — Step 4: Form UX
 - [ ] Autocomplete dropdown touch sizing — bump to `py-3`, add `active:bg-blue-100`, handle `touchstart` alongside `mousedown`

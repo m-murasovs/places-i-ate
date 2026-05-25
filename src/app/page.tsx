@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import useFetchVisitedPlaces from '@/hooks/use_fetch_visited_places';
 import VisitForm from '@/components/VisitForm';
 import VisitCard from '@/components/VisitCard';
-import { SecondaryButton } from '@/components/button';
+import { PrimaryButton, SecondaryButton } from '@/components/button';
 import { RatingType, SortType, VisitWithPlace } from '@/Server/VisitService/VisitService';
 
 const RATINGS: RatingType[] = ['1', '2', '3', '4', '5', 'S'];
@@ -53,9 +53,9 @@ export default function Home() {
                         }} />
                     </div>
                 ) : (
-                    <SecondaryButton onClick={() => setShowForm(true)}>
+                    <PrimaryButton onClick={() => setShowForm(true)} className='w-full sm:w-auto'>
                         + Add a visit
-                    </SecondaryButton>
+                    </PrimaryButton>
                 )}
             </section>
 

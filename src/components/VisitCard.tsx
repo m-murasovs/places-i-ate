@@ -54,7 +54,7 @@ export default function VisitCard({ visit }: { visit: VisitWithPlace }) {
     if (editing) {
         return (
             <li className='mb-4 p-4 border border-pink-200 rounded-xl bg-pink-50'>
-                <h3 className='text-lg font-semibold mb-2'>{visit.place.name}</h3>
+                <h3 className='text-lg font-semibold mb-2 truncate'>{visit.place.name}</h3>
                 <p className='text-sm text-stone-700 mb-3'>{visit.place.address}</p>
 
                 <div className='mb-3'>
@@ -106,7 +106,7 @@ export default function VisitCard({ visit }: { visit: VisitWithPlace }) {
     return (
         <li className='mb-4 p-4 border border-stone-200 rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow'>
             <div className='flex items-center justify-between'>
-                <h3 className='text-lg font-semibold'>{visit.place.name}</h3>
+                <h3 className='text-lg font-semibold truncate'>{visit.place.name}</h3>
                 <span className={`inline-flex items-center justify-center w-8 h-8 shrink-0 rounded-full font-bold text-sm ${
                     RATING_BADGE_CLASSES[visit.rating] ?? 'bg-stone-400 text-white'
                 }`}>
