@@ -23,6 +23,11 @@ export default defineConfig({
             use: { ...devices['Desktop Chrome'] },
             dependencies: ['setup'],
         },
+        {
+            name: 'teardown',
+            testMatch: /global\.teardown\.ts/,
+            use: { storageState: undefined },
+        },
     ],
     webServer: {
         command: 'npm run dev',

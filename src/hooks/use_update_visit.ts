@@ -1,10 +1,11 @@
 'use client';
 import { updateVisit } from '@/Server/actions/VisitActions';
 import { RatingType } from '@/Server/VisitService/VisitService';
-import { useMutation } from '@tanstack/react-query';
-import { invalidateQueries } from '@/app/react_query_provider';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const useUpdateVisit = () => {
+    const queryClient = useQueryClient();
+
     return useMutation({
         mutationFn: ({ visitId, data }: {
             visitId: string;
@@ -15,7 +16,7 @@ const useUpdateVisit = () => {
             }>;
         }) => updateVisit(visitId, data),
         onSuccess: () => {
-            invalidateQueries(['fetchVisitedPlaces']);
+            queryClient.invalidateQueries({ queryKey: ['fetchVisitedPlaces'] });
         },
     });
 };

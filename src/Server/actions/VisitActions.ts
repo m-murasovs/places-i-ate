@@ -56,9 +56,6 @@ export const createVisitWithPlace = async (data: {
             });
         }
 
-        if (!place) {
-            throw new Error('Failed to create place');
-        }
         resolvedPlaceId = place.id;
     }
 
@@ -108,8 +105,8 @@ export const deleteVisit = async (visitId: string) => {
         throw new Error('Forbidden');
     }
 
-    const result = await visitService.deleteVisit(visitId);
-    return result;
+    await visitService.deleteVisit(visitId);
+    return true;
 };
 
 export const fetchUserVisits = async (limit: number = 50, offset: number = 0, rating?: RatingType, sort: SortType = 'date') => {
@@ -119,8 +116,9 @@ export const fetchUserVisits = async (limit: number = 50, offset: number = 0, ra
     }
 
     if (rating) {
-        const visits = await visitService.getVisitsByRating(session.user.id, rating, sort);
-        return { visits: visits.slice(offset, offset + limit), count: visits.length };
+        const visits = await visitService.getVisitsByRating(session.user.id, rating, sort, limit, offset);
+        const count = await visitService.getUserVisitCountByRating(session.user.id, rating);
+        return { visits, count };
     }
 
     const visits = await visitService.getUserVisits(session.user.id, limit, offset, sort);
@@ -133,27 +131,3 @@ export const getVisit = async (visitId: string) => {
     return visit;
 };
 
-export const getPlaceVisits = async (placeId: string) => {
-    const visits = await visitService.getPlaceVisits(placeId);
-    return visits;
-};
-
-export const getUserPlaceVisits = async (placeId: string) => {
-    const session = await auth();
-    if (!session?.user?.id) {
-        throw new Error('Unauthorized');
-    }
-
-    const visits = await visitService.getUserPlaceVisits(session.user.id, placeId);
-    return visits;
-};
-
-export const getVisitsByRating = async (rating: RatingType) => {
-    const session = await auth();
-    if (!session?.user?.id) {
-        throw new Error('Unauthorized');
-    }
-
-    const visits = await visitService.getVisitsByRating(session.user.id, rating);
-    return visits;
-};

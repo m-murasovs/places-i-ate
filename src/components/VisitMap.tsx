@@ -76,6 +76,7 @@ export default function VisitMap({ visits }: { visits: VisitWithPlace[] }) {
     const validVisits = visits.filter(
         (v) => v.place.latitude !== 0 || v.place.longitude !== 0
     );
+    const hiddenCount = visits.length - validVisits.length;
 
     if (validVisits.length === 0) {
         return <p className='text-gray-500'>No visits with coordinates to show on the map.</p>;
@@ -87,7 +88,13 @@ export default function VisitMap({ visits }: { visits: VisitWithPlace[] }) {
     };
 
     return (
-        <div className='h-[calc(100vh-12rem)] sm:h-[600px] w-full rounded-lg overflow-hidden shadow-md'>
+        <div>
+            {hiddenCount > 0 && (
+                <p className='text-sm text-amber-600 mb-2'>
+                    {hiddenCount} {hiddenCount === 1 ? 'visit' : 'visits'} without coordinates {hiddenCount === 1 ? 'is' : 'are'} not shown on the map.
+                </p>
+            )}
+            <div className='h-[calc(100vh-12rem)] sm:h-[600px] w-full rounded-lg overflow-hidden shadow-md'>
             <MapContainer
                 center={[center.lat, center.lng]}
                 zoom={13}
@@ -136,6 +143,7 @@ export default function VisitMap({ visits }: { visits: VisitWithPlace[] }) {
                     ))}
                 </MarkerClusterGroup>
             </MapContainer>
+            </div>
         </div>
     );
 }

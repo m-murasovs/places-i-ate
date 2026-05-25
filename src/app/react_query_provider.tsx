@@ -1,16 +1,12 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
-const queryClient = new QueryClient();
-
-export const invalidateQueries = (queryKeys: string[]) => {
-    queryClient.invalidateQueries({ queryKey: queryKeys });
-};
-
 export function ReactQueryProvider({ children }: React.PropsWithChildren) {
+    const [queryClient] = useState(() => new QueryClient());
+
     return (
         <QueryClientProvider client={queryClient}>
             {children}
@@ -18,4 +14,3 @@ export function ReactQueryProvider({ children }: React.PropsWithChildren) {
         </QueryClientProvider>
     );
 }
-

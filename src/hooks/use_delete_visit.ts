@@ -1,13 +1,14 @@
 'use client';
 import { deleteVisit } from '@/Server/actions/VisitActions';
-import { useMutation } from '@tanstack/react-query';
-import { invalidateQueries } from '@/app/react_query_provider';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const useDeleteVisit = () => {
+    const queryClient = useQueryClient();
+
     return useMutation({
         mutationFn: (visitId: string) => deleteVisit(visitId),
         onSuccess: () => {
-            invalidateQueries(['fetchVisitedPlaces']);
+            queryClient.invalidateQueries({ queryKey: ['fetchVisitedPlaces'] });
         },
     });
 };
