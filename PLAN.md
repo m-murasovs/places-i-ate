@@ -77,14 +77,14 @@ NextAuth 5 beta (GitHub OAuth), Prisma 5 + MongoDB Atlas, TanStack Query v5, Lea
 - [x] Success feedback — inline message after add with 3s auto-dismiss
 - [x] Delete confirmation redesign — already had proper `Confirm delete` + `Cancel` button row from Step 1
 
-### UX — Step 4: Form UX
+### UX — Step 4: Form UX (completed)
 - [x] Autocomplete dropdown touch handling — added `touchstart` event listener alongside `mousedown` for mobile dismiss
-- [ ] Input focus styles — add `focus:border-blue-500 focus:outline-none` to all inputs/textareas (also an accessibility fix)
-- [ ] Test `<input type="date">` on iOS Safari, add pattern fallback if broken
+- [x] Input focus styles — all inputs already have `focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400`
+- [x] Date input iOS Safari — `<input type="date">` works on iOS Safari; added `pattern` attribute as safety net
 
-### UX — Step 5: Navigation
+### UX — Step 5: Navigation (completed)
 - [x] Active nav link indicator — extract `NavLinks` client component using `usePathname()`, highlight current route
-- [ ] Mobile tab bar — render nav links as full-width horizontal tabs below header on small screens, with underline active indicator
+- [x] Mobile tab bar — fixed bottom tab bar on small screens with active rose indicator, safe-area padding for notched devices
 - [x] Pagination for large visit lists — 10 visits per page with prev/next controls, resets on filter/sort change
 
 ### Social — Phase 6: Profiles & follow graph

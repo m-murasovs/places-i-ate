@@ -176,6 +176,7 @@ export default function VisitForm({ onSuccess }: { onSuccess?: () => void }) {
                 <input
                     id='visitDate'
                     type='date'
+                    pattern='\d{4}-\d{2}-\d{2}'
                     value={visitDate}
                     onChange={(e) => setVisitDate(e.target.value)}
                     className='mt-1 block w-full p-2 border-2 border-stone-300 rounded focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400'
