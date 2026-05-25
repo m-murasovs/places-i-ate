@@ -27,10 +27,58 @@ setup('authenticate as test user', async ({ page }) => {
 
     const prisma = new PrismaClient();
     try {
-        await prisma.user.updateMany({
+        const user = await prisma.user.upsert({
             where: { email: 'e2e-test@places-i-ate.internal' },
-            data: { username: 'e2e-test-user' },
+            update: { username: 'e2e-test-user' },
+            create: {
+                email: 'e2e-test@places-i-ate.internal',
+                name: 'E2E Test User',
+                username: 'e2e-test-user',
+            },
         });
+
+        const places = [
+            {
+                googlePlacesId: 'e2e-place-riga-1',
+                name: 'E2E Test Place Riga',
+                address: 'Kalku iela 1, Riga, Latvia',
+                latitude: 56.9496,
+                longitude: 24.1052,
+            },
+            {
+                googlePlacesId: 'e2e-place-vienna-1',
+                name: 'E2E Test Place Vienna',
+                address: 'Stephansplatz 1, Vienna, Austria',
+                latitude: 48.2082,
+                longitude: 16.3738,
+            },
+        ];
+
+        for (const placeData of places) {
+            const place = await prisma.place.upsert({
+                where: { googlePlacesId: placeData.googlePlacesId },
+                update: placeData,
+                create: placeData,
+            });
+
+            await prisma.visit.upsert({
+                where: {
+                    userId_placeId_visitDate: {
+                        userId: user.id,
+                        placeId: place.id,
+                        visitDate: new Date('2025-01-15'),
+                    },
+                },
+                update: {},
+                create: {
+                    userId: user.id,
+                    placeId: place.id,
+                    rating: '5',
+                    review: 'E2E test visit',
+                    visitDate: new Date('2025-01-15'),
+                },
+            });
+        }
     } finally {
         await prisma.$disconnect();
     }

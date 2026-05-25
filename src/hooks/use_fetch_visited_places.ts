@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 
 const useFetchVisitedPlaces = (limit: number = 50, offset: number = 0, rating?: RatingType, sort: SortType = 'date') => {
     return useQuery({
-        queryKey: ['fetchVisitedPlaces', offset, rating, sort],
+        queryKey: ['fetchVisitedPlaces', limit, offset, rating, sort],
         queryFn: () => fetchUserVisits(limit, offset, rating, sort),
         enabled: !!limit,
     });

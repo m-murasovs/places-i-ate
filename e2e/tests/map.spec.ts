@@ -1,24 +1,24 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Map page', () => {
-    test('loads with heading', async ({ page }) => {
+    test('loads with heading and visit count', async ({ page }) => {
         await page.goto('/map');
         await expect(page.getByText('My visits map')).toBeVisible({ timeout: 15000 });
+        await expect(page.locator('text=/\\d+ visits? loaded/')).toBeVisible({ timeout: 10000 });
     });
 
-    test('shows visit count or no-coordinates message', async ({ page }) => {
-        await page.goto('/map');
-        const hasCount = page.locator('text=/\\d+ visits? loaded/');
-        const hasNoCoords = page.getByText('No visits with coordinates to show on the map.');
-        await expect(hasCount.or(hasNoCoords).first()).toBeVisible({ timeout: 10000 });
-    });
-
-    test('markers or no-coordinates message appear on first load without re-focus', async ({ page }) => {
+    test('markers appear on first load without navigation', async ({ page }) => {
         await page.goto('/map');
         await expect(page.getByText('My visits map')).toBeVisible({ timeout: 15000 });
+
         const markers = page.locator('.leaflet-marker-icon');
         const clusters = page.locator('.marker-cluster');
-        const noCoords = page.getByText('No visits with coordinates to show on the map.');
-        await expect(markers.or(clusters).or(noCoords).first()).toBeVisible({ timeout: 10000 });
+        await expect(markers.or(clusters).first()).toBeVisible({ timeout: 10000 });
+    });
+
+    test('map tiles load on first render', async ({ page }) => {
+        await page.goto('/map');
+        await expect(page.locator('.leaflet-container')).toBeVisible({ timeout: 15000 });
+        await expect(page.locator('.leaflet-tile-loaded').first()).toBeVisible({ timeout: 10000 });
     });
 });

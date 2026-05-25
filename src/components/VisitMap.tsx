@@ -40,32 +40,37 @@ function createIcon(rating: string) {
     });
 }
 
-function FitBounds({ visits }: { visits: VisitWithPlace[] }) {
+function MapReady({ visits }: { visits: VisitWithPlace[] }) {
     const map = useMap();
 
     useEffect(() => {
-        const points = visits
-            .filter((v) => v.place.latitude !== 0 || v.place.longitude !== 0)
-            .map((v) => [v.place.latitude, v.place.longitude] as [number, number]);
+        const container = map.getContainer();
 
-        if (points.length === 0) return;
-
-        const bounds = L.latLngBounds(points);
-
-        const fitOnce = () => {
+        const apply = () => {
             map.invalidateSize();
-            map.fitBounds(bounds, { padding: [40, 40] });
+
+            const points = visits
+                .filter((v) => v.place.latitude !== 0 || v.place.longitude !== 0)
+                .map((v) => [v.place.latitude, v.place.longitude] as [number, number]);
+
+            if (points.length > 0) {
+                map.fitBounds(L.latLngBounds(points), { padding: [40, 40] });
+            }
         };
 
-        const container = map.getContainer();
+        // Dynamic import means the container may have 0 dimensions on first render.
+        if (container.clientHeight > 0 && container.clientWidth > 0) {
+            requestAnimationFrame(apply);
+            return;
+        }
+
         const observer = new ResizeObserver(() => {
-            fitOnce();
-            observer.disconnect();
+            if (container.clientHeight > 0 && container.clientWidth > 0) {
+                observer.disconnect();
+                apply();
+            }
         });
         observer.observe(container);
-
-        fitOnce();
-
         return () => observer.disconnect();
     }, [visits, map]);
 
@@ -104,7 +109,7 @@ export default function VisitMap({ visits }: { visits: VisitWithPlace[] }) {
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                     url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
                 />
-                <FitBounds visits={validVisits} />
+                <MapReady visits={validVisits} />
                 <MarkerClusterGroup chunkedLoading>
                     {validVisits.map((visit) => (
                         <Marker

@@ -10,7 +10,6 @@ export const searchPlaces = async (query: string, limit: number = 10) => {
     return places;
 };
 
-
 export const createPlace = async (data: {
     googlePlacesId: string;
     name: string;
