@@ -14,7 +14,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     callbacks: {
         ...authConfig.callbacks,
-        async jwt({ token, user }) {
+        async jwt({ token, user, trigger }) {
             if (user) {
                 const dbUser = await prisma.user.findUnique({
                     where: {
@@ -25,6 +25,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 if (dbUser) {
                     token.id = dbUser.id;
                     token.username = dbUser.username ?? (dbUser.email === 'e2e-test@places-i-ate.internal' ? 'e2e-test-user' : null);
+                }
+            }
+
+            if (trigger === 'update' && token.id) {
+                const dbUser = await prisma.user.findUnique({
+                    where: { id: token.id as string },
+                    select: { username: true },
+                });
+                if (dbUser) {
+                    token.username = dbUser.username;
                 }
             }
 

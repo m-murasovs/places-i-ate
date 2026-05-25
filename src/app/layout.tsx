@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { auth, signOut } from '@/auth';
 import { PrimaryButton } from '@/components/button';
 import NavLinks from '@/components/NavLinks';
-import { ReactQueryProvider } from './react_query_provider';
+import { Providers } from './react_query_provider';
 
 const geistSans = localFont({
     src: './fonts/GeistVF.woff',
@@ -36,7 +36,7 @@ export default async function RootLayout({
     return (
         <html lang="en">
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-                <ReactQueryProvider>
+                <Providers>
                     <header className="bg-white border-b border-stone-200">
                         <div className="mx-auto max-w-7xl px-4 py-3 sm:py-6 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
                             <div className="flex items-center gap-6">
@@ -62,7 +62,7 @@ export default async function RootLayout({
                             {children}
                         </div>
                     </main>
-                </ReactQueryProvider>
+                </Providers>
             </body>
         </html>
     );

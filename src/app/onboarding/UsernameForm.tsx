@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { claimUsername } from '@/Server/actions/UserActions';
 import { PrimaryButton } from '@/components/button';
 
@@ -11,6 +12,7 @@ export default function UsernameForm({ defaultUsername }: { defaultUsername: str
     const [error, setError] = useState<string | null>(null);
     const [isPending, setIsPending] = useState(false);
     const router = useRouter();
+    const { update } = useSession();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -19,7 +21,7 @@ export default function UsernameForm({ defaultUsername }: { defaultUsername: str
 
         try {
             await claimUsername(username, bio || undefined);
-            router.refresh();
+            await update();
             router.push('/');
         } catch (err) {
             setError((err as Error).message);
