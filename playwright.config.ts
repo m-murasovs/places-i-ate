@@ -8,7 +8,7 @@ export default defineConfig({
     workers: 1,
     reporter: 'html',
     use: {
-        baseURL: 'http://localhost:3000',
+        baseURL: 'http://localhost:3737',
         storageState: 'e2e/.auth/user.json',
         trace: 'on-first-retry',
     },
@@ -26,7 +26,7 @@ export default defineConfig({
     ],
     webServer: {
         command: 'npm run dev',
-        url: 'http://localhost:3000',
+        url: 'http://localhost:3737',
         reuseExistingServer: true,
         env: {
             E2E_TEST: 'true',

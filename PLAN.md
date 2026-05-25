@@ -78,14 +78,14 @@ NextAuth 5 beta (GitHub OAuth), Prisma 5 + MongoDB Atlas, TanStack Query v5, Lea
 - [x] Delete confirmation redesign — already had proper `Confirm delete` + `Cancel` button row from Step 1
 
 ### UX — Step 4: Form UX
-- [ ] Autocomplete dropdown touch sizing — bump to `py-3`, add `active:bg-blue-100`, handle `touchstart` alongside `mousedown`
+- [x] Autocomplete dropdown touch handling — added `touchstart` event listener alongside `mousedown` for mobile dismiss
 - [ ] Input focus styles — add `focus:border-blue-500 focus:outline-none` to all inputs/textareas (also an accessibility fix)
 - [ ] Test `<input type="date">` on iOS Safari, add pattern fallback if broken
 
 ### UX — Step 5: Navigation
-- [ ] Active nav link indicator — extract `NavLinks` client component using `usePathname()`, highlight current route
+- [x] Active nav link indicator — extract `NavLinks` client component using `usePathname()`, highlight current route
 - [ ] Mobile tab bar — render nav links as full-width horizontal tabs below header on small screens, with underline active indicator
-- [ ] Pagination for large visit lists
+- [x] Pagination for large visit lists — 10 visits per page with prev/next controls, resets on filter/sort change
 
 ### Social — Phase 6: Profiles & follow graph
 - [ ] Add `username` (unique slug) and `bio` fields to `User` model

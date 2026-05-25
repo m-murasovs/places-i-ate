@@ -10,16 +10,15 @@ A full-stack web application to track and review restaurants you've visited. Log
   - **Written Reviews** — Add detailed notes about your experience
   - **Visit Date** — Track when you ate there
 - **Place Autocomplete** — Search from 200+ pre-loaded Gdynia restaurants, or add a new place manually
-- **Visit History** — Browse all your visits with rating filter pills (All, 1-5 stars, S-tier)
+- **Visit History** — Browse all your visits with rating filter pills (All, 1-5 stars, S-tier), paginated 10 per page
 - **Sorting** — Sort visits by date (newest first), rating (highest first), or place name (A-Z)
 - **Edit / Delete** — Inline edit rating and review, or delete a visit with confirmation
 - **Interactive Map** — See visited restaurants on a Leaflet map with color-coded markers
 
 ### Planned
 
-- Polish map view (fix loading state, clustering for dense areas)
-- Pagination for large visit lists
 - Better mobile styling
+- Public profiles and social features
 
 ## Tech Stack
 
@@ -57,7 +56,7 @@ A full-stack web application to track and review restaurants you've visited. Log
 
    # Auth
    AUTH_SECRET=<generated-secret>
-   AUTH_URL=http://localhost:3000
+   AUTH_URL=http://localhost:3737
    AUTH_GITHUB_ID=<your-github-oauth-client-id>
    AUTH_GITHUB_SECRET=<your-github-oauth-client-secret>
    ```
@@ -78,7 +77,7 @@ A full-stack web application to track and review restaurants you've visited. Log
    npm run dev
    ```
 
-7. Open http://localhost:3000 in your browser
+7. Open http://localhost:3737 in your browser
 
 ## Project Structure
 

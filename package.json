@@ -4,9 +4,9 @@
     "private": true,
     "scripts": {
         "generate": "npx prisma generate",
-        "dev": "npm run generate && next dev",
+        "dev": "npm run generate && next dev --port 3737",
         "build": "npm run generate && next build",
-        "start": "npm run generate && next start",
+        "start": "npm run generate && next start --port 3737",
         "lint": "next lint",
         "test:e2e": "playwright test",
         "test:e2e:ui": "playwright test --ui"

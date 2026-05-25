@@ -22,13 +22,17 @@ export default function VisitForm({ onSuccess }: { onSuccess?: () => void }) {
     const { mutate, isPending, isError, error } = useCreateVisit();
 
     useEffect(() => {
-        const handleClickOutside = (e: MouseEvent) => {
+        const handleClickOutside = (e: MouseEvent | TouchEvent) => {
             if (suggestionsRef.current && !suggestionsRef.current.contains(e.target as Node)) {
                 setShowSuggestions(false);
             }
         };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
+        document.addEventListener('mousedown', handleClickOutside as EventListener);
+        document.addEventListener('touchstart', handleClickOutside as EventListener);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside as EventListener);
+            document.removeEventListener('touchstart', handleClickOutside as EventListener);
+        };
     }, []);
 
     const handleSearchChange = (value: string) => {

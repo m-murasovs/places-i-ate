@@ -21,13 +21,21 @@ function SkeletonCard() {
     );
 }
 
+const PAGE_SIZE = 10;
+
 export default function Home() {
     const [showForm, setShowForm] = useState(false);
     const [ratingFilter, setRatingFilter] = useState<RatingType | undefined>();
     const [sortOrder, setSortOrder] = useState<SortType>('date');
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
+    const [page, setPage] = useState(1);
 
-    const { data, isLoading, isFetching } = useFetchVisitedPlaces(50, 0, ratingFilter, sortOrder);
+    const offset = (page - 1) * PAGE_SIZE;
+    const { data, isLoading, isFetching } = useFetchVisitedPlaces(PAGE_SIZE, offset, ratingFilter, sortOrder);
+
+    useEffect(() => {
+        setPage(1);
+    }, [ratingFilter, sortOrder]);
 
     useEffect(() => {
         if (successMessage) {
@@ -35,6 +43,10 @@ export default function Home() {
             return () => clearTimeout(timer);
         }
     }, [successMessage]);
+
+    const totalPages = data?.count ? Math.ceil(data.count / PAGE_SIZE) : 1;
+    const isFirstPage = page === 1;
+    const isLastPage = page >= totalPages;
 
     return (
         <div>
@@ -123,11 +135,32 @@ export default function Home() {
                         ))}
                     </ul>
                     : data?.visits?.length
-                        ? <ul>
-                            {data.visits.map((visit) => (
-                                <VisitCard key={visit.id} visit={visit as VisitWithPlace} />
-                            ))}
-                        </ul>
+                        ? <div>
+                            <ul>
+                                {data.visits.map((visit) => (
+                                    <VisitCard key={visit.id} visit={visit as VisitWithPlace} />
+                                ))}
+                            </ul>
+                            {totalPages > 1 && (
+                                <div className='flex items-center justify-center gap-4 mt-6'>
+                                    <SecondaryButton
+                                        onClick={() => setPage(page - 1)}
+                                        disabled={isFirstPage}
+                                    >
+                                        Previous
+                                    </SecondaryButton>
+                                    <span className='text-sm text-stone-600'>
+                                        Page {page} of {totalPages}
+                                    </span>
+                                    <SecondaryButton
+                                        onClick={() => setPage(page + 1)}
+                                        disabled={isLastPage}
+                                    >
+                                        Next
+                                    </SecondaryButton>
+                                </div>
+                            )}
+                        </div>
                         : <p className='text-stone-500'>
                             {ratingFilter
                                 ? `No visits with rating ${ratingFilter === 'S' ? 'S-tier' : ratingFilter + ' star' + (ratingFilter !== '1' ? 's' : '')}.`
