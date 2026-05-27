@@ -64,3 +64,9 @@ export const checkFollowing = async (targetId: string) => {
     if (!session?.user?.id) return false;
     return followService.isFollowing(session.user.id, targetId);
 };
+
+export const searchUsers = async (query: string) => {
+    const trimmed = query.trim();
+    if (trimmed.length < 2) return [];
+    return userService.searchUsers(trimmed, 10);
+};

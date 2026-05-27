@@ -30,6 +30,24 @@ export class UserService {
       data: { bio },
     });
   }
+
+  async searchUsers(query: string, limit: number = 10): Promise<PublicUser[]> {
+    return prisma.user.findMany({
+      where: {
+        AND: [
+          { username: { not: null } },
+          {
+            OR: [
+              { username: { contains: query, mode: 'insensitive' } },
+              { name: { contains: query, mode: 'insensitive' } },
+            ],
+          },
+        ],
+      },
+      select: { id: true, username: true, name: true, image: true, bio: true },
+      take: limit,
+    });
+  }
 }
 
 export const userService = new UserService();

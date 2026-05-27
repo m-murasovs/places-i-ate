@@ -16,10 +16,12 @@ A full-stack web application to track and review restaurants you've visited. Log
 - **Interactive Map** — See visited restaurants on a Leaflet map with color-coded markers and clustering
 - **Public Profiles** — Choose a username, get a public profile at `/u/username` with your visits and map
 - **Follow System** — Follow other users (asymmetric, no approval needed)
+- **People Search** — Find other users by name or username at `/people`, with debounced search and profile links
 - **Mobile Tab Bar** — Fixed bottom navigation on mobile with safe-area padding
 
 ### Planned
 
+- Tag companions — tag users you ate with on a visit, displayed as profile links on the visit card
 - Place detail pages with aggregate ratings across users
 - "Friends also rated this" on place pages
 - Bookmarks ("want to try" list)
@@ -93,6 +95,7 @@ src/
 │   ├── map/           # Map view (Leaflet)
 │   ├── login/         # Login page
 │   ├── onboarding/    # Username claim on first login
+│   ├── people/        # User search / discovery
 │   └── u/[username]/  # Public profile page
 ├── components/        # React components
 │   ├── VisitForm.tsx  # Create visit with place autocomplete
@@ -119,6 +122,7 @@ e2e/
     ├── home.spec.ts        # Home page, filters, sorting
     ├── visit-crud.spec.ts  # Create, edit, delete visits
     ├── map.spec.ts         # Map page
+    ├── people.spec.ts      # People search, navigation to profile
     └── profile.spec.ts     # Profile page, follow button, read-only cards
 ```
 

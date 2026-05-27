@@ -7,6 +7,7 @@ export default function NavLinks({ username }: { username?: string | null }) {
     const links = [
         { href: '/', label: 'Visits' },
         { href: '/map', label: 'Map' },
+        { href: '/people', label: 'People' },
         ...(username ? [{ href: `/u/${username}`, label: 'Profile' }] : []),
     ];
 

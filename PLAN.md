@@ -105,12 +105,50 @@ NextAuth 5 beta (GitHub OAuth), Prisma 5 + MongoDB Atlas, TanStack Query v5, Lea
 - [x] E2E setup seeds 2 visits with real coordinates (Riga + Vienna), map tests assert markers on first load
 - [x] Fixed Playwright teardown ordering (`teardown` property on chromium project)
 
-### Social — Phase 7: Place intelligence
+### Social — Phase 7: User discovery (completed)
+
+#### Step 7.1 — User search backend
+- [x] `UserService.searchUsers(query, limit)` — case-insensitive search on `username` and `name`, exclude users without username, return `PublicUser[]`
+- [x] `searchUsers` server action in `UserActions.ts` — min 2-char query, returns up to 10 results, no auth required
+
+#### Step 7.2 — User search hook + page
+- [x] `useSearchUsers` hook (`src/hooks/useSearchUsers.ts`) — TanStack Query, enabled when query >= 2 chars
+- [x] `/people` page — search input, result list with avatar + name + @username + bio, links to `/u/[username]`
+- [x] Add "People" to `NavLinks` (between Map and Profile) + mobile tab bar
+- [x] Add `/people` to `PROTECTED_ROUTES`
+
+#### Step 7.3 — E2E tests
+- [x] `e2e/tests/people.spec.ts` — renders search input, finds test user, navigates to profile, short query shows no results
+
+### Social — Phase 8: Tag users in visits
+
+#### Step 8.1 — Resolve tagged users for display
+- [ ] `TaggedUser` type (`Pick<User, 'id' | 'username' | 'name' | 'image'>`) and `VisitWithPlaceAndTags` type in `VisitService.ts`
+- [ ] Batch `resolveTaggedUsers` helper — collect all unique IDs from a page of visits, single `findMany`, map back (avoids N+1)
+- [ ] `getUserVisits` and `getVisitsByRating` return `VisitWithPlaceAndTags[]`
+
+#### Step 8.2 — Wire tagging through actions
+- [ ] `createVisitWithPlace` forwards `visitedWithUserIds` to `visitService.createVisit` (currently omitted)
+- [ ] `updateVisit` already accepts `visitedWithUserIds` — no change needed
+
+#### Step 8.3 — UserTagPicker component
+- [ ] `src/components/UserTagPicker.tsx` — text input with debounced search (reuses `useSearchUsers`), dropdown results, selected users as dismissible pills (avatar + @username), prevents duplicates and self-tagging
+
+#### Step 8.4 — VisitForm + VisitCard integration
+- [ ] VisitForm: add `UserTagPicker` before submit, pass `visitedWithUserIds` in mutation, reset on success
+- [ ] VisitCard view mode: "With: @username, @username" line with links to `/u/[username]`
+- [ ] VisitCard edit mode: `UserTagPicker` initialized with existing tags, updates on save
+- [ ] Propagate `VisitWithPlaceAndTags` type to all call sites (`page.tsx`, `u/[username]/page.tsx`)
+
+#### Step 8.5 — E2E tests
+- [ ] Extend `visit-crud.spec.ts`: tag a user when creating, verify "With:" display, tagged link navigates to profile, remove tag in edit mode
+
+### Social — Phase 9: Place intelligence
 - [ ] Place detail page (`/place/[id]`) with aggregate rating (average + count) across all users
 - [ ] "Friends also rated this" — show ratings from people you follow on the place page
 - [ ] Top-rated places leaderboard filtered to your follow network
 
-### Social — Phase 8: Bookmarks & visit visibility
+### Social — Phase 10: Bookmarks & visit visibility
 - [ ] Bookmarks — save a place to a "want to try" list, visible on your profile (`Bookmark` model)
 - [ ] Per-visit visibility setting: public / followers-only / private (`visibility` enum on `Visit`, default public)
 
@@ -132,3 +170,4 @@ NextAuth 5 beta (GitHub OAuth), Prisma 5 + MongoDB Atlas, TanStack Query v5, Lea
 5. **TanStack Query v5** — aligned devtools/client versions
 6. **react-leaflet v4 + cluster v2.1.0** — v5/v4.1.3 require React 19, project is on React 18. Upgrade to React 19 + Next.js 15 is a future task
 7. **Playwright for e2e** — CredentialsProvider auth bypass, global setup writes session cookies once, all tests reuse stored auth state
+8. **Visit tagging via `visitedWithUserIds String[]`** — no schema change needed, field already exists. Resolved to `TaggedUser` objects at the service layer with batched lookup (one `findMany` per page of visits). `UserTagPicker` is a shared component used by both VisitForm and VisitCard edit mode
