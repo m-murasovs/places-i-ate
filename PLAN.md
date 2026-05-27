@@ -152,11 +152,11 @@ NextAuth 5 beta (GitHub OAuth), Prisma 5 + MongoDB Atlas, TanStack Query v5, Lea
 - [ ] Bookmarks — save a place to a "want to try" list, visible on your profile (`Bookmark` model)
 - [ ] Per-visit visibility setting: public / followers-only / private (`visibility` enum on `Visit`, default public)
 
-### UX — Landing / logged-out view
-- [ ] Modern landing page for unauthenticated users — hero section with tagline, app screenshot/illustration, and prominent "Sign in with GitHub" CTA
-- [ ] Brief feature highlights (log visits, rate restaurants, map view, follow friends) as a visual grid or icon row
-- [ ] Social proof / stats section (e.g. "X visits logged") if feasible
-- [ ] Responsive layout — full-width hero on mobile, split layout on desktop
+### UX — Landing / logged-out view (completed)
+- [x] Modern landing page for unauthenticated users — hero section with tagline, mock visit cards preview, and prominent "Sign in with GitHub" CTA with GitHub icon
+- [x] Brief feature highlights (log visits, rate restaurants, map view, follow friends) as a 2x2/4-col icon grid with SVG icons
+- [x] Social proof / stats section — live visit count from database, conditional render
+- [x] Responsive layout — full-width hero on mobile (mock cards hidden), split layout on desktop
 
 ### Data & integrations
 - [ ] Google Places API autocomplete (optional, replaces DB search for worldwide coverage)
