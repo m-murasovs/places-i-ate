@@ -19,7 +19,7 @@ test.describe('Home page', () => {
         await page.goto('/');
         const pill = page.getByRole('button', { name: '5 stars' });
         await pill.click();
-        await expect(pill).toHaveClass(/bg-rose-600/);
+        await expect(pill).toHaveClass(/bg-lime-500/);
         await expect(page.getByRole('button', { name: 'All' })).not.toHaveClass(/bg-rose-600/);
     });
 

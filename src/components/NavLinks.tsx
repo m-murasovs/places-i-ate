@@ -2,20 +2,19 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-export default function NavLinks({ username }: { username?: string | null }) {
+export default function NavLinks() {
     const pathname = usePathname();
     const links = [
         { href: '/', label: 'Visits' },
         { href: '/map', label: 'Map' },
         { href: '/people', label: 'People' },
-        ...(username ? [{ href: `/u/${username}`, label: 'Profile' }] : []),
     ];
 
     return (
         <>
             <nav className='hidden sm:flex gap-3 sm:gap-4'>
                 {links.map(({ href, label }) => {
-                    const isActive = href.startsWith('/u/') ? pathname.startsWith('/u/') : pathname === href;
+                    const isActive = pathname === href;
                     return (
                         <Link
                             key={href}
@@ -35,7 +34,7 @@ export default function NavLinks({ username }: { username?: string | null }) {
             <nav className='fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-stone-200 sm:hidden pb-[env(safe-area-inset-bottom)]'>
                 <div className='flex'>
                     {links.map(({ href, label }) => {
-                        const isActive = href.startsWith('/u/') ? pathname.startsWith('/u/') : pathname === href;
+                        const isActive = pathname === href;
                         return (
                             <Link
                                 key={href}

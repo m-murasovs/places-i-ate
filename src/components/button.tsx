@@ -15,10 +15,14 @@ const ButtonBase = ({
     </button>;
 };
 
-export const PrimaryButton = (props: ButtonHTMLAttributes<HTMLButtonElement>) => {
-    return <ButtonBase className={`${props.className} bg-rose-500 hover:bg-rose-600 text-white focus-visible:ring-rose-400`} {...props} />;
+export const PrimaryButton = ({ className, ...props }: ButtonHTMLAttributes<HTMLButtonElement>) => {
+    return <ButtonBase className={`${className} bg-rose-500 hover:bg-rose-600 text-white focus-visible:ring-rose-400`} {...props} />;
 };
 
-export const SecondaryButton = (props: ButtonHTMLAttributes<HTMLButtonElement>) => {
-    return <ButtonBase className={`${props.className} bg-pink-100 hover:bg-pink-200 text-stone-700 focus-visible:ring-pink-300`} {...props} />;
+export const SecondaryButton = ({ className, ...props }: ButtonHTMLAttributes<HTMLButtonElement>) => {
+    return <ButtonBase className={`${className} bg-pink-100 hover:bg-pink-200 text-stone-700 focus-visible:ring-pink-300`} {...props} />;
+};
+
+export const GhostButton = ({ className, ...props }: ButtonHTMLAttributes<HTMLButtonElement>) => {
+    return <ButtonBase className={`${className} bg-transparent hover:bg-stone-100 text-stone-500 hover:text-stone-700 focus-visible:ring-stone-300`} {...props} />;
 };

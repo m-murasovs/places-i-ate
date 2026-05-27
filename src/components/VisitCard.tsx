@@ -6,26 +6,28 @@ import useUpdateVisit from '@/hooks/use_update_visit';
 import useDeleteVisit from '@/hooks/use_delete_visit';
 import Link from 'next/link';
 import UserTagPicker from './UserTagPicker';
+import StarBadge from './StarBadge';
 
 const RATINGS: RatingType[] = ['1', '2', '3', '4', '5', 'S'];
 
 const RATING_ACTIVE_CLASSES: Record<RatingType, string> = {
-    'S': 'bg-yellow-400 border-yellow-500 text-white',
-    '5': 'bg-emerald-500 border-emerald-600 text-white',
-    '4': 'bg-emerald-400 border-emerald-500 text-stone-800',
+    'S': 'bg-gradient-to-br from-amber-400 to-yellow-500 border-amber-500 text-white',
+    '5': 'bg-lime-500 border-lime-600 text-white',
+    '4': 'bg-teal-400 border-teal-500 text-white',
     '3': 'bg-amber-400 border-amber-500 text-stone-800',
-    '2': 'bg-orange-400 border-orange-500 text-white',
-    '1': 'bg-red-400 border-red-500 text-white',
+    '2': 'bg-orange-500 border-orange-600 text-white',
+    '1': 'bg-red-500 border-red-600 text-white',
 };
 
 const RATING_BADGE_CLASSES: Record<string, string> = {
-    'S': 'bg-yellow-400 text-white',
-    '5': 'bg-emerald-500 text-white',
-    '4': 'bg-emerald-400 text-stone-800',
+    'S': 'bg-gradient-to-br from-amber-400 to-yellow-500 text-white',
+    '5': 'bg-lime-500 text-white',
+    '4': 'bg-teal-400 text-white',
     '3': 'bg-amber-400 text-stone-800',
-    '2': 'bg-orange-400 text-white',
-    '1': 'bg-red-400 text-white',
+    '2': 'bg-orange-500 text-white',
+    '1': 'bg-red-500 text-white',
 };
+
 
 export default function VisitCard({ visit, readOnly = false }: { visit: VisitWithPlaceAndTags; readOnly?: boolean }) {
     const [editing, setEditing] = useState(false);
@@ -65,18 +67,28 @@ export default function VisitCard({ visit, readOnly = false }: { visit: VisitWit
                     <label className='block text-sm font-medium text-stone-700 mb-1'>Rating</label>
                     <div className='flex gap-2'>
                         {RATINGS.map((r) => (
-                            <button
-                                key={r}
-                                type='button'
-                                onClick={() => setRating(r)}
-                                className={`w-8 h-8 rounded-full font-bold text-sm border-2 transition-colors ${
-                                    rating === r
-                                        ? RATING_ACTIVE_CLASSES[r]
-                                        : 'bg-white border-stone-300 text-stone-600 hover:border-pink-400'
-                                }`}
-                            >
-                                {r}
-                            </button>
+                            r === 'S' ? (
+                                <button key={r} type='button' onClick={() => setRating(r)} className='transition-colors'>
+                                    <StarBadge
+                                        label='S'
+                                        size={36}
+                                        className={rating === 'S' ? 'text-amber-400' : 'text-stone-300 hover:text-amber-200'}
+                                    />
+                                </button>
+                            ) : (
+                                <button
+                                    key={r}
+                                    type='button'
+                                    onClick={() => setRating(r)}
+                                    className={`w-8 h-8 rounded-full font-bold text-sm border-2 transition-colors ${
+                                        rating === r
+                                            ? RATING_ACTIVE_CLASSES[r]
+                                            : 'bg-white border-stone-300 text-stone-600 hover:border-pink-400'
+                                    }`}
+                                >
+                                    {r}
+                                </button>
+                            )
                         ))}
                     </div>
                 </div>
@@ -114,11 +126,15 @@ export default function VisitCard({ visit, readOnly = false }: { visit: VisitWit
         <li className='mb-4 p-4 border border-stone-200 rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow'>
             <div className='flex items-center justify-between'>
                 <h3 className='text-lg font-semibold truncate'>{visit.place.name}</h3>
-                <span className={`inline-flex items-center justify-center w-8 h-8 shrink-0 rounded-full font-bold text-sm ${
-                    RATING_BADGE_CLASSES[visit.rating] ?? 'bg-stone-400 text-white'
-                }`}>
-                    {visit.rating}
-                </span>
+                {visit.rating === 'S' ? (
+                    <StarBadge label='S' size={36} className='text-amber-400' />
+                ) : (
+                    <span className={`inline-flex items-center justify-center w-8 h-8 shrink-0 rounded-full font-bold text-sm ${
+                        RATING_BADGE_CLASSES[visit.rating] ?? 'bg-stone-400 text-white'
+                    }`}>
+                        {visit.rating}
+                    </span>
+                )}
             </div>
             <p className='text-sm text-stone-500'>{visit.place.address}</p>
             {visit.review && <p className='mt-1'>{visit.review}</p>}

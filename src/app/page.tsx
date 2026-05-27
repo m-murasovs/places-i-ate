@@ -65,7 +65,7 @@ export default function Home() {
                         }} />
                     </div>
                 ) : (
-                    <PrimaryButton onClick={() => setShowForm(true)} className='w-full sm:w-auto'>
+                    <PrimaryButton onClick={() => setShowForm(true)} className='w-full sm:w-auto text-lg py-3 px-6 shadow-md hover:shadow-lg'>
                         + Add a visit
                     </PrimaryButton>
                 )}
@@ -94,21 +94,27 @@ export default function Home() {
                     >
                         All
                     </button>
-                    {RATINGS.map((r) => (
-                        <button
-                            key={r}
-                            onClick={() => setRatingFilter(ratingFilter === r ? undefined : r)}
-                            className={`px-3 py-1 rounded-full text-sm border transition-colors ${
-                                ratingFilter === r
-                                    ? r === 'S'
-                                        ? 'bg-yellow-400 text-white border-yellow-400'
-                                        : 'bg-rose-600 text-white border-rose-600'
-                                    : 'bg-white text-stone-600 border-stone-300 hover:border-pink-400'
-                            }`}
-                        >
-                            {r === 'S' ? 'S-tier' : `${r} star${r !== '1' ? 's' : ''}`}
-                        </button>
-                    ))}
+                    {RATINGS.map((r) => {
+                        const activeClass = r === 'S' ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-white border-amber-400'
+                            : r === '5' ? 'bg-lime-500 text-white border-lime-500'
+                            : r === '4' ? 'bg-teal-400 text-white border-teal-400'
+                            : r === '3' ? 'bg-amber-400 text-stone-800 border-amber-400'
+                            : r === '2' ? 'bg-orange-500 text-white border-orange-500'
+                            : 'bg-red-500 text-white border-red-500';
+                        return (
+                            <button
+                                key={r}
+                                onClick={() => setRatingFilter(ratingFilter === r ? undefined : r)}
+                                className={`px-3 py-1 rounded-full text-sm border transition-colors ${
+                                    ratingFilter === r
+                                        ? activeClass
+                                        : 'bg-white text-stone-600 border-stone-300 hover:border-pink-400'
+                                }`}
+                            >
+                                {r === 'S' ? 'S-tier' : `${r} star${r !== '1' ? 's' : ''}`}
+                            </button>
+                        );
+                    })}
                 </div>
 
                 <div className='flex gap-2 mb-6 flex-wrap items-center'>

@@ -3,9 +3,9 @@ import localFont from 'next/font/local';
 import './globals.css';
 
 import Link from 'next/link';
-import { auth, signOut } from '@/auth';
-import { PrimaryButton } from '@/components/button';
+import { auth } from '@/auth';
 import NavLinks from '@/components/NavLinks';
+import UserMenu from '@/components/UserMenu';
 import { Providers } from './react_query_provider';
 
 const geistSans = localFont({
@@ -43,18 +43,15 @@ export default async function RootLayout({
                                 <Link href="/" className="text-xl sm:text-3xl font-bold tracking-tight text-stone-900 hover:text-rose-600">
                                     Places I Ate
                                 </Link>
-                                <NavLinks username={username} />
+                                {session?.user && <NavLinks />}
                             </div>
-                            <form
-                                action={async () => {
-                                    'use server';
-                                    await signOut();
-                                }}
-                            >
-                                <PrimaryButton type="submit">
-                                    Log Out
-                                </PrimaryButton>
-                            </form>
+                            {session?.user && (
+                                <UserMenu
+                                    image={session.user.image}
+                                    name={session.user.name}
+                                    username={username}
+                                />
+                            )}
                         </div>
                     </header>
                     <main>

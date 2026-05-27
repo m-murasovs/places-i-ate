@@ -1,11 +1,13 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Onboarding', () => {
-    test('users with username see Profile link in nav', async ({ page }) => {
+    test('users with username see Profile in avatar menu', async ({ page }) => {
         await page.goto('/');
-        const profileLink = page.locator('nav a[href*="/u/"]');
-        await expect(profileLink.first()).toBeVisible();
-        await expect(profileLink.first()).toHaveText('Profile');
+        const avatar = page.locator('header .relative button');
+        await avatar.click();
+        const profileLink = page.locator('a[href*="/u/"]');
+        await expect(profileLink).toBeVisible();
+        await expect(profileLink).toHaveText('Profile');
     });
 
     test('users with username are redirected away from /onboarding', async ({ page }) => {

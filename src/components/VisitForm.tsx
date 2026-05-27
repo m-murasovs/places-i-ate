@@ -5,6 +5,7 @@ import { PrimaryButton } from './button';
 import useCreateVisit from '@/hooks/use_create_visit';
 import useSearchPlaces from '@/hooks/use_search_places';
 import UserTagPicker from './UserTagPicker';
+import StarBadge from './StarBadge';
 import { useSession } from 'next-auth/react';
 
 const RATINGS: RatingType[] = ['1', '2', '3', '4', '5', 'S'];
@@ -142,22 +143,34 @@ export default function VisitForm({ onSuccess }: { onSuccess?: () => void }) {
                 <label className='block text-sm font-medium text-stone-700 mb-1'>
                     Rating
                 </label>
-                <div className='flex gap-2'>
+                <div className='flex gap-2 items-center'>
                     {RATINGS.map((r) => (
-                        <button
-                            key={r}
-                            type='button'
-                            onClick={() => setRating(r)}
-                            className={`w-10 h-10 rounded-full font-bold border-2 transition-colors ${
-                                rating === r
-                                    ? r === 'S'
-                                        ? 'bg-yellow-400 border-yellow-500 text-white'
-                                        : 'bg-rose-500 border-rose-600 text-white'
-                                    : 'bg-white border-stone-300 text-stone-600 hover:border-pink-400'
-                            }`}
-                        >
-                            {r}
-                        </button>
+                        r === 'S' ? (
+                            <button key={r} type='button' onClick={() => setRating(r)} className='transition-colors'>
+                                <StarBadge
+                                    label='S'
+                                    size={44}
+                                    className={rating === 'S' ? 'text-amber-400' : 'text-stone-300 hover:text-amber-200'}
+                                />
+                            </button>
+                        ) : (
+                            <button
+                                key={r}
+                                type='button'
+                                onClick={() => setRating(r)}
+                                className={`w-10 h-10 rounded-full font-bold border-2 transition-colors ${
+                                    rating === r
+                                        ? r === '5' ? 'bg-lime-500 border-lime-600 text-white'
+                                        : r === '4' ? 'bg-teal-400 border-teal-500 text-white'
+                                        : r === '3' ? 'bg-amber-400 border-amber-500 text-stone-800'
+                                        : r === '2' ? 'bg-orange-500 border-orange-600 text-white'
+                                        : 'bg-red-500 border-red-600 text-white'
+                                        : 'bg-white border-stone-300 text-stone-600 hover:border-pink-400'
+                                }`}
+                            >
+                                {r}
+                            </button>
+                        )
                     ))}
                 </div>
             </div>

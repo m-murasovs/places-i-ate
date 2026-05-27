@@ -1,19 +1,16 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Profile page', () => {
-    test('profile link appears in navigation', async ({ page }) => {
+    test('avatar menu shows profile link', async ({ page }) => {
         await page.goto('/');
-        const profileLink = page.locator('nav a[href*="/u/"]');
-        await expect(profileLink.first()).toBeVisible();
+        const avatar = page.locator('header .relative button');
+        await avatar.click();
+        const profileLink = page.locator('a[href*="/u/"]');
+        await expect(profileLink).toBeVisible();
     });
 
     test('own profile shows name, stats, and no follow button', async ({ page }) => {
-        await page.goto('/');
-        const profileLink = page.locator('nav a[href*="/u/"]').first();
-        const href = await profileLink.getAttribute('href');
-        expect(href).toBeTruthy();
-
-        await page.goto(href!);
+        await page.goto('/u/e2e-test-user');
         await expect(page.locator('h1')).toBeVisible();
         await expect(page.getByText(/follower/)).toBeVisible();
         await expect(page.getByText(/\d+ visit/)).toBeVisible();
@@ -21,10 +18,7 @@ test.describe('Profile page', () => {
     });
 
     test('visit cards on profile are read-only (no edit/delete)', async ({ page }) => {
-        await page.goto('/');
-        const profileLink = page.locator('nav a[href*="/u/"]').first();
-        const href = await profileLink.getAttribute('href');
-        await page.goto(href!);
+        await page.goto('/u/e2e-test-user');
 
         const visitCards = page.locator('ul li');
         const count = await visitCards.count();
