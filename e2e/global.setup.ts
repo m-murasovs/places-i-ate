@@ -37,6 +37,16 @@ setup('authenticate as test user', async ({ page }) => {
             },
         });
 
+        await prisma.user.upsert({
+            where: { email: 'e2e-tag-target@places-i-ate.internal' },
+            update: { username: 'e2e-tag-user' },
+            create: {
+                email: 'e2e-tag-target@places-i-ate.internal',
+                name: 'E2E Tag Target',
+                username: 'e2e-tag-user',
+            },
+        });
+
         const places = [
             {
                 googlePlacesId: 'e2e-place-riga-1',

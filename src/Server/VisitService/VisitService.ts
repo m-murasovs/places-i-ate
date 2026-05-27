@@ -1,7 +1,11 @@
 import prisma from '@/lib/prisma';
-import { Visit, Place } from '@prisma/client';
+import { Visit, Place, User } from '@prisma/client';
 
 export type VisitWithPlace = Visit & { place: Place };
+
+export type TaggedUser = Pick<User, 'id' | 'username' | 'name' | 'image'>;
+
+export type VisitWithPlaceAndTags = VisitWithPlace & { taggedUsers: TaggedUser[] };
 
 export type RatingType = '1' | '2' | '3' | '4' | '5' | 'S';
 
@@ -20,6 +24,35 @@ function getOrderBy(sort: SortType) {
 }
 
 export class VisitService {
+  private async resolveTaggedUsers(visits: VisitWithPlace[]): Promise<VisitWithPlaceAndTags[]> {
+    const allIds = new Set(visits.flatMap(v => v.visitedWithUserIds));
+
+    if (allIds.size === 0) {
+      return visits.map(v => ({ ...v, taggedUsers: [] }));
+    }
+
+    const users = await prisma.user.findMany({
+      where: {
+        id: { in: Array.from(allIds) },
+      },
+      select: {
+        id: true,
+        username: true,
+        name: true,
+        image: true,
+      },
+    });
+
+    const userMap = new Map<string, TaggedUser>(users.map((u: TaggedUser) => [u.id, u]));
+
+    return visits.map(v => ({
+      ...v,
+      taggedUsers: v.visitedWithUserIds
+        .map(id => userMap.get(id))
+        .filter((u): u is TaggedUser => u !== undefined),
+    }));
+  }
+
   async createVisit(data: {
     userId: string;
     placeId: string;
@@ -66,7 +99,7 @@ export class VisitService {
     limit: number = 50,
     offset: number = 0,
     sort: SortType = 'date'
-  ): Promise<VisitWithPlace[]> {
+  ): Promise<VisitWithPlaceAndTags[]> {
     const visits = await prisma.visit.findMany({
       where: { userId },
       include: {
@@ -76,7 +109,7 @@ export class VisitService {
       take: limit,
       skip: offset,
     });
-    return visits;
+    return this.resolveTaggedUsers(visits);
   }
 
   async getUserVisitCount(userId: string): Promise<number> {
@@ -93,7 +126,7 @@ export class VisitService {
     return count;
   }
 
-  async getVisitsByRating(userId: string, rating: RatingType, sort: SortType = 'date', limit: number = 50, offset: number = 0): Promise<VisitWithPlace[]> {
+  async getVisitsByRating(userId: string, rating: RatingType, sort: SortType = 'date', limit: number = 50, offset: number = 0): Promise<VisitWithPlaceAndTags[]> {
     const visits = await prisma.visit.findMany({
       where: {
         userId,
@@ -106,7 +139,7 @@ export class VisitService {
       take: limit,
       skip: offset,
     });
-    return visits;
+    return this.resolveTaggedUsers(visits);
   }
 }
 

@@ -120,28 +120,28 @@ NextAuth 5 beta (GitHub OAuth), Prisma 5 + MongoDB Atlas, TanStack Query v5, Lea
 #### Step 7.3 — E2E tests
 - [x] `e2e/tests/people.spec.ts` — renders search input, finds test user, navigates to profile, short query shows no results
 
-### Social — Phase 8: Tag users in visits
+### Social — Phase 8: Tag users in visits (completed)
 
 #### Step 8.1 — Resolve tagged users for display
-- [ ] `TaggedUser` type (`Pick<User, 'id' | 'username' | 'name' | 'image'>`) and `VisitWithPlaceAndTags` type in `VisitService.ts`
-- [ ] Batch `resolveTaggedUsers` helper — collect all unique IDs from a page of visits, single `findMany`, map back (avoids N+1)
-- [ ] `getUserVisits` and `getVisitsByRating` return `VisitWithPlaceAndTags[]`
+- [x] `TaggedUser` type (`Pick<User, 'id' | 'username' | 'name' | 'image'>`) and `VisitWithPlaceAndTags` type in `VisitService.ts`
+- [x] Batch `resolveTaggedUsers` helper — collect all unique IDs from a page of visits, single `findMany`, map back (avoids N+1)
+- [x] `getUserVisits` and `getVisitsByRating` return `VisitWithPlaceAndTags[]`
 
 #### Step 8.2 — Wire tagging through actions
-- [ ] `createVisitWithPlace` forwards `visitedWithUserIds` to `visitService.createVisit` (currently omitted)
-- [ ] `updateVisit` already accepts `visitedWithUserIds` — no change needed
+- [x] `createVisitWithPlace` forwards `visitedWithUserIds` to `visitService.createVisit` (currently omitted)
+- [x] `updateVisit` already accepts `visitedWithUserIds` — no change needed
 
 #### Step 8.3 — UserTagPicker component
-- [ ] `src/components/UserTagPicker.tsx` — text input with debounced search (reuses `useSearchUsers`), dropdown results, selected users as dismissible pills (avatar + @username), prevents duplicates and self-tagging
+- [x] `src/components/UserTagPicker.tsx` — text input with debounced search (reuses `useSearchUsers`), dropdown results, selected users as dismissible pills (avatar + @username), prevents duplicates and self-tagging
 
 #### Step 8.4 — VisitForm + VisitCard integration
-- [ ] VisitForm: add `UserTagPicker` before submit, pass `visitedWithUserIds` in mutation, reset on success
-- [ ] VisitCard view mode: "With: @username, @username" line with links to `/u/[username]`
-- [ ] VisitCard edit mode: `UserTagPicker` initialized with existing tags, updates on save
-- [ ] Propagate `VisitWithPlaceAndTags` type to all call sites (`page.tsx`, `u/[username]/page.tsx`)
+- [x] VisitForm: add `UserTagPicker` before submit, pass `visitedWithUserIds` in mutation, reset on success
+- [x] VisitCard view mode: "With: @username, @username" line with links to `/u/[username]`
+- [x] VisitCard edit mode: `UserTagPicker` initialized with existing tags, updates on save
+- [x] Propagate `VisitWithPlaceAndTags` type to all call sites (`page.tsx`, `u/[username]/page.tsx`)
 
 #### Step 8.5 — E2E tests
-- [ ] Extend `visit-crud.spec.ts`: tag a user when creating, verify "With:" display, tagged link navigates to profile, remove tag in edit mode
+- [x] Extend `visit-crud.spec.ts`: tag a user when creating, verify "With:" display, tagged link navigates to profile, remove tag in edit mode
 
 ### Social — Phase 9: Place intelligence
 - [ ] Place detail page (`/place/[id]`) with aggregate rating (average + count) across all users

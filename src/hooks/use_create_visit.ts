@@ -14,6 +14,7 @@ const useCreateVisit = () => {
             rating: RatingType;
             review?: string;
             visitDate: Date;
+            visitedWithUserIds?: string[];
         }) => createVisitWithPlace(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['fetchVisitedPlaces'] });

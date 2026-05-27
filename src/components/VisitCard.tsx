@@ -1,9 +1,11 @@
 'use client';
 import React, { useState } from 'react';
-import { RatingType, VisitWithPlace } from '@/Server/VisitService/VisitService';
+import { RatingType, VisitWithPlaceAndTags, TaggedUser } from '@/Server/VisitService/VisitService';
 import { PrimaryButton, SecondaryButton } from './button';
 import useUpdateVisit from '@/hooks/use_update_visit';
 import useDeleteVisit from '@/hooks/use_delete_visit';
+import Link from 'next/link';
+import UserTagPicker from './UserTagPicker';
 
 const RATINGS: RatingType[] = ['1', '2', '3', '4', '5', 'S'];
 
@@ -25,11 +27,12 @@ const RATING_BADGE_CLASSES: Record<string, string> = {
     '1': 'bg-red-400 text-white',
 };
 
-export default function VisitCard({ visit, readOnly = false }: { visit: VisitWithPlace; readOnly?: boolean }) {
+export default function VisitCard({ visit, readOnly = false }: { visit: VisitWithPlaceAndTags; readOnly?: boolean }) {
     const [editing, setEditing] = useState(false);
     const [rating, setRating] = useState<RatingType>(visit.rating as RatingType);
     const [review, setReview] = useState(visit.review ?? '');
     const [confirmDelete, setConfirmDelete] = useState(false);
+    const [taggedUsers, setTaggedUsers] = useState<TaggedUser[]>(visit.taggedUsers);
 
     const updateMutation = useUpdateVisit();
     const deleteMutation = useDeleteVisit();
@@ -41,6 +44,7 @@ export default function VisitCard({ visit, readOnly = false }: { visit: VisitWit
                 data: {
                     rating,
                     review: review || undefined,
+                    visitedWithUserIds: taggedUsers.map(u => u.id),
                 },
             },
             { onSuccess: () => setEditing(false) }
@@ -87,6 +91,8 @@ export default function VisitCard({ visit, readOnly = false }: { visit: VisitWit
                     />
                 </div>
 
+                <UserTagPicker selectedUsers={taggedUsers} onChange={setTaggedUsers} excludeUserId={visit.userId} />
+
                 <div className='flex gap-2'>
                     <PrimaryButton onClick={handleSave} disabled={updateMutation.isPending}>
                         {updateMutation.isPending ? 'Saving...' : 'Save'}
@@ -95,6 +101,7 @@ export default function VisitCard({ visit, readOnly = false }: { visit: VisitWit
                         setEditing(false);
                         setRating(visit.rating as RatingType);
                         setReview(visit.review ?? '');
+                        setTaggedUsers(visit.taggedUsers);
                     }}>
                         Cancel
                     </SecondaryButton>
@@ -118,6 +125,19 @@ export default function VisitCard({ visit, readOnly = false }: { visit: VisitWit
             <p className='text-xs text-stone-400 mt-1'>
                 {new Date(visit.visitDate).toLocaleDateString()}
             </p>
+            {visit.taggedUsers.length > 0 && (
+                <p className='text-xs text-stone-500 mt-1'>
+                    With:{' '}
+                    {visit.taggedUsers.map((u, i) => (
+                        <span key={u.id}>
+                            {i > 0 && ', '}
+                            <Link href={`/u/${u.username}`} className='text-rose-600 hover:underline'>
+                                @{u.username}
+                            </Link>
+                        </span>
+                    ))}
+                </p>
+            )}
 
             {!readOnly && (
                 <div className='flex gap-2 mt-2'>

@@ -34,6 +34,7 @@ export const createVisitWithPlace = async (data: {
     rating: RatingType;
     review?: string;
     visitDate: Date;
+    visitedWithUserIds?: string[];
 }) => {
     const session = await auth();
     if (!session?.user?.id) {
@@ -65,6 +66,7 @@ export const createVisitWithPlace = async (data: {
         rating: data.rating,
         review: data.review,
         visitDate: data.visitDate,
+        visitedWithUserIds: data.visitedWithUserIds,
     });
 
     return visit;

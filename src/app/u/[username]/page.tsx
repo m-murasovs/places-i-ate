@@ -1,7 +1,7 @@
 import { auth } from '@/auth';
 import { getPublicProfile, checkFollowing } from '@/Server/actions/UserActions';
 import { notFound } from 'next/navigation';
-import { VisitWithPlace } from '@/Server/VisitService/VisitService';
+import { VisitWithPlaceAndTags } from '@/Server/VisitService/VisitService';
 import VisitCard from '@/components/VisitCard';
 import FollowButton from './FollowButton';
 import dynamic from 'next/dynamic';
@@ -61,7 +61,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
             {profile.visits.length > 0 && (
                 <div className='mb-8'>
                     <h2 className='text-xl font-semibold text-stone-800 mb-4'>Map</h2>
-                    <VisitMap visits={profile.visits as VisitWithPlace[]} />
+                    <VisitMap visits={profile.visits as VisitWithPlaceAndTags[]} />
                 </div>
             )}
 
@@ -70,7 +70,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
                 {profile.visits.length > 0 ? (
                     <ul>
                         {profile.visits.map((visit) => (
-                            <VisitCard key={visit.id} visit={visit as VisitWithPlace} readOnly />
+                            <VisitCard key={visit.id} visit={visit as VisitWithPlaceAndTags} readOnly />
                         ))}
                     </ul>
                 ) : (

@@ -1,9 +1,11 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
-import { RatingType } from '@/Server/VisitService/VisitService';
+import { RatingType, TaggedUser } from '@/Server/VisitService/VisitService';
 import { PrimaryButton } from './button';
 import useCreateVisit from '@/hooks/use_create_visit';
 import useSearchPlaces from '@/hooks/use_search_places';
+import UserTagPicker from './UserTagPicker';
+import { useSession } from 'next-auth/react';
 
 const RATINGS: RatingType[] = ['1', '2', '3', '4', '5', 'S'];
 
@@ -17,6 +19,9 @@ export default function VisitForm({ onSuccess }: { onSuccess?: () => void }) {
     const [review, setReview] = useState('');
     const [visitDate, setVisitDate] = useState(new Date().toISOString().split('T')[0]);
     const suggestionsRef = useRef<HTMLDivElement>(null);
+
+    const { data: session } = useSession();
+    const [taggedUsers, setTaggedUsers] = useState<TaggedUser[]>([]);
 
     const { data: suggestions } = useSearchPlaces(searchQuery);
     const { mutate, isPending, isError, error } = useCreateVisit();
@@ -61,6 +66,7 @@ export default function VisitForm({ onSuccess }: { onSuccess?: () => void }) {
                 rating,
                 review: review || undefined,
                 visitDate: new Date(visitDate),
+                visitedWithUserIds: taggedUsers.map(u => u.id),
             },
             {
                 onSuccess: () => {
@@ -71,6 +77,7 @@ export default function VisitForm({ onSuccess }: { onSuccess?: () => void }) {
                     setRating('3');
                     setReview('');
                     setVisitDate(new Date().toISOString().split('T')[0]);
+                    setTaggedUsers([]);
                     onSuccess?.();
                 },
             }
@@ -183,6 +190,12 @@ export default function VisitForm({ onSuccess }: { onSuccess?: () => void }) {
                     required
                 />
             </div>
+
+            <UserTagPicker
+                selectedUsers={taggedUsers}
+                onChange={setTaggedUsers}
+                excludeUserId={session?.user?.id ?? undefined}
+            />
 
             {isError && (
                 <p className='text-red-600 text-sm'>

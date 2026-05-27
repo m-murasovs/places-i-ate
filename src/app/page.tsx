@@ -4,7 +4,7 @@ import useFetchVisitedPlaces from '@/hooks/use_fetch_visited_places';
 import VisitForm from '@/components/VisitForm';
 import VisitCard from '@/components/VisitCard';
 import { PrimaryButton, SecondaryButton } from '@/components/button';
-import { RatingType, SortType, VisitWithPlace } from '@/Server/VisitService/VisitService';
+import { RatingType, SortType, VisitWithPlaceAndTags } from '@/Server/VisitService/VisitService';
 
 const RATINGS: RatingType[] = ['1', '2', '3', '4', '5', 'S'];
 
@@ -138,7 +138,7 @@ export default function Home() {
                         ? <div>
                             <ul>
                                 {data.visits.map((visit) => (
-                                    <VisitCard key={visit.id} visit={visit as VisitWithPlace} />
+                                    <VisitCard key={visit.id} visit={visit as VisitWithPlaceAndTags} />
                                 ))}
                             </ul>
                             {totalPages > 1 && (

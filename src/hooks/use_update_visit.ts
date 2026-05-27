@@ -13,6 +13,7 @@ const useUpdateVisit = () => {
                 rating: RatingType;
                 review: string;
                 visitDate: Date;
+                visitedWithUserIds: string[];
             }>;
         }) => updateVisit(visitId, data),
         onSuccess: () => {
