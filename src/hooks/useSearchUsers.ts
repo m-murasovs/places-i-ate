@@ -6,7 +6,7 @@ const useSearchUsers = (query: string) => {
     return useQuery({
         queryKey: ['searchUsers', query],
         queryFn: () => searchUsers(query),
-        enabled: query.length >= 2,
+        enabled: query.length >= 3,
     });
 };
 

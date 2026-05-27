@@ -2,7 +2,7 @@ import NextAuth from 'next-auth';
 import { NextResponse } from 'next/server';
 
 import { authConfig } from '@/lib/auth.config';
-import { API_AUTH_PREFIX, AUTH_ROUTES, PROTECTED_ROUTES } from '@/routes';
+import { API_AUTH_PREFIX, AUTH_ROUTES, PROTECTED_ROUTES, PROTECTED_EXACT } from '@/routes';
 
 export const { auth } = NextAuth(authConfig);
 
@@ -12,7 +12,7 @@ export default auth(req => {
 
     const isAccessingApiAuthRoute = pathname.startsWith(API_AUTH_PREFIX);
     const isAccessingAuthRoute = AUTH_ROUTES.some(route => pathname.startsWith(route));
-    const isAccessingProtectedRoute = PROTECTED_ROUTES.some(route => pathname.startsWith(route));
+    const isAccessingProtectedRoute = PROTECTED_EXACT.includes(pathname) || PROTECTED_ROUTES.some(route => pathname.startsWith(route));
 
     if (isAccessingApiAuthRoute) {
         return NextResponse.next();

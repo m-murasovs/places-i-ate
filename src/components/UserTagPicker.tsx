@@ -39,7 +39,7 @@ export default function UserTagPicker({ selectedUsers, onChange, excludeUserId }
     }, []);
 
     useEffect(() => {
-        setShowDropdown(debouncedQuery.length >= 2);
+        setShowDropdown(debouncedQuery.length >= 3);
     }, [debouncedQuery]);
 
     const selectedUserIds = new Set(selectedUsers.map(u => u.id));
@@ -68,33 +68,37 @@ export default function UserTagPicker({ selectedUsers, onChange, excludeUserId }
                     type='text'
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    onFocus={() => debouncedQuery.length >= 2 && setShowDropdown(true)}
+                    onFocus={() => debouncedQuery.length >= 3 && setShowDropdown(true)}
                     className='w-full px-3 py-2 border-2 border-stone-300 rounded focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400'
                     placeholder='Search people...'
                     autoComplete='off'
                 />
-                {showDropdown && filteredResults && filteredResults.length > 0 && (
+                {showDropdown && (
                     <div className='absolute z-10 mt-1 w-full bg-white border border-stone-200 rounded shadow-lg max-h-48 overflow-y-auto'>
-                        {filteredResults.map((user) => (
-                            <button
-                                key={user.id}
-                                type='button'
-                                onClick={() => handleSelectUser(user)}
-                                className='w-full text-left px-3 py-2 hover:bg-pink-50 text-sm flex items-center gap-2'
-                            >
-                                {user.image && (
-                                    <img
-                                        src={user.image}
-                                        alt={user.name ?? user.username ?? ''}
-                                        className='w-6 h-6 rounded-full object-cover'
-                                    />
-                                )}
-                                <div className='flex flex-col'>
-                                    <span className='font-medium'>{user.name}</span>
-                                    <span className='text-stone-500'>@{user.username}</span>
-                                </div>
-                            </button>
-                        ))}
+                        {filteredResults.length > 0 ? (
+                            filteredResults.map((user) => (
+                                <button
+                                    key={user.id}
+                                    type='button'
+                                    onClick={() => handleSelectUser(user)}
+                                    className='w-full text-left px-3 py-2 hover:bg-pink-50 text-sm flex items-center gap-2'
+                                >
+                                    {user.image && (
+                                        <img
+                                            src={user.image}
+                                            alt={user.name ?? user.username ?? ''}
+                                            className='w-6 h-6 rounded-full object-cover'
+                                        />
+                                    )}
+                                    <div className='flex flex-col'>
+                                        <span className='font-medium'>{user.name}</span>
+                                        <span className='text-stone-500'>@{user.username}</span>
+                                    </div>
+                                </button>
+                            ))
+                        ) : (
+                            <p className='px-3 py-2 text-sm text-stone-400'>No users found</p>
+                        )}
                     </div>
                 )}
             </div>

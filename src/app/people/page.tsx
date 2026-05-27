@@ -31,13 +31,13 @@ export default function PeoplePage() {
       />
 
       <div className="mt-6 space-y-3">
-        {debouncedQuery.length < 2 && query.length > 0 && (
-          <p className="text-stone-400 text-sm">Type at least 2 characters to search</p>
+        {debouncedQuery.length < 3 && query.length > 0 && (
+          <p className="text-stone-400 text-sm">Type at least 3 characters to search</p>
         )}
 
         {isLoading && <p className="text-stone-400 text-sm">Searching...</p>}
 
-        {data && data.length === 0 && debouncedQuery.length >= 2 && (
+        {data && data.length === 0 && debouncedQuery.length >= 3 && (
           <p className="text-stone-400 text-sm">No users found</p>
         )}
 

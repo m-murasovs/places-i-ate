@@ -17,24 +17,11 @@ export class PlaceService {
     return place;
   }
 
-  async getPlaceById(id: string): Promise<Place | null> {
-    const place = await prisma.place.findUnique({
-      where: { id },
-    });
-    return place;
-  }
-
   async getPlaceByGoogleId(googlePlacesId: string): Promise<Place | null> {
     const place = await prisma.place.findUnique({
       where: { googlePlacesId },
     });
     return place;
-  }
-
-  async deletePlace(id: string): Promise<void> {
-    await prisma.place.delete({
-      where: { id },
-    });
   }
 
   async searchPlaces(query: string, limit: number = 10): Promise<Place[]> {

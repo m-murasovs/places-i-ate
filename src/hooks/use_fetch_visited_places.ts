@@ -7,7 +7,6 @@ const useFetchVisitedPlaces = (limit: number = 50, offset: number = 0, rating?: 
     return useQuery({
         queryKey: ['fetchVisitedPlaces', limit, offset, rating, sort],
         queryFn: () => fetchUserVisits(limit, offset, rating, sort),
-        enabled: !!limit,
     });
 };
 

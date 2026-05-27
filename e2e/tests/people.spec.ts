@@ -29,8 +29,8 @@ test.describe('People page', () => {
 	test('short query shows no results', async ({ page }) => {
 		await page.goto('/people');
 		const searchInput = page.locator('input[placeholder="Search by name or username..."]');
-		await searchInput.fill('a');
-		const noResultsText = page.locator('text=Type at least 2 characters');
+		await searchInput.fill('ab');
+		const noResultsText = page.locator('text=Type at least 3 characters');
 		await expect(noResultsText).toBeVisible();
 	});
 });

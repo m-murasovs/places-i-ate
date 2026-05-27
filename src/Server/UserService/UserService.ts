@@ -4,10 +4,6 @@ import { User } from '@prisma/client';
 export type PublicUser = Pick<User, 'id' | 'username' | 'name' | 'image' | 'bio'>;
 
 export class UserService {
-  async getUserById(id: string): Promise<User | null> {
-    return prisma.user.findUnique({ where: { id } });
-  }
-
   async getUserByUsername(username: string): Promise<User | null> {
     return prisma.user.findUnique({ where: { username } });
   }
@@ -21,13 +17,6 @@ export class UserService {
     return prisma.user.update({
       where: { id: userId },
       data: { username, bio },
-    });
-  }
-
-  async updateBio(userId: string, bio: string): Promise<User> {
-    return prisma.user.update({
-      where: { id: userId },
-      data: { bio },
     });
   }
 

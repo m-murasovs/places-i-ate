@@ -105,7 +105,7 @@ export default function VisitCard({ visit, readOnly = false }: { visit: VisitWit
 
                 <UserTagPicker selectedUsers={taggedUsers} onChange={setTaggedUsers} excludeUserId={visit.userId} />
 
-                <div className='flex gap-2'>
+                <div className='flex gap-2 mt-3'>
                     <PrimaryButton onClick={handleSave} disabled={updateMutation.isPending}>
                         {updateMutation.isPending ? 'Saving...' : 'Save'}
                     </PrimaryButton>

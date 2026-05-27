@@ -67,6 +67,6 @@ export const checkFollowing = async (targetId: string) => {
 
 export const searchUsers = async (query: string) => {
     const trimmed = query.trim();
-    if (trimmed.length < 2) return [];
+    if (trimmed.length < 3) return [];
     return userService.searchUsers(trimmed, 10);
 };
