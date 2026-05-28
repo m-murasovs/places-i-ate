@@ -28,7 +28,6 @@ const RATING_BADGE_CLASSES: Record<string, string> = {
     '1': 'bg-red-500 text-white',
 };
 
-
 export default function VisitCard({ visit, readOnly = false }: { visit: VisitWithPlaceAndTags; readOnly?: boolean }) {
     const [editing, setEditing] = useState(false);
     const [rating, setRating] = useState<RatingType>(visit.rating as RatingType);

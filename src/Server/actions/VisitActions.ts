@@ -108,5 +108,3 @@ export const fetchUserVisits = async (limit: number = 50, offset: number = 0, ra
     const count = await visitService.getUserVisitCount(session.user.id);
     return { visits, count };
 };
-
-
