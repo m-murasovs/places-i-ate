@@ -164,8 +164,10 @@ NextAuth 5 beta (GitHub OAuth), Prisma 5 + MongoDB Atlas, TanStack Query v5, Lea
 - [ ] Re-run seed script to refresh dataset (or schedule via Apify webhook)
 - [ ] Photo uploads for visits
 
-### Project infra
-- [ ] Set up a CI flow to make sure tests and deploy to Vercel are done automatically.
+### Project infra (completed)
+- [x] GitHub Actions CI — lint, typecheck, build on push/PR to main; e2e job gated on `E2E_ENABLED` repo variable
+- [x] Pre-commit hooks — husky + lint-staged (ESLint on staged files, `tsc --noEmit`)
+- [ ] Connect Vercel GitHub integration for auto-deploy
 
 ## Key architectural decisions made
 

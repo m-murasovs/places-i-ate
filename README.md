@@ -35,6 +35,7 @@ A full-stack web application to track and review restaurants you've visited. Log
 - **Database**: MongoDB Atlas + Prisma ORM
 - **State**: TanStack Query v5
 - **Testing**: Playwright (e2e)
+- **CI**: GitHub Actions (lint, typecheck, build), Husky pre-commit hooks
 - **Data**: Apify dataset (Gdynia restaurants scraped from Google Maps)
 
 ## Getting Started
