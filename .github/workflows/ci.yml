@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-typecheck-build:
+    name: Lint, Typecheck & Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci --legacy-peer-deps
+      - run: npm run lint
+      - run: npx tsc --noEmit
+      - run: npm run build
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          AUTH_SECRET: "ci-placeholder-secret"
+
+  e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    if: ${{ vars.E2E_ENABLED == 'true' }}
+    needs: lint-typecheck-build
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci --legacy-peer-deps
+      - run: npx playwright install --with-deps chromium
+      - name: Start dev server
+        run: E2E_TEST=true E2E_SECRET_TOKEN=${{ secrets.E2E_SECRET_TOKEN }} npm run dev &
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+      - name: Wait for dev server
+        run: npx wait-on http://localhost:3737 --timeout 60000
+      - name: Run e2e tests
+        run: npx playwright test
+        env:
+          E2E_TEST: "true"
+          E2E_SECRET_TOKEN: ${{ secrets.E2E_SECRET_TOKEN }}
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
