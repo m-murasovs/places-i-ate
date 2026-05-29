@@ -7,6 +7,7 @@ import useDeleteVisit from '@/hooks/use_delete_visit';
 import Link from 'next/link';
 import UserTagPicker from './UserTagPicker';
 import StarBadge from './StarBadge';
+import RatingBadge from './RatingBadge';
 
 const RATINGS: RatingType[] = ['1', '2', '3', '4', '5', 'S'];
 
@@ -17,15 +18,6 @@ const RATING_ACTIVE_CLASSES: Record<RatingType, string> = {
     '3': 'bg-amber-400 border-amber-500 text-stone-800',
     '2': 'bg-orange-500 border-orange-600 text-white',
     '1': 'bg-red-500 border-red-600 text-white',
-};
-
-const RATING_BADGE_CLASSES: Record<string, string> = {
-    'S': 'bg-gradient-to-br from-amber-400 to-yellow-500 text-white',
-    '5': 'bg-lime-500 text-white',
-    '4': 'bg-teal-400 text-white',
-    '3': 'bg-amber-400 text-stone-800',
-    '2': 'bg-orange-500 text-white',
-    '1': 'bg-red-500 text-white',
 };
 
 export default function VisitCard({ visit, readOnly = false }: { visit: VisitWithPlaceAndTags; readOnly?: boolean }) {
@@ -123,17 +115,11 @@ export default function VisitCard({ visit, readOnly = false }: { visit: VisitWit
 
     return (
         <li className='mb-4 p-4 border border-stone-200 rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow'>
-            <div className='flex items-center justify-between'>
-                <h3 className='text-lg font-semibold truncate'>{visit.place.name}</h3>
-                {visit.rating === 'S' ? (
-                    <StarBadge label='S' size={36} className='text-amber-400' />
-                ) : (
-                    <span className={`inline-flex items-center justify-center w-8 h-8 shrink-0 rounded-full font-bold text-sm ${
-                        RATING_BADGE_CLASSES[visit.rating] ?? 'bg-stone-400 text-white'
-                    }`}>
-                        {visit.rating}
-                    </span>
-                )}
+            <div className='flex items-center justify-between gap-2'>
+                <Link href={`/place/${visit.place.id}`} className='text-lg font-semibold truncate hover:underline'>
+                    {visit.place.name}
+                </Link>
+                <RatingBadge rating={visit.rating} size={36} />
             </div>
             <p className='text-sm text-stone-500'>{visit.place.address}</p>
             {visit.review && <p className='mt-1'>{visit.review}</p>}

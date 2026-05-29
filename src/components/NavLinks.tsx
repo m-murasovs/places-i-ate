@@ -7,6 +7,7 @@ export default function NavLinks() {
     const links = [
         { href: '/', label: 'Visits' },
         { href: '/map', label: 'Map' },
+        { href: '/leaderboard', label: 'Top' },
         { href: '/people', label: 'People' },
     ];
 

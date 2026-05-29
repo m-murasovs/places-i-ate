@@ -24,6 +24,14 @@ export class FollowService {
   async getFollowingCount(userId: string): Promise<number> {
     return prisma.follow.count({ where: { followerId: userId } });
   }
+
+  async getFollowingIds(userId: string): Promise<string[]> {
+    const rows = await prisma.follow.findMany({
+      where: { followerId: userId },
+      select: { followingId: true },
+    });
+    return rows.map((r: { followingId: string }) => r.followingId);
+  }
 }
 
 export const followService = new FollowService();

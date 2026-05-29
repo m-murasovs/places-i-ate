@@ -21,10 +21,10 @@ A full-stack web application to track and review restaurants you've visited. Log
 
 - **Tag Companions** — Tag users you ate with on a visit, displayed as "@username" profile links on the visit card
 - **UserTagPicker** — Reusable debounced search picker for tagging users, with dismissible pills and duplicate/self-tag prevention
+- **Place Detail Pages** — Each place has a page (`/place/id`) with its aggregate rating (S-tier counts as 6) and visit count, a "Friends also rated this" feed from people you follow, and your own visits
+- **Network Leaderboard** — `/leaderboard` ranks the top-rated places across you and everyone you follow, by average rating then visit count
 
 ### Planned
-- Place detail pages with aggregate ratings across users
-- "Friends also rated this" on place pages
 - Bookmarks ("want to try" list)
 - Per-visit visibility (public / followers-only / private)
 
@@ -98,11 +98,14 @@ src/
 │   ├── login/         # Login page
 │   ├── onboarding/    # Username claim on first login
 │   ├── people/        # User search / discovery
+│   ├── place/[id]/    # Place detail (aggregate rating, friends' + your visits)
+│   ├── leaderboard/   # Top-rated places across your follow network
 │   └── u/[username]/  # Public profile page
 ├── components/        # React components
 │   ├── VisitForm.tsx  # Create visit with place autocomplete
 │   ├── VisitCard.tsx  # Visit display with edit/delete (readOnly for profiles)
 │   ├── VisitMap.tsx   # Leaflet map with markers
+│   ├── RatingBadge.tsx # Shared rating badge (colored circle / S-tier star)
 │   └── NavLinks.tsx   # Desktop + mobile bottom tab bar navigation
 ├── hooks/             # React Query hooks
 ├── lib/               # Utilities
@@ -125,6 +128,7 @@ e2e/
     ├── visit-crud.spec.ts  # Create, edit, delete visits
     ├── map.spec.ts         # Map page
     ├── people.spec.ts      # People search, navigation to profile
+    ├── place.spec.ts       # Place detail aggregate, leaderboard render + navigation
     └── profile.spec.ts     # Profile page, follow button, read-only cards
 ```
 

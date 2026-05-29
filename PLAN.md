@@ -143,10 +143,14 @@ NextAuth 5 beta (GitHub OAuth), Prisma 5 + MongoDB Atlas, TanStack Query v5, Lea
 #### Step 8.5 — E2E tests
 - [x] Extend `visit-crud.spec.ts`: tag a user when creating, verify "With:" display, tagged link navigates to profile, remove tag in edit mode
 
-### Social — Phase 9: Place intelligence
-- [ ] Place detail page (`/place/[id]`) with aggregate rating (average + count) across all users
-- [ ] "Friends also rated this" — show ratings from people you follow on the place page
-- [ ] Top-rated places leaderboard filtered to your follow network
+### Social — Phase 9: Place intelligence (completed)
+- [x] Place detail page (`/place/[id]`) with aggregate rating (average + count) across all users — S-tier counts as 6 in the average, S-tier count shown as a separate stat
+- [x] "Friends also rated this" — ratings from people you follow shown on the place page (avatar + @username + rating + review), plus a "Your visits" section
+- [x] Top-rated places leaderboard (`/leaderboard`) covering you + people you follow, ranked by average then visit count
+- [x] `PlaceService` extended: `getPlaceById`, `getPlaceAggregate`, `getVisitsForPlace`, `getNetworkLeaderboard`; `FollowService.getFollowingIds`
+- [x] Shared `ratingToNumber` helper (`src/lib/rating.ts`) and reusable `RatingBadge` component (extracted from VisitCard)
+- [x] Place names in `VisitCard` link to `/place/[id]`; "Top" nav link added; both routes protected
+- [x] E2e tests (`place.spec.ts`): place link → detail with aggregate, leaderboard render, leaderboard → detail navigation
 
 ### Social — Phase 10: Bookmarks & visit visibility
 - [ ] Bookmarks — save a place to a "want to try" list, visible on your profile (`Bookmark` model)
@@ -179,3 +183,4 @@ NextAuth 5 beta (GitHub OAuth), Prisma 5 + MongoDB Atlas, TanStack Query v5, Lea
 6. **react-leaflet v4 + cluster v2.1.0** — v5/v4.1.3 require React 19, project is on React 18. Upgrade to React 19 + Next.js 15 is a future task
 7. **Playwright for e2e** — CredentialsProvider auth bypass, global setup writes session cookies once, all tests reuse stored auth state
 8. **Visit tagging via `visitedWithUserIds String[]`** — no schema change needed, field already exists. Resolved to `TaggedUser` objects at the service layer with batched lookup (one `findMany` per page of visits). `UserTagPicker` is a shared component used by both VisitForm and VisitCard edit mode
+9. **Place intelligence on existing data (no schema change)** — aggregates and leaderboard are computed in `PlaceService` from `Visit` rows. S-tier maps to 6 via `ratingToNumber` so S places rank above pure 5s. Place-centric visit queries (`getVisitsForPlace`, leaderboard) live in `PlaceService` rather than `VisitService` to keep files focused and under the size limit
