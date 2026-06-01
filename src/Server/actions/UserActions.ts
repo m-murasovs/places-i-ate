@@ -4,6 +4,7 @@ import { auth } from '@/auth';
 import { userService } from '../UserService/UserService';
 import { followService } from '../FollowService/FollowService';
 import { visitService } from '../VisitService/VisitService';
+import { bookmarkService } from '../BookmarkService/BookmarkService';
 
 function slugifyUsername(raw: string): string {
     return raw.toLowerCase().replace(/[^a-z0-9_]/g, '_').replace(/_{2,}/g, '_').replace(/^_|_$/g, '');
@@ -26,10 +27,11 @@ export const getPublicProfile = async (username: string) => {
     const user = await userService.getUserByUsername(username);
     if (!user) return null;
 
-    const [visits, followerCount, followingCount] = await Promise.all([
+    const [visits, followerCount, followingCount, bookmarks] = await Promise.all([
         visitService.getUserVisits(user.id, 50, 0, 'date'),
         followService.getFollowerCount(user.id),
         followService.getFollowingCount(user.id),
+        bookmarkService.getBookmarkedPlaces(user.id),
     ]);
 
     return {
@@ -43,6 +45,7 @@ export const getPublicProfile = async (username: string) => {
         visits,
         followerCount,
         followingCount,
+        bookmarks,
     };
 };
 

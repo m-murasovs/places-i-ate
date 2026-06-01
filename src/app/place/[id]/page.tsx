@@ -2,6 +2,7 @@ import { getPlaceDetail } from '@/Server/actions/PlaceActions';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import RatingBadge from '@/components/RatingBadge';
+import BookmarkButton from './BookmarkButton';
 import { VisitWithAuthor } from '@/Server/PlaceService/PlaceServicePrisma';
 
 function VisitRow({ visit }: { visit: VisitWithAuthor }) {
@@ -36,13 +37,16 @@ export default async function PlacePage({ params }: { params: Promise<{ id: stri
     const detail = await getPlaceDetail(id);
     if (!detail) notFound();
 
-    const { place, aggregate, yourVisits, friendVisits } = detail;
+    const { place, aggregate, yourVisits, friendVisits, isBookmarked } = detail;
 
     return (
         <div className='max-w-2xl mx-auto'>
-            <div className='mb-6'>
-                <h1 className='text-2xl font-bold text-stone-900'>{place.name}</h1>
-                <p className='text-stone-500'>{place.address}</p>
+            <div className='mb-6 flex items-start justify-between gap-4'>
+                <div className='min-w-0'>
+                    <h1 className='text-2xl font-bold text-stone-900'>{place.name}</h1>
+                    <p className='text-stone-500'>{place.address}</p>
+                </div>
+                <BookmarkButton placeId={place.id} initialBookmarked={isBookmarked} />
             </div>
 
             <div className='flex items-center gap-6 mb-8 p-4 bg-white border border-stone-200 rounded-xl'>

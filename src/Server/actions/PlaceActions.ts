@@ -2,6 +2,7 @@
 
 import { placeService } from '../PlaceService/PlaceServicePrisma';
 import { followService } from '../FollowService/FollowService';
+import { bookmarkService } from '../BookmarkService/BookmarkService';
 import { auth } from '@/auth';
 
 export const searchPlaces = async (query: string, limit: number = 10) => {
@@ -19,17 +20,18 @@ export const getPlaceDetail = async (placeId: string) => {
     const session = await auth();
     const userId = session?.user?.id;
 
-    const [aggregate, yourVisits, followingIds] = await Promise.all([
+    const [aggregate, yourVisits, followingIds, isBookmarked] = await Promise.all([
         placeService.getPlaceAggregate(placeId),
         userId ? placeService.getVisitsForPlace(placeId, [userId]) : Promise.resolve([]),
         userId ? followService.getFollowingIds(userId) : Promise.resolve([]),
+        userId ? bookmarkService.isBookmarked(userId, placeId) : Promise.resolve(false),
     ]);
 
     const friendVisits = followingIds.length > 0
         ? await placeService.getVisitsForPlace(placeId, followingIds)
         : [];
 
-    return { place, aggregate, yourVisits, friendVisits };
+    return { place, aggregate, yourVisits, friendVisits, isBookmarked };
 };
 
 export const getNetworkLeaderboard = async () => {

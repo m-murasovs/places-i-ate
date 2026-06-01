@@ -5,6 +5,7 @@ import { VisitWithPlaceAndTags } from '@/Server/VisitService/VisitService';
 import VisitCard from '@/components/VisitCard';
 import FollowButton from './FollowButton';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 
 const VisitMap = dynamic(() => import('@/components/VisitMap'), {
     ssr: false,
@@ -30,6 +31,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
                 <div className='flex items-start justify-between'>
                     <div className='flex items-center gap-4'>
                         {profile.user.image && (
+                            // eslint-disable-next-line @next/next/no-img-element
                             <img
                                 src={profile.user.image}
                                 alt={profile.user.name ?? ''}
@@ -77,6 +79,25 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
                     <p className='text-stone-500'>No visits yet.</p>
                 )}
             </div>
+
+            {profile.bookmarks.length > 0 && (
+                <div data-testid='want-to-try' className='mt-8'>
+                    <h2 className='text-xl font-semibold text-stone-800 mb-4'>Want to try</h2>
+                    <ul className='space-y-2'>
+                        {profile.bookmarks.map((place) => (
+                            <li key={place.id}>
+                                <Link
+                                    href={`/place/${place.id}`}
+                                    className='block p-3 border border-stone-200 rounded-lg hover:bg-stone-50 transition'
+                                >
+                                    <p className='font-semibold text-stone-900'>{place.name}</p>
+                                    <p className='text-sm text-stone-600'>{place.address}</p>
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
         </div>
     );
 }

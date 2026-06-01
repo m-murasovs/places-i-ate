@@ -153,7 +153,8 @@ NextAuth 5 beta (GitHub OAuth), Prisma 5 + MongoDB Atlas, TanStack Query v5, Lea
 - [x] E2e tests (`place.spec.ts`): place link → detail with aggregate, leaderboard render, leaderboard → detail navigation
 
 ### Social — Phase 10: Bookmarks & visit visibility
-- [ ] Bookmarks — save a place to a "want to try" list, visible on your profile (`Bookmark` model)
+- [x] Bookmarks — save a place to a "want to try" list from the place detail page, visible on your profile (`Bookmark` model, `BookmarkService`, `toggleBookmark` action, `BookmarkButton`); "Want to try" section on `/u/[username]`
+- [x] E2e tests (`bookmark.spec.ts`): bookmark from detail page, want-to-try list on profile (seeded in `global.setup.ts`)
 - [ ] Per-visit visibility setting: public / followers-only / private (`visibility` enum on `Visit`, default public)
 
 ### UX — Landing / logged-out view (completed)

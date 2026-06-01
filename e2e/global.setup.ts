@@ -64,12 +64,17 @@ setup('authenticate as test user', async ({ page }) => {
             },
         ];
 
+        let rigaPlaceId = '';
         for (const placeData of places) {
             const place = await prisma.place.upsert({
                 where: { googlePlacesId: placeData.googlePlacesId },
                 update: placeData,
                 create: placeData,
             });
+
+            if (placeData.googlePlacesId === 'e2e-place-riga-1') {
+                rigaPlaceId = place.id;
+            }
 
             await prisma.visit.upsert({
                 where: {
@@ -89,6 +94,20 @@ setup('authenticate as test user', async ({ page }) => {
                 },
             });
         }
+
+        await prisma.bookmark.upsert({
+            where: {
+                userId_placeId: {
+                    userId: user.id,
+                    placeId: rigaPlaceId,
+                },
+            },
+            update: {},
+            create: {
+                userId: user.id,
+                placeId: rigaPlaceId,
+            },
+        });
     } finally {
         await prisma.$disconnect();
     }

@@ -22,6 +22,7 @@ model User {
   visits         Visit[]
   followers      Follow[] @relation("following")
   following      Follow[] @relation("follower")
+  bookmarks      Bookmark[]
 
   @@map("user")
 }
@@ -56,6 +57,7 @@ model Place {
   phoneNumber    String?
   website        String?
   visits         Visit[]
+  bookmarks      Bookmark[]
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
@@ -91,4 +93,17 @@ model Follow {
 
   @@unique([followerId, followingId])
   @@map("follow")
+}
+
+model Bookmark {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  placeId   String
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  place Place @relation(fields: [placeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, placeId])
+  @@map("bookmark")
 }
