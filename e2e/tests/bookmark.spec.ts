@@ -2,8 +2,16 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Bookmarks', () => {
 	test('can bookmark a place from its detail page', async ({ page }) => {
-		await page.goto('/');
-		await page.locator('a[href^="/place/"]').first().click();
+		// Navigate directly to the unvisited place to ensure bookmark button is visible
+		const { PrismaClient } = await import('@prisma/client');
+		const prisma = new PrismaClient();
+		const unvisitedPlace = await prisma.place.findFirst({
+			where: { googlePlacesId: 'e2e-place-unvisited-1' },
+		});
+		await prisma.$disconnect();
+		if (!unvisitedPlace) throw new Error('Unvisited place not found in seed');
+
+		await page.goto(`/place/${unvisitedPlace.id}`);
 		await page.waitForURL('**/place/**');
 
 		const btn = page.getByRole('button', { name: /want to try|saved/i });

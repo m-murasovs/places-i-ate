@@ -62,6 +62,13 @@ setup('authenticate as test user', async ({ page }) => {
                 latitude: 48.2082,
                 longitude: 16.3738,
             },
+            {
+                googlePlacesId: 'e2e-place-unvisited-1',
+                name: 'E2E Test Place Unvisited',
+                address: 'Test St 1, Test City, Test Country',
+                latitude: 50.0,
+                longitude: 15.0,
+            },
         ];
 
         let rigaPlaceId = '';
@@ -74,6 +81,11 @@ setup('authenticate as test user', async ({ page }) => {
 
             if (placeData.googlePlacesId === 'e2e-place-riga-1') {
                 rigaPlaceId = place.id;
+            }
+
+            // The unvisited place stays visit-free so the bookmark button shows for it
+            if (placeData.googlePlacesId === 'e2e-place-unvisited-1') {
+                continue;
             }
 
             await prisma.visit.upsert({

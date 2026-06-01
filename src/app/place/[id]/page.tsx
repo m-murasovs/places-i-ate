@@ -46,7 +46,9 @@ export default async function PlacePage({ params }: { params: Promise<{ id: stri
                     <h1 className='text-2xl font-bold text-stone-900'>{place.name}</h1>
                     <p className='text-stone-500'>{place.address}</p>
                 </div>
-                <BookmarkButton placeId={place.id} initialBookmarked={isBookmarked} />
+                {yourVisits.length === 0 && (
+                    <BookmarkButton placeId={place.id} initialBookmarked={isBookmarked} />
+                )}
             </div>
 
             <div className='flex items-center gap-6 mb-8 p-4 bg-white border border-stone-200 rounded-xl'>
