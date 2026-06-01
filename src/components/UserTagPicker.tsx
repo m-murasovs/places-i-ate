@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 import { TaggedUser } from '@/Server/VisitService/VisitService';
 import useSearchUsers from '@/hooks/useSearchUsers';
 
@@ -84,10 +85,12 @@ export default function UserTagPicker({ selectedUsers, onChange, excludeUserId }
                                     className='w-full text-left px-3 py-2 hover:bg-pink-50 text-sm flex items-center gap-2'
                                 >
                                     {user.image && (
-                                        <img
+                                        <Image
                                             src={user.image}
                                             alt={user.name ?? user.username ?? ''}
                                             className='w-6 h-6 rounded-full object-cover'
+                                            width={24}
+                                            height={24}
                                         />
                                     )}
                                     <div className='flex flex-col'>
@@ -110,10 +113,12 @@ export default function UserTagPicker({ selectedUsers, onChange, excludeUserId }
                             className='flex items-center gap-1 bg-pink-50 border border-pink-200 rounded-full px-2 py-1 text-sm'
                         >
                             {user.image && (
-                                <img
+                                <Image
                                     src={user.image}
                                     alt={user.name ?? user.username ?? ''}
                                     className='w-5 h-5 rounded-full object-cover'
+                                    width={20}
+                                    height={20}
                                 />
                             )}
                             <span>@{user.username}</span>

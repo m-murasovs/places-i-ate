@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import useSearchUsers from '@/hooks/useSearchUsers';
 
@@ -48,7 +49,7 @@ export default function PeoplePage() {
             className="flex items-center gap-4 p-4 bg-white border border-stone-200 rounded-lg hover:shadow-md transition-shadow"
           >
             {user.image ? (
-              <img src={user.image} alt="" className="w-10 h-10 rounded-full" />
+              <Image src={user.image} alt="" className="w-10 h-10 rounded-full" width={40} height={40} />
             ) : (
               <div className="w-10 h-10 rounded-full bg-stone-200" />
             )}

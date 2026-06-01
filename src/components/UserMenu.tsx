@@ -1,5 +1,6 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 
@@ -34,7 +35,7 @@ export default function UserMenu({ image, name, username }: UserMenuProps) {
                 className='w-9 h-9 rounded-full overflow-hidden border-2 border-stone-200 hover:border-rose-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 focus-visible:ring-offset-1'
             >
                 {image ? (
-                    <img src={image} alt={name ?? ''} className='w-full h-full object-cover' />
+                    <Image src={image} alt={name ?? ''} className='w-full h-full object-cover' width={36} height={36} />
                 ) : (
                     <span className='flex items-center justify-center w-full h-full bg-stone-200 text-stone-500 text-sm font-bold'>
                         {(name ?? username ?? '?')[0].toUpperCase()}

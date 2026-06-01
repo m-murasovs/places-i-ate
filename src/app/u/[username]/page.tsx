@@ -6,6 +6,7 @@ import VisitCard from '@/components/VisitCard';
 import FollowButton from './FollowButton';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const VisitMap = dynamic(() => import('@/components/VisitMap'), {
     ssr: false,
@@ -31,11 +32,12 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
                 <div className='flex items-start justify-between'>
                     <div className='flex items-center gap-4'>
                         {profile.user.image && (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img
+                            <Image
                                 src={profile.user.image}
                                 alt={profile.user.name ?? ''}
                                 className='w-16 h-16 rounded-full'
+                                width={64}
+                                height={64}
                             />
                         )}
                         <div>

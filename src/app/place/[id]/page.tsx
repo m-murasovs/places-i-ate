@@ -1,6 +1,7 @@
 import { getPlaceDetail } from '@/Server/actions/PlaceActions';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import RatingBadge from '@/components/RatingBadge';
 import BookmarkButton from './BookmarkButton';
 import { VisitWithAuthor } from '@/Server/PlaceService/PlaceServicePrisma';
@@ -9,8 +10,7 @@ function VisitRow({ visit }: { visit: VisitWithAuthor }) {
     return (
         <li className='flex items-start gap-3 p-3 border-b border-stone-100 last:border-0'>
             {visit.user.image ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={visit.user.image} alt='' className='w-9 h-9 rounded-full' />
+                <Image src={visit.user.image} alt='' className='w-9 h-9 rounded-full' width={36} height={36} />
             ) : (
                 <div className='w-9 h-9 rounded-full bg-stone-200' />
             )}
