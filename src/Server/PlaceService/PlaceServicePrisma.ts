@@ -64,9 +64,9 @@ export class PlaceService {
         return { count: visits.length, average: sum / visits.length, sTierCount };
     }
 
-    async getVisitsForPlace(placeId: string, userIds?: string[]): Promise<VisitWithAuthor[]> {
+    async getVisitsForPlace(placeId: string, userIds?: string[], visibilityIn?: string[]): Promise<VisitWithAuthor[]> {
         return prisma.visit.findMany({
-            where: { placeId, ...(userIds ? { userId: { in: userIds } } : {}) },
+            where: { placeId, ...(userIds ? { userId: { in: userIds } } : {}), ...(visibilityIn ? { visibility: { in: visibilityIn } } : {}) },
             include: { user: { select: { id: true, username: true, name: true, image: true } } },
             orderBy: { visitDate: 'desc' },
         });

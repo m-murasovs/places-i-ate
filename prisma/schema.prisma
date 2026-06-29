@@ -69,6 +69,7 @@ model Visit {
   userId              String   @db.ObjectId
   placeId             String
   rating              String   // "1" | "2" | "3" | "4" | "5" | "S"
+  visibility          String   @default("public") // "public" | "followers" | "private"
   review              String?
   visitDate           DateTime
   visitedWithUserIds  String[] // Array of user IDs for multi-user support

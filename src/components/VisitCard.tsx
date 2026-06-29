@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { RatingType, VisitWithPlaceAndTags, TaggedUser } from '@/Server/VisitService/VisitService';
+import { RatingType, VisitWithPlaceAndTags, TaggedUser, VisibilityType } from '@/Server/VisitService/VisitService';
 import { PrimaryButton, SecondaryButton } from './button';
 import useUpdateVisit from '@/hooks/use_update_visit';
 import useDeleteVisit from '@/hooks/use_delete_visit';
@@ -8,6 +8,7 @@ import Link from 'next/link';
 import UserTagPicker from './UserTagPicker';
 import StarBadge from './StarBadge';
 import RatingBadge from './RatingBadge';
+import { VISIBILITY_OPTIONS, VISIBILITY_LABELS } from '@/lib/visibility';
 
 const RATINGS: RatingType[] = ['1', '2', '3', '4', '5', 'S'];
 
@@ -24,6 +25,7 @@ export default function VisitCard({ visit, readOnly = false }: { visit: VisitWit
     const [editing, setEditing] = useState(false);
     const [rating, setRating] = useState<RatingType>(visit.rating as RatingType);
     const [review, setReview] = useState(visit.review ?? '');
+    const [visibility, setVisibility] = useState<VisibilityType>(visit.visibility as VisibilityType);
     const [confirmDelete, setConfirmDelete] = useState(false);
     const [taggedUsers, setTaggedUsers] = useState<TaggedUser[]>(visit.taggedUsers);
 
@@ -38,6 +40,7 @@ export default function VisitCard({ visit, readOnly = false }: { visit: VisitWit
                     rating,
                     review: review || undefined,
                     visitedWithUserIds: taggedUsers.map(u => u.id),
+                    visibility,
                 },
             },
             { onSuccess: () => setEditing(false) }
@@ -96,6 +99,26 @@ export default function VisitCard({ visit, readOnly = false }: { visit: VisitWit
 
                 <UserTagPicker selectedUsers={taggedUsers} onChange={setTaggedUsers} excludeUserId={visit.userId} />
 
+                <div className='mt-3'>
+                    <label className='block text-sm font-medium text-stone-700 mb-1'>Visibility</label>
+                    <div className='flex gap-2'>
+                        {VISIBILITY_OPTIONS.map(({ value, label }) => (
+                            <button
+                                key={value}
+                                type='button'
+                                onClick={() => setVisibility(value)}
+                                className={`px-3 py-1.5 rounded-full text-sm font-medium border-2 transition-colors ${
+                                    visibility === value
+                                        ? 'bg-rose-500 border-rose-600 text-white'
+                                        : 'bg-white border-stone-300 text-stone-600 hover:border-rose-400'
+                                }`}
+                            >
+                                {label}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
                 <div className='flex gap-2 mt-3'>
                     <PrimaryButton onClick={handleSave} disabled={updateMutation.isPending}>
                         {updateMutation.isPending ? 'Saving...' : 'Save'}
@@ -104,6 +127,7 @@ export default function VisitCard({ visit, readOnly = false }: { visit: VisitWit
                         setEditing(false);
                         setRating(visit.rating as RatingType);
                         setReview(visit.review ?? '');
+                        setVisibility(visit.visibility as VisibilityType);
                         setTaggedUsers(visit.taggedUsers);
                     }}>
                         Cancel
@@ -126,6 +150,11 @@ export default function VisitCard({ visit, readOnly = false }: { visit: VisitWit
             <p className='text-xs text-stone-400 mt-1'>
                 {new Date(visit.visitDate).toLocaleDateString()}
             </p>
+            {visit.visibility !== 'public' && (
+                <span data-testid='visibility-badge' className='inline-block mt-1 text-xs text-stone-500 bg-stone-100 rounded px-2 py-0.5'>
+                    {VISIBILITY_LABELS[visit.visibility as VisibilityType]}
+                </span>
+            )}
             {visit.taggedUsers.length > 0 && (
                 <p className='text-xs text-stone-500 mt-1'>
                     With:{' '}

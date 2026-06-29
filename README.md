@@ -24,9 +24,7 @@ A full-stack web application to track and review restaurants you've visited. Log
 - **Place Detail Pages** — Each place has a page (`/place/id`) with its aggregate rating (S-tier counts as 6) and visit count, a "Friends also rated this" feed from people you follow, and your own visits
 - **Network Leaderboard** — `/leaderboard` ranks the top-rated places across you and everyone you follow, by average rating then visit count
 - **Bookmarks** — Save a place to a "want to try" list from its detail page; saved places appear in a "Want to try" section on your public profile
-
-### Planned
-- Per-visit visibility (public / followers-only / private)
+- **Per-Visit Visibility** — Mark each visit public, followers-only, or private; profile visit lists and the "Friends also rated" feed hide visits the viewer isn't allowed to see
 
 ## Tech Stack
 

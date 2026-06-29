@@ -3,7 +3,7 @@
 import { auth } from '@/auth';
 import { userService } from '../UserService/UserService';
 import { followService } from '../FollowService/FollowService';
-import { visitService } from '../VisitService/VisitService';
+import { visitService, VisibilityType } from '../VisitService/VisitService';
 import { bookmarkService } from '../BookmarkService/BookmarkService';
 
 function slugifyUsername(raw: string): string {
@@ -27,8 +27,19 @@ export const getPublicProfile = async (username: string) => {
     const user = await userService.getUserByUsername(username);
     if (!user) return null;
 
+    const session = await auth();
+    const viewerId = session?.user?.id;
+    let visibilityIn: VisibilityType[];
+    if (viewerId === user.id) {
+        visibilityIn = ['public', 'followers', 'private'];
+    } else if (viewerId && (await followService.isFollowing(viewerId, user.id))) {
+        visibilityIn = ['public', 'followers'];
+    } else {
+        visibilityIn = ['public'];
+    }
+
     const [visits, followerCount, followingCount, bookmarks] = await Promise.all([
-        visitService.getUserVisits(user.id, 50, 0, 'date'),
+        visitService.getUserVisits(user.id, 50, 0, 'date', visibilityIn),
         followService.getFollowerCount(user.id),
         followService.getFollowingCount(user.id),
         bookmarkService.getBookmarkedPlaces(user.id),

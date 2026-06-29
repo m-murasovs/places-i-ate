@@ -1,6 +1,6 @@
 'use client';
 import { createVisitWithPlace } from '@/Server/actions/VisitActions';
-import { RatingType } from '@/Server/VisitService/VisitService';
+import { RatingType, VisibilityType } from '@/Server/VisitService/VisitService';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const useCreateVisit = () => {
@@ -15,6 +15,7 @@ const useCreateVisit = () => {
             review?: string;
             visitDate: Date;
             visitedWithUserIds?: string[];
+            visibility?: VisibilityType;
         }) => createVisitWithPlace(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['fetchVisitedPlaces'] });

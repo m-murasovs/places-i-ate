@@ -11,6 +11,8 @@ export type RatingType = '1' | '2' | '3' | '4' | '5' | 'S';
 
 export type SortType = 'date' | 'rating' | 'name';
 
+export type VisibilityType = 'public' | 'followers' | 'private';
+
 function getOrderBy(sort: SortType) {
   switch (sort) {
     case 'rating':
@@ -60,6 +62,7 @@ export class VisitService {
     review?: string;
     visitDate: Date;
     visitedWithUserIds?: string[];
+    visibility?: VisibilityType;
   }): Promise<Visit> {
     const visit = await prisma.visit.create({
       data: {
@@ -98,10 +101,11 @@ export class VisitService {
     userId: string,
     limit: number = 50,
     offset: number = 0,
-    sort: SortType = 'date'
+    sort: SortType = 'date',
+    visibilityIn?: VisibilityType[]
   ): Promise<VisitWithPlaceAndTags[]> {
     const visits = await prisma.visit.findMany({
-      where: { userId },
+      where: { userId, ...(visibilityIn ? { visibility: { in: visibilityIn } } : {}) },
       include: {
         place: true,
       },

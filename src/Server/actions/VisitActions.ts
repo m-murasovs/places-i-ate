@@ -1,6 +1,6 @@
 'use server';
 
-import { visitService, RatingType, SortType } from '../VisitService/VisitService';
+import { visitService, RatingType, SortType, VisibilityType } from '../VisitService/VisitService';
 import { placeService } from '../PlaceService/PlaceServicePrisma';
 import { auth } from '@/auth';
 
@@ -16,6 +16,7 @@ export const createVisitWithPlace = async (data: {
     review?: string;
     visitDate: Date;
     visitedWithUserIds?: string[];
+    visibility?: VisibilityType;
 }) => {
     const session = await auth();
     if (!session?.user?.id) {
@@ -48,6 +49,7 @@ export const createVisitWithPlace = async (data: {
         review: data.review,
         visitDate: data.visitDate,
         visitedWithUserIds: data.visitedWithUserIds,
+        visibility: data.visibility,
     });
 
     return visit;
@@ -60,6 +62,7 @@ export const updateVisit = async (
         review?: string;
         visitDate: Date;
         visitedWithUserIds?: string[];
+        visibility?: VisibilityType;
     }>
 ) => {
     const session = await auth();

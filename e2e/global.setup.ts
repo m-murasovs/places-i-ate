@@ -37,7 +37,7 @@ setup('authenticate as test user', async ({ page }) => {
             },
         });
 
-        await prisma.user.upsert({
+        const tagUser = await prisma.user.upsert({
             where: { email: 'e2e-tag-target@places-i-ate.internal' },
             update: { username: 'e2e-tag-user' },
             create: {
@@ -120,6 +120,38 @@ setup('authenticate as test user', async ({ page }) => {
                 placeId: rigaPlaceId,
             },
         });
+
+        const visibilityPlaces = [
+            { googlePlacesId: 'e2e-vis-public', name: 'E2E Visibility Public', address: 'Public St 1, Test City', latitude: 51.0, longitude: 14.0, visibility: 'public' },
+            { googlePlacesId: 'e2e-vis-followers', name: 'E2E Visibility Followers', address: 'Followers St 1, Test City', latitude: 51.1, longitude: 14.1, visibility: 'followers' },
+            { googlePlacesId: 'e2e-vis-private', name: 'E2E Visibility Private', address: 'Private St 1, Test City', latitude: 51.2, longitude: 14.2, visibility: 'private' },
+        ];
+        for (const p of visibilityPlaces) {
+            const { visibility, ...placeFields } = p;
+            const place = await prisma.place.upsert({
+                where: { googlePlacesId: p.googlePlacesId },
+                update: placeFields,
+                create: placeFields,
+            });
+            await prisma.visit.upsert({
+                where: {
+                    userId_placeId_visitDate: {
+                        userId: tagUser.id,
+                        placeId: place.id,
+                        visitDate: new Date('2025-02-01'),
+                    },
+                },
+                update: { visibility },
+                create: {
+                    userId: tagUser.id,
+                    placeId: place.id,
+                    rating: '4',
+                    review: `E2E ${visibility} visit`,
+                    visitDate: new Date('2025-02-01'),
+                    visibility,
+                },
+            });
+        }
     } finally {
         await prisma.$disconnect();
     }

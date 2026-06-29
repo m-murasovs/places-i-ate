@@ -1,6 +1,6 @@
 'use client';
 import { updateVisit } from '@/Server/actions/VisitActions';
-import { RatingType } from '@/Server/VisitService/VisitService';
+import { RatingType, VisibilityType } from '@/Server/VisitService/VisitService';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const useUpdateVisit = () => {
@@ -14,6 +14,7 @@ const useUpdateVisit = () => {
                 review: string;
                 visitDate: Date;
                 visitedWithUserIds: string[];
+                visibility: VisibilityType;
             }>;
         }) => updateVisit(visitId, data),
         onSuccess: () => {

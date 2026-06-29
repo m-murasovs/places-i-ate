@@ -28,7 +28,7 @@ export const getPlaceDetail = async (placeId: string) => {
     ]);
 
     const friendVisits = followingIds.length > 0
-        ? await placeService.getVisitsForPlace(placeId, followingIds)
+        ? await placeService.getVisitsForPlace(placeId, followingIds, ['public', 'followers'])
         : [];
 
     return { place, aggregate, yourVisits, friendVisits, isBookmarked };

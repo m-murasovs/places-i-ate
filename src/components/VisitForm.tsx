@@ -1,12 +1,13 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
-import { RatingType, TaggedUser } from '@/Server/VisitService/VisitService';
+import { RatingType, TaggedUser, VisibilityType } from '@/Server/VisitService/VisitService';
 import { PrimaryButton } from './button';
 import useCreateVisit from '@/hooks/use_create_visit';
 import useSearchPlaces from '@/hooks/use_search_places';
 import UserTagPicker from './UserTagPicker';
 import StarBadge from './StarBadge';
 import { useSession } from 'next-auth/react';
+import { VISIBILITY_OPTIONS } from '@/lib/visibility';
 
 const RATINGS: RatingType[] = ['1', '2', '3', '4', '5', 'S'];
 
@@ -19,6 +20,7 @@ export default function VisitForm({ onSuccess }: { onSuccess?: () => void }) {
     const [rating, setRating] = useState<RatingType>('3');
     const [review, setReview] = useState('');
     const [visitDate, setVisitDate] = useState(new Date().toISOString().split('T')[0]);
+    const [visibility, setVisibility] = useState<VisibilityType>('public');
     const suggestionsRef = useRef<HTMLDivElement>(null);
 
     const { data: session } = useSession();
@@ -68,6 +70,7 @@ export default function VisitForm({ onSuccess }: { onSuccess?: () => void }) {
                 review: review || undefined,
                 visitDate: new Date(visitDate),
                 visitedWithUserIds: taggedUsers.map(u => u.id),
+                visibility,
             },
             {
                 onSuccess: () => {
@@ -78,6 +81,7 @@ export default function VisitForm({ onSuccess }: { onSuccess?: () => void }) {
                     setRating('3');
                     setReview('');
                     setVisitDate(new Date().toISOString().split('T')[0]);
+                    setVisibility('public');
                     setTaggedUsers([]);
                     onSuccess?.();
                 },
@@ -202,6 +206,26 @@ export default function VisitForm({ onSuccess }: { onSuccess?: () => void }) {
                     className='mt-1 block w-full p-2 border-2 border-stone-300 rounded focus:outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-400'
                     required
                 />
+            </div>
+
+            <div>
+                <label className='block text-sm font-medium text-stone-700 mb-1'>Visibility</label>
+                <div className='flex gap-2'>
+                    {VISIBILITY_OPTIONS.map(({ value, label }) => (
+                        <button
+                            key={value}
+                            type='button'
+                            onClick={() => setVisibility(value)}
+                            className={`px-3 py-2 rounded-full text-sm font-medium border-2 transition-colors ${
+                                visibility === value
+                                    ? 'bg-rose-500 border-rose-600 text-white'
+                                    : 'bg-white border-stone-300 text-stone-600 hover:border-rose-400'
+                            }`}
+                        >
+                            {label}
+                        </button>
+                    ))}
+                </div>
             </div>
 
             <UserTagPicker
